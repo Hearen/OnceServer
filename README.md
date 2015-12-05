@@ -12,5 +12,5 @@ This whole project is intended to build up a VMware-like tool, which is based on
 Now this project is supported by only four major members:
 Doctor Bear and LHearen is working on underlying server part;
 #Contacts
-Doctor Bear: wuyuewen11@otcaix.iscas.ac.cn 
-LHearen: LHearen@126.com, luosonglei14@otcaix.iscas.ac.cn
+* LHearen: LHearen@126.com, luosonglei14@otcaix.iscas.ac.cn
+* Doctor Bear: wuyuewen11@otcaix.iscas.ac.cn 
