@@ -1,0 +1,100 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ByteUnitUtil	xenapi/utils/ByteUnitUtil.java	/^public class ByteUnitUtil {$/;"	c
+HostTest	xenapi/HostTest.java	/^public class HostTest extends TestBase {$/;"	c
+Master_HOST_NAME	xenapi/base/TestBase.java	/^	protected static final String Master_HOST_NAME = "133.133.135.12";$/;"	f	class:TestBase
+MigaBytes2Bytes	xenapi/utils/ByteUnitUtil.java	/^	public static Long MigaBytes2Bytes(Long migaBytes) {$/;"	m	class:ByteUnitUtil
+PORT	xenapi/base/TestBase.java	/^	protected static final int PORT = 9363;$/;"	f	class:TestBase
+PROTOCAL	xenapi/base/TestBase.java	/^	protected static final String PROTOCAL = "HTTP";$/;"	f	class:TestBase
+PWD	xenapi/base/TestBase.java	/^	private static final String PWD = "onceas";$/;"	f	class:TestBase	file:
+PackageVisibleTest	xenapi/PackageVisibleTest.java	/^public class PackageVisibleTest {$/;"	c
+PoolTest	xenapi/PoolTest.java	/^public class PoolTest {$/;"	c
+SRTest	xenapi/SRTest.java	/^public class SRTest {$/;"	c
+Slave_HOST_NAME	xenapi/base/TestBase.java	/^	protected static final String Slave_HOST_NAME = "133.133.135.16";$/;"	f	class:TestBase
+Test	xenapi/Test.java	/^public class Test {$/;"	c
+Test1	xenapi/Test1.java	/^public class Test1 {$/;"	c
+TestBase	xenapi/base/TestBase.java	/^	protected TestBase() {$/;"	m	class:TestBase
+TestBase	xenapi/base/TestBase.java	/^public abstract class TestBase {$/;"	c
+TestGeneration	xenapi/experiments/VMTest.java	/^	public interface TestGeneration {$/;"	i	class:VMTest
+Test_vbd_opt	xenapi/Test_vbd_opt.java	/^public class Test_vbd_opt {$/;"	c
+Test_vm_create	xenapi/Test_vm_create.java	/^public class Test_vm_create {$/;"	c
+Test_vm_opt	xenapi/Test_vm_opt.java	/^public class Test_vm_opt {$/;"	c
+USER_NAME	xenapi/base/TestBase.java	/^	private static final String USER_NAME = "root";$/;"	f	class:TestBase	file:
+VBDTest	xenapi/VBDTest.java	/^public class VBDTest {$/;"	c
+VDITest	xenapi/VDITest.java	/^public class VDITest {$/;"	c
+VIFTest	xenapi/VIFTest.java	/^public class VIFTest {$/;"	c
+VMTest	xenapi/VMTest.java	/^public class VMTest extends TestBase {$/;"	c
+VMTest	xenapi/experiments/VMTest.java	/^	public VMTest(Record input, Record expectedResult) {$/;"	m	class:VMTest
+VMTest	xenapi/experiments/VMTest.java	/^public class VMTest extends TestBase {$/;"	c
+assertWithException	xenapi/experiments/VMTest.java	/^		public void assertWithException();$/;"	m	interface:VMTest.TestGeneration
+assertWithException	xenapi/experiments/VMTest.java	/^	private void assertWithException(Exception e) {$/;"	m	class:VMTest	file:
+assertWithoutException	xenapi/experiments/VMTest.java	/^		public void assertWithoutException();$/;"	m	interface:VMTest.TestGeneration
+assertWithoutException	xenapi/experiments/VMTest.java	/^	private void assertWithoutException(Record expected, Record actual) {$/;"	m	class:VMTest	file:
+cleanShutdown_AObject_WrongConnection	xenapi/VMTest.java	/^	public void cleanShutdown_AObject_WrongConnection()$/;"	m	class:VMTest
+cleanShutdown_The_Right_Case	xenapi/VMTest.java	/^	public void cleanShutdown_The_Right_Case() throws Exception {$/;"	m	class:VMTest
+com.beyondsphere.xenapi	xenapi/HostTest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/PackageVisibleTest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/PoolTest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/SRTest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/Test.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/Test1.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/Test_vbd_opt.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/Test_vm_create.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/Test_vm_opt.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/VBDTest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/VDITest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/VIFTest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi	xenapi/VMTest.java	/^package com.beyondsphere.xenapi;$/;"	p
+com.beyondsphere.xenapi.base	xenapi/base/TestBase.java	/^package com.beyondsphere.xenapi.base;$/;"	p
+com.beyondsphere.xenapi.experiments	xenapi/experiments/VMTest.java	/^package com.beyondsphere.xenapi.experiments;$/;"	p
+com.beyondsphere.xenapi.utils	xenapi/utils/ByteUnitUtil.java	/^package com.beyondsphere.xenapi.utils;$/;"	p
+connection	xenapi/base/TestBase.java	/^	private Connection connection = new Connection(url);$/;"	f	class:TestBase	file:
+createImage_A$ProperConnection_A$ConflictUUID	xenapi/VMTest.java	/^	public void createImage_A$ProperConnection_A$ConflictUUID()$/;"	m	class:VMTest
+createImage_A$ProperConnection_A$IllegalFormatedUUID_Longer_Than_8	xenapi/VMTest.java	/^	public void createImage_A$ProperConnection_A$IllegalFormatedUUID_Longer_Than_8()$/;"	m	class:VMTest
+createImage_A$ProperConnection_A$IllegalFormatedUUID_Shorter_Than_8	xenapi/VMTest.java	/^	public void createImage_A$ProperConnection_A$IllegalFormatedUUID_Shorter_Than_8()$/;"	m	class:VMTest
+createImage_A$ProperUUID_A$ProperConnection	xenapi/VMTest.java	/^	public void createImage_A$ProperUUID_A$ProperConnection()$/;"	m	class:VMTest
+createImage_InPool_WithCreateOnAnotherHost_CreateImageOnTheMaster	xenapi/VMTest.java	/^	public void createImage_InPool_WithCreateOnAnotherHost_CreateImageOnTheMaster()$/;"	m	class:VMTest
+createRecordWithMinParams	xenapi/VMTest.java	/^	private VM.Record createRecordWithMinParams(String mac,$/;"	m	class:VMTest	file:
+createRecordWithMinParams	xenapi/experiments/VMTest.java	/^	private static VM.Record createRecordWithMinParams(long memoryStaticMax,$/;"	m	class:VMTest	file:
+createVm	xenapi/experiments/VMTest.java	/^	private static VM createVm(long memoryStaticMax, long memoryStaticMin,$/;"	m	class:VMTest	file:
+expectedResult	xenapi/experiments/VMTest.java	/^	private Record expectedResult;$/;"	f	class:VMTest	file:
+generatorCases	xenapi/experiments/VMTest.java	/^		public Collection<Object[]> generatorCases();$/;"	m	interface:VMTest.TestGeneration
+getConnection	xenapi/base/TestBase.java	/^	public Connection getConnection() {$/;"	m	class:TestBase
+getErrorHost	xenapi/base/TestBase.java	/^	public Host getErrorHost() throws Exception {$/;"	m	class:TestBase
+getHost	xenapi/base/TestBase.java	/^	public Host getHost() throws Exception {$/;"	m	class:TestBase
+getHostByIp	xenapi/base/TestBase.java	/^	private Host getHostByIp(String hostNameByIp) throws Exception {$/;"	m	class:TestBase	file:
+getIsATemplate_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost	xenapi/VMTest.java	/^	public void getIsATemplate_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost()$/;"	m	class:VMTest
+getMemoryDynamicMax_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost	xenapi/VMTest.java	/^	public void getMemoryDynamicMax_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost()$/;"	m	class:VMTest
+getMemoryDynamicMin_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost	xenapi/VMTest.java	/^	public void getMemoryDynamicMin_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost()$/;"	m	class:VMTest
+getMemoryStaticMax_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost	xenapi/VMTest.java	/^	public void getMemoryStaticMax_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost()$/;"	m	class:VMTest
+getVCPUsMax_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost	xenapi/VMTest.java	/^	public void getVCPUsMax_InPool_WithCreateOnAnotherHost_GetResultWithMasterHost()$/;"	m	class:VMTest
+input	xenapi/experiments/VMTest.java	/^	private Record input;$/;"	f	class:VMTest	file:
+inputParameters	xenapi/experiments/VMTest.java	/^	public static Collection<Object[]> inputParameters() {$/;"	m	class:VMTest
+loop	xenapi/Test1.java	/^	public static void loop(){$/;"	m	class:Test1
+main	xenapi/HostTest.java	/^	public static void main(String[] args) throws BadServerResponse,$/;"	m	class:HostTest
+main	xenapi/PoolTest.java	/^	public static void main(String[] args) throws BadServerResponse, SessionAuthenticationFailed, MalformedURLException, XenAPIException, XmlRpcException {$/;"	m	class:PoolTest
+main	xenapi/SRTest.java	/^	public static void main(String[] args) throws BadServerResponse, SessionAuthenticationFailed, MalformedURLException, XenAPIException, XmlRpcException {$/;"	m	class:SRTest
+main	xenapi/Test.java	/^	public static void main(String[] args) throws BadServerResponse,$/;"	m	class:Test
+main	xenapi/Test1.java	/^	public static void main(String[] args) {$/;"	m	class:Test1
+main	xenapi/Test_vbd_opt.java	/^	public static void main(String[] args) throws BadServerResponse, SessionAuthenticationFailed, MalformedURLException, XenAPIException, XmlRpcException {$/;"	m	class:Test_vbd_opt
+main	xenapi/Test_vm_create.java	/^	public static void main(String[] args) throws BadServerResponse,$/;"	m	class:Test_vm_create
+main	xenapi/Test_vm_opt.java	/^	public static void main(String[] args) throws BadServerResponse,$/;"	m	class:Test_vm_opt
+main	xenapi/VBDTest.java	/^	public static void main(String[] args) throws BadServerResponse, SessionAuthenticationFailed, MalformedURLException, XenAPIException, XmlRpcException {$/;"	m	class:VBDTest
+main	xenapi/VDITest.java	/^	public static void main(String[] args) throws BadServerResponse, XenAPIException, XmlRpcException, MalformedURLException {$/;"	m	class:VDITest
+main	xenapi/VIFTest.java	/^	public static void main(String[] args) throws BadServerResponse, SessionAuthenticationFailed, MalformedURLException, XenAPIException, XmlRpcException {$/;"	m	class:VIFTest
+test	xenapi/PackageVisibleTest.java	/^	public void test() {$/;"	m	class:PackageVisibleTest
+testCreateOn	xenapi/experiments/VMTest.java	/^	public void testCreateOn() throws XenAPIException, XmlRpcException {$/;"	m	class:VMTest
+testCreateOnWithDynamicMaxLessThanDynamicMin	xenapi/VMTest.java	/^	public void testCreateOnWithDynamicMaxLessThanDynamicMin() throws Exception {$/;"	m	class:VMTest
+testCreateOnWithMinimalParameterSet	xenapi/VMTest.java	/^	public void testCreateOnWithMinimalParameterSet() throws Exception {$/;"	m	class:VMTest
+testCreateOnWithStaticMaxLessThanStaticMin	xenapi/VMTest.java	/^	public void testCreateOnWithStaticMaxLessThanStaticMin() throws Exception {$/;"	m	class:VMTest
+testCreateWithBlankRecord	xenapi/VMTest.java	/^	public void testCreateWithBlankRecord() throws Exception {$/;"	m	class:VMTest
+testCreateWithNullConnection	xenapi/VMTest.java	/^	public void testCreateWithNullConnection() throws Exception {$/;"	m	class:VMTest
+testCreateWithNullHost	xenapi/VMTest.java	/^	public void testCreateWithNullHost() throws XenAPIException,$/;"	m	class:VMTest
+testCreateWithNullRecord	xenapi/VMTest.java	/^	public void testCreateWithNullRecord() throws Exception {$/;"	m	class:VMTest
+testCreate_WithWrongConnection	xenapi/VMTest.java	/^	public void testCreate_WithWrongConnection() throws Exception {$/;"	m	class:VMTest
+testHost	xenapi/HostTest.java	/^	public void testHost() {$/;"	m	class:HostTest
+url	xenapi/base/TestBase.java	/^	private URL url;$/;"	f	class:TestBase	file:
