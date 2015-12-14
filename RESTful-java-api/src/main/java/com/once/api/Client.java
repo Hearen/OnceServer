@@ -28,11 +28,11 @@ public class Client {
 	private static final String POST_URL = "http://localhost:9090/SpringMVCExample/home";
 
 	public static void main(String[] args) throws IOException {
-		VM.create("vm", 1024, 2, "/home/res/images/test1.qcow2", "/home/res/iso/CentOS-7.1.iso", "ovs0");
-//		URL url = new URL("HTTP", "133.133.135.13", 5100,
-//				"/VM/7504b4c5dd1543d6b469f701a4a3c3a8");
-////		 StringBuffer result = sendGET(url);
-////		 System.out.println(result);
+//		VM.create("vm", 1024, 2, "/home/res/images/test1.qcow2", "/home/res/iso/CentOS-7.1.iso", "ovs0");
+		URL url = new URL("HTTP", "133.133.135.13", 5100,
+				"/VM/035e2bdc-06d6-4651-957e-1bf968d0d39f");
+		 StringBuffer result = sendGET(url);
+		 System.out.println(result);
 //		Map<String, String> headers = new HashMap<String, String>();
 //		headers.put("Method", "VM_start");
 //		headers.put("Params",

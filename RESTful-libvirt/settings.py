@@ -46,16 +46,28 @@ vm = {
          },
 		 'name': {
 			'type': 'string',
+            'required': True,
 		 },
 		 'vcpu': {
 			'type': 'integer',
+            'required': True,
 		 },
 		 'memory': {
 			'type': 'integer',
+            'required': True,
 		 },
-		 'consoles': {
-			'type': 'list',
-		 },
+        'diskDir':{
+            'type': 'string',
+            'required': True,
+        },
+        'isoDir':{
+            'type':'string',
+            'required': True,
+        },
+        'bridgeSrc':{
+            'type':'string',
+            'required': True,
+        },
 		 'VBDs': {
 			'type': 'list',
 		 },
@@ -64,10 +76,11 @@ vm = {
 		 },
 		 'is_template': {
 			'type': 'boolean',
+             'default': False,
 		 },
         'powerstate': {
             'type': 'string',
-                       },
+        },
     }
 }
 

@@ -6,13 +6,15 @@ from Utils import XMLConverter
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
-def create(name, memory, vcpus, diskDir, isoType, bridgeSrc):
+def create(uuid, name, memory, vcpu, diskDir, isoDir, bridgeSrc):
     '''
     coded by LHearen
     E-mail: LHearen@126.com
-    change the return value from 0 to dom.UUIDString()
+    Using limited parameters to create a VM and return its UUIDString;
     '''
     print("Inside create")
+    if len(uuid) < 5:
+        uuid = None
     conn = Connection.get_libvirt_connection()
     hvm = {"loader": "/usr/lib/xen/boot/hvmloader"}
     hvm["boot"] = "cdrom"
@@ -20,7 +22,7 @@ def create(name, memory, vcpus, diskDir, isoType, bridgeSrc):
     image = {"hvm": hvm}
 
     tap2 = {"dev": "hdc:cdrom"}
-    tap2["uname"] = "tap:aio:" + isoType
+    tap2["uname"] = "tap:aio:" + isoDir
     tap2["mode"] = "r"
 
     vif = {"bridge": bridgeSrc}
@@ -33,7 +35,7 @@ def create(name, memory, vcpus, diskDir, isoType, bridgeSrc):
     vfb["vnclisten"] = "0.0.0.0"
 
     console = {"location": "0"}
-    xml_config = XMLConverter.toVMXml(name, memory, vcpus, image, tap2,
+    xml_config = XMLConverter.toVMXml(uuid, name, memory, vcpu, image, tap2,
                                         vif, vbd, vfb, console)
     return define_VM_by_xml(conn, xml_config)
 
@@ -121,7 +123,7 @@ def define_VM_by_xml(conn, xml_config):
     try:
         dom = conn.defineXML(xml_config)
     except Exception:
-        None
+        return None
     return dom.UUIDString()
 
 def reboot(uuid, flags=0):
@@ -156,17 +158,4 @@ def reboot(uuid, flags=0):
             return True
     except Exception:
         return False
-
-def dump_request_detail(request):
-    request_detail = """
-request.endpoint:{request.endpoint}
-request.method:{request.method}
-request.view_args:{request.view_args}
-request.args:{request.args}
-request.form:{request.form}
-request.user_agent:{request.user_agent}
-request.files:{request.files}
-request.is_xhr:{request.is_xhr}
-{request.headers}""".format(request=request).strip()
-    return request_detail
 

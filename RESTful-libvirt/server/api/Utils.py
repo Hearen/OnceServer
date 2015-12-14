@@ -1,23 +1,24 @@
 import xml.etree.ElementTree as ET
 class XMLConverter():
     @staticmethod
-    def toVMXml(name, memory, vcpu, image, tap2, vif, vbd, vfb, console):
+    def toVMXml(uuid, name, memory, vcpu, image, tap2, vif, vbd, vfb, console):
         root = ET.Element("domain")
         root.set("type", 'xen')
+
+        if uuid is not None:
+            uuidET = ET.SubElement(root, "uuid")
+            uuidET.text = uuid
 
         nameET = ET.SubElement(root, "name")
         nameET.text = name
 
         memElement = ET.SubElement(root, "memory")
         memory = int(memory) * 1024
-        print memory
         memElement.text = str(memory)
         memElement.set("unit", 'KiB')
 
         currentmemElement = ET.SubElement(root, "currentmemory")
         memory = int(memory) * 1024
-        print type(memory)
-        print memory
         currentmemElement.text = str(memory)
         currentmemElement.set("unit", 'KiB')
 
@@ -28,9 +29,9 @@ class XMLConverter():
         os = ET.SubElement(root,"os")
 
         features = ET.SubElement(root,"features")
-        acpi = ET.SubElement(features,"acpi")
-        apic = ET.SubElement(features,"apic")
-        pae = ET.SubElement(features,"pae")
+        ET.SubElement(features,"acpi")
+        ET.SubElement(features,"apic")
+        ET.SubElement(features,"pae")
 
         clock = ET.SubElement(root,"clock")
         clock.set("offset",'utc')
@@ -70,12 +71,12 @@ class XMLConverter():
         disk.set("device",vbd['dev'][4:])
         source = ET.SubElement(disk,"source")
         source.set("file",vbd['uname'][8:])
-        backingStore = ET.SubElement(disk,"backingStore")
+        ET.SubElement(disk,"backingStore")
         target = ET.SubElement(disk,"target")
         target.set("dev",vbd['dev'][0:3])
         target.set("bus",'virtio')
         if vbd['mode'] == 'r':
-            readonly = ET.SubElement(disk, "readonly")
+            ET.SubElement(disk, "readonly")
         address = ET.SubElement(disk,"address")
         address.set("type","drive")
         address.set("controller",'0')
@@ -88,12 +89,12 @@ class XMLConverter():
         disk.set("device",tap2['dev'][4:])
         source = ET.SubElement(disk,"source")
         source.set("file",tap2['uname'][8:])
-        backingStore = ET.SubElement(disk,"backingStore")
+        ET.SubElement(disk,"backingStore")
         target = ET.SubElement(disk,"target")
         target.set("dev",tap2['dev'][0:3])
         target.set("bus",'virtio')
         if tap2['mode'] == 'r':
-            readonly = ET.SubElement(disk, "readonly")
+            ET.SubElement(disk, "readonly")
         address = ET.SubElement(disk,"address")
         address.set("type","drive")
         address.set("controller",'0')
@@ -153,4 +154,5 @@ class XMLConverter():
 
         print rough_string
         return rough_string
+
 

@@ -3,6 +3,7 @@ package main.java.com.once.api;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class Connection
     Description: encapulate all parameters in 
     headers and post to a certain url;
     *******************************************/ 
-    public static String sendPost(URL url, Map<String, String> headers)
+    public static String sendPost(URL url, Map<String, String> headers, Map<String, String> data)
     {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost post = new HttpPost(url.toString());
@@ -40,6 +41,19 @@ public class Connection
         {
             post.addHeader(key, headers.get(key));
         }
+        
+        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		for (String key : data.keySet()) {
+			System.out.println(key);
+			urlParameters.add(new BasicNameValuePair(key, data.get(key)));
+		}
+		try {
+			post.setEntity(new UrlEncodedFormEntity(urlParameters, "utf-8"));
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
         CloseableHttpResponse response = null;
         try
         {
