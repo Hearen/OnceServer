@@ -6,7 +6,7 @@ import inspect
 import logging
 import logging.handlers
 
-from server.api.util import mkdir
+from server.api.utils import mkdir
 
 MAX_BYTES = 1 << 20  # 1MB
 BACKUP_COUNT = 5
@@ -54,7 +54,7 @@ if 'TRACE' not in logging.__dict__:
             except IndexError, exn:
                 raise IOError(exn)
         inspect.findsource = findsource
-        
+
 log = logging.getLogger("libvirt")
 
 def fcntl_setfd_cloexec(file, bool):
@@ -64,8 +64,8 @@ def fcntl_setfd_cloexec(file, bool):
         fcntl.fcntl(file, fcntl.F_SETFD, f)
 
 
-logfilename = None     
-   
+logfilename = None
+
 class XendRotatingFileHandler(logging.handlers.RotatingFileHandler):
 
     def __init__(self, fname, mode, maxBytes, backupCount):
@@ -84,7 +84,7 @@ class XendRotatingFileHandler(logging.handlers.RotatingFileHandler):
     # is even worse
     def setCloseOnExec(self):
         fcntl_setfd_cloexec(self.stream, True)
-        
+
 def init(filename, level, logname=None):
     """Initialise logging.  Logs to the given filename, and logs to stderr if
     """
@@ -137,4 +137,4 @@ def init(filename, level, logname=None):
 
 def getLogFilename():
     return logfilename
-        
+

@@ -30,7 +30,7 @@ public class VM {
         URL url = new URL("HTTP", "133.133.135.13", 5100, "/VM/");
         Map<String, String> data = new HashMap<String, String>();
 //        data.put("uuid", "74697a47-9eed-471e-9fd2-f925cf852612");
-        data.put("uuid", "");
+        data.put("_id", "d9a562e8-6efc-4b54-8df6-57a254fcc026");
         data.put("name", name);
         data.put("memory", Integer.toString(memory));
         data.put("vcpu", Integer.toString(vcpu));

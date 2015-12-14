@@ -1,46 +1,43 @@
 import xml.etree.ElementTree as ET
-from _elementtree import ElementTree
-
-class VMXmlConfig(object):
-    def __init__(self, name, memory, vcpu, image, tap2, vif, vbd, vfb, console):
-        self.name = name
-        self.memory = memory
-        self.vcpu = vcpu
-        self.image = image
-        self.tap2 = tap2
-        self.vif = vif
-        self.vbd = vbd
-        self.vfb = vfb
-        self.console = console
-
-    def toXml(self):
+class XMLConverter():
+    '''
+    Author: LHearen
+    E-mail: LHearen@126.com
+    Time  :	2015-12-14 15:51
+    Description: Use limited parameters to return XML configuration string;
+    '''
+    @staticmethod
+    def toVMXml(uuid, name, memory, vcpu, image, tap2, vif, vbd, vfb, console):
         root = ET.Element("domain")
-        root.set("id", self.domid)
         root.set("type", 'xen')
 
-        name = ET.SubElement(root, "name")
-        name.text = self.name
+        if uuid is not None:
+            uuidET = ET.SubElement(root, "uuid")
+            uuidET.text = uuid
 
-        memory = ET.SubElement(root, "memory")
-        memory.text = str(int(self.memory)*1024)
-#         memory.text = '1000'
-        memory.set("unit", 'KiB')
+        nameET = ET.SubElement(root, "name")
+        nameET.text = name
 
-        currentmemory = ET.SubElement(root, "currentmemory")
-        currentmemory.text = str(int(self.memory)*1024)
-#         currentmemory.text = '1000'
-        currentmemory.set("unit", 'KiB')
+        memElement = ET.SubElement(root, "memory")
+        memory = int(memory) * 1024
+        memElement.text = str(memory)
+        memElement.set("unit", 'KiB')
+
+        currentmemElement = ET.SubElement(root, "currentmemory")
+        memory = int(memory) * 1024
+        currentmemElement.text = str(memory)
+        currentmemElement.set("unit", 'KiB')
 
         vcpu = ET.SubElement(root, "vcpu")
-        vcpu.text = self.vcpu
+        vcpu.text = vcpu
         vcpu.set("placement", 'static')
 
         os = ET.SubElement(root,"os")
 
         features = ET.SubElement(root,"features")
-        acpi = ET.SubElement(features,"acpi")
-        apic = ET.SubElement(features,"apic")
-        pae = ET.SubElement(features,"pae")
+        ET.SubElement(features,"acpi")
+        ET.SubElement(features,"apic")
+        ET.SubElement(features,"pae")
 
         clock = ET.SubElement(root,"clock")
         clock.set("offset",'utc')
@@ -53,39 +50,39 @@ class VMXmlConfig(object):
         on_crash.text = "destroy"
 
         device = ['cdrom','hd']
-        for key in self.image:
-            type = ET.SubElement(os, "type")
-            type.text = key
-            type.set("arch", 'x86_64')
-            type.set("machine", 'xenfy')
+        for key in image:
+            typeET = ET.SubElement(os, "type")
+            typeET.text = key
+            typeET.set("arch", 'x86_64')
+            typeET.set("machine", 'xenfy')
 
             loader = ET.SubElement(os, "loader")
-            loader.text = self.image[key]['loader']
+            loader.text = image[key]['loader']
             loader.set("type", 'rom')
 
             boot = ET.SubElement(os,"boot")
-            boot.set("dev",self.image[key]['boot'])
+            boot.set("dev",image[key]['boot'])
 
-            device.remove(self.image[key]['boot'])
+            device.remove(image[key]['boot'])
             for element in device:
                 boot = ET.SubElement(os,"boot")
                 boot.set("dev",str(element))
 
             devices = ET.SubElement(root,"devices")
             emulator = ET.SubElement(devices,"emulator")
-            emulator.text = self.image[key]['device_model']
+            emulator.text = image[key]['device_model']
 
         disk = ET.SubElement(devices, "disk")
         disk.set("type","file")
-        disk.set("device",self.vbd['dev'][4:])
+        disk.set("device",vbd['dev'][4:])
         source = ET.SubElement(disk,"source")
-        source.set("file",self.vbd['uname'][8:])
-        backingStore = ET.SubElement(disk,"backingStore")
+        source.set("file",vbd['uname'][8:])
+        ET.SubElement(disk,"backingStore")
         target = ET.SubElement(disk,"target")
-        target.set("dev",self.vbd['dev'][0:3])
+        target.set("dev",vbd['dev'][0:3])
         target.set("bus",'virtio')
-        if self.vbd['mode'] == 'r':
-            readonly = ET.SubElement(disk, "readonly")
+        if vbd['mode'] == 'r':
+            ET.SubElement(disk, "readonly")
         address = ET.SubElement(disk,"address")
         address.set("type","drive")
         address.set("controller",'0')
@@ -95,15 +92,15 @@ class VMXmlConfig(object):
 
         disk = ET.SubElement(devices, "disk")
         disk.set("type","file")
-        disk.set("device",self.tap2['dev'][4:])
+        disk.set("device",tap2['dev'][4:])
         source = ET.SubElement(disk,"source")
-        source.set("file",self.tap2['uname'][8:])
-        backingStore = ET.SubElement(disk,"backingStore")
+        source.set("file",tap2['uname'][8:])
+        ET.SubElement(disk,"backingStore")
         target = ET.SubElement(disk,"target")
-        target.set("dev",self.tap2['dev'][0:3])
+        target.set("dev",tap2['dev'][0:3])
         target.set("bus",'virtio')
-        if self.tap2['mode'] == 'r':
-            readonly = ET.SubElement(disk, "readonly")
+        if tap2['mode'] == 'r':
+            ET.SubElement(disk, "readonly")
         address = ET.SubElement(disk,"address")
         address.set("type","drive")
         address.set("controller",'0')
@@ -125,21 +122,21 @@ class VMXmlConfig(object):
 
         interface = ET.SubElement(devices,"interface")
         interface.set("type",'bridge')
-        mac = ET.SubElement(interface,"mac")
-        mac.set("address",self.vif['mac'])
+        # mac = ET.SubElement(interface,"mac")
+        # mac.set("address",vif['mac'])
         source = ET.SubElement(interface,"source")
-        source.set("bridge",self.vif['bridge'])
+        source.set("bridge",vif['bridge'])
 
         serial = ET.SubElement(devices,"serial")
         serial.set("type",'pty')
         target = ET.SubElement(serial,"target")
         target.set("port",'0')
 
-        console = ET.SubElement(devices,"console")
-        console.set("type",'pty')
-        target = ET.SubElement(console,"target")
+        consoleET = ET.SubElement(devices,"console")
+        consoleET.set("type",'pty')
+        target = ET.SubElement(consoleET,"target")
         target.set("type",'serial')
-        target.set("port",self.console['location'])
+        target.set("port",console['location'])
 
         input = ET.SubElement(devices,"input")
         input.set("type","tablet")
@@ -147,12 +144,12 @@ class VMXmlConfig(object):
 
         graphics = ET.SubElement(devices, "graphics")
         graphics.set("type", 'vnc')
-        graphics.set("port", self.vfb['location'][8:])
+        graphics.set("port", vfb['location'][8:])
         graphics.set("autoport", 'yes')
-        graphics.set("listen", self.vfb['location'][0:7])
+        graphics.set("listen", vfb['location'][0:7])
         listen = ET.SubElement(graphics,"listen")
         listen.set("type","address")
-        listen.set("address",self.vfb['vnclisten'])
+        listen.set("address",vfb['vnclisten'])
 
         video = ET.SubElement(devices,"video")
         model = ET.SubElement(video,"model")
@@ -160,13 +157,38 @@ class VMXmlConfig(object):
         model.set("vram","8192")
         model.set("heads",'1')
         rough_string = ET.tostring(root, 'utf-8')
-#         reparsed = minidom.parseString(rough_string)
-#         xml_config = reparsed.toprettyxml(indent=" " , encoding="utf-8")
 
+        print rough_string
         return rough_string
 
-#         file = open("/home/test/"+self.name+".xml",'w')
-#         file.writelines(rough_string)
-#         file.close()
-#
-#         return "/home/test/"+self.name+".xml"
+
+    @staticmethod
+    def toVBDXml(fileDir, diskTarget):
+        root = ET.Element("disk")
+        root.set('device', 'disk')
+        root.set('type','file')
+
+        source = ET.SubElement(root, 'source')
+        source.set('file', fileDir)
+
+        ET.SubElement(root, 'backingStore')
+        target = ET.SubElement(root, 'target')
+        target.set('bus', 'xen')
+        target.set('dev', diskTarget)
+
+        vbdXml = ET.tostring(root, 'utf-8')
+
+        return vbdXml
+
+
+    @staticmethod
+    def toNetXml(name, bridge):
+        root = ET.Element("network")
+        name = ET.SubElement(root, "name")
+        name.text = name
+
+        bridge = ET.SubElement(root, "bridge")
+        bridge.set("name", bridge)
+        netXml = ET.tostring(root, 'utf-8')
+        return netXml
+
