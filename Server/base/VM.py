@@ -1,8 +1,11 @@
-from Connection import Connection
-from util.OnceLogging import log, init
-from Utils import XMLConverter
+from utils.Connection import Connection
+from utils.OnceLogging import log, init
+from utils.Utils import XMLConverter
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
+
+def test():
+    print "I'm in VM."
 
 def create(_id, name, memory, vcpu, diskDir, isoDir, bridgeSrc):
     '''

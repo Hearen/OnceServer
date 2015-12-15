@@ -2,6 +2,7 @@ import traceback
 from server import app
 from flask import request, make_response
 from OnceLogging import log, init
+import base.VM
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
@@ -24,9 +25,14 @@ def before():
     methodName = str(request.headers.get('Method'))
     print dump_request_detail(request)
     params = request.form.to_dict()
+    module = __import__(moduleName, globals={"__name__": __name__})
+    method = getattr(module, methodName)
+    retv = method(**params)
     try:
         print "inside try block"
+        print moduleName
         if moduleName != "None":
+            print moduleName
             module = __import__(moduleName, globals={"__name__": __name__})
             method = getattr(module, methodName)
             retv = method(**params)

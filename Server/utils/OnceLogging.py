@@ -5,8 +5,7 @@ import types
 import inspect
 import logging
 import logging.handlers
-
-from server.api.utils import mkdir
+import mkdir
 
 MAX_BYTES = 1 << 20  # 1MB
 BACKUP_COUNT = 5

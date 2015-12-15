@@ -7,6 +7,18 @@ import java.util.Map;
 
 public class VM {
 	private String uuid = null;
+	
+	
+	public static void create(String uuid, String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
+    {
+		create0(uuid, name, memory, vcpu, diskDir, isoDir, bridgeSrc);
+    }
+	
+	public static void create(String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
+    {
+		create0("27167fe7-fc9d-47d5-9cd0-717106ef67be", name, memory, vcpu, diskDir, isoDir, bridgeSrc);
+    }
+	
 
     /*******************************************
     Author: LHearen
@@ -15,7 +27,7 @@ public class VM {
     Description: according to the given parameters
     to create a VM in remote host;
     *******************************************/         
-    public static void create(String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
+    public static void create0(String uuid, String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
     {
     	/*
     	 * used to post a VM configuration to server;
@@ -30,7 +42,7 @@ public class VM {
         URL url = new URL("HTTP", "133.133.135.13", 5100, "/VM/");
         Map<String, String> data = new HashMap<String, String>();
 //        data.put("uuid", "74697a47-9eed-471e-9fd2-f925cf852612");
-        data.put("_id", "d9a562e8-6efc-4b54-8df6-57a254fcc026");
+        data.put("_id", uuid);
         data.put("name", name);
         data.put("memory", Integer.toString(memory));
         data.put("vcpu", Integer.toString(vcpu));
