@@ -3,6 +3,7 @@ from utils.OnceLogging import log, init
 from utils.Utils import XMLConverter
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
+conn = Connection.get_libvirt_connection()
 
 def test():
     print "I'm in VM."
@@ -18,7 +19,6 @@ def create(_id, name, memory, vcpu, diskDir, isoDir, bridgeSrc):
     if len(uuid) < 5:
         uuid = None
     uuid = None
-    conn = Connection.get_libvirt_connection()
     hvm = {"loader": "/usr/lib/xen/boot/hvmloader"}
     hvm["boot"] = "cdrom"
     hvm["device_model"] = "/usr/lib64/xen/bin/qemu-system-i386"
@@ -40,10 +40,10 @@ def create(_id, name, memory, vcpu, diskDir, isoDir, bridgeSrc):
     console = {"location": "0"}
     xml_config = XMLConverter.toVMXml(uuid, name, memory, vcpu, image, tap2,
                                         vif, vbd, vfb, console)
-    return define_VM_by_xml(conn, xml_config)
+    return define_VM_by_xml(xml_config)
 
 
-def define_VM_by_xml(conn, xml_config):
+def define_VM_by_xml(xml_config):
     '''
     added by LHearen
     E-mail: LHearen@126.com
@@ -58,3 +58,19 @@ def define_VM_by_xml(conn, xml_config):
         return None
     return dom.UUIDString()
 
+
+def start(_id, flags=0):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-15 15 : 44
+    Description : Used to start the VM pointed by uuid;
+    '''
+    dom = conn.lookupByUUIDString(_id)
+    try:
+        dom.createWithFlags(int(flags))
+    except Exception:
+        log.error("Started dom %s failed" % _id)
+        return False
+    else:
+        return True

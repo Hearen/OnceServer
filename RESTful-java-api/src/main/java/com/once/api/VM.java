@@ -8,12 +8,23 @@ import java.util.Map;
 public class VM {
 	private String uuid = null;
 	
-	
+    /*******************************************
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-15 16 : 08
+    Description : Used to specify a uuid for the VM;
+    *******************************************/	
 	public static void create(String uuid, String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
     {
 		create0(uuid, name, memory, vcpu, diskDir, isoDir, bridgeSrc);
     }
-	
+
+    /*******************************************
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-15 16 : 08
+    Description : Using the default uuid created by server;
+    *******************************************/    
 	public static void create(String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
     {
 		create0("27167fe7-fc9d-47d5-9cd0-717106ef67be", name, memory, vcpu, diskDir, isoDir, bridgeSrc);
@@ -54,6 +65,30 @@ public class VM {
         System.out.println(response);
     }
         
-	
+    /*******************************************
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-15 16 : 09
+    Description : Used to start a VM specified by uuid;
+    *******************************************/
+	public static boolean start(String uuid)
+	{
+		Map<String, String> header = new HashMap<String, String>();
+        header.put("Module", "VM");
+        header.put("Method", "start");
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("_id", uuid);
+		URL url = null;
+		try {
+			url = new URL("HTTP", "133.133.135.13", 5100, "/VM/" + uuid);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		String response = Connection.sendPost(url, header, data);
+		System.out.println(response);
+		return true;
+	}
 
 }

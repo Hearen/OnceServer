@@ -71,6 +71,10 @@ def before():
     print dump_request_detail(request)
     print moduleName
     params = request.form.to_dict()
+    module = moduleLoader('base', moduleName)
+    print module
+    method = getattr(module, methodName)
+    retv = method(**params)
     try:
         print "inside try block"
         if moduleName != "None":
