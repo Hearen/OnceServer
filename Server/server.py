@@ -5,9 +5,11 @@ from utils.MyUUID import UUIDValidator
 import traceback
 from flask import request, make_response
 from utils.OnceLogging import log, init
+from utils.Tools import dumpRequest
 
 def replace_uuid(items):
     print "I am inserting VM now."
+
 
 def hello(resourceName, items):
     '''
@@ -38,6 +40,7 @@ app.on_insert_VM += replace_uuid
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
+
 def errorResponseMaker():
     '''
     Author      : LHearen
@@ -47,6 +50,7 @@ def errorResponseMaker():
     '''
     headers = {'Content-Type':'text/plain'}
     return make_response("User function failed", 403, headers)
+
 
 def moduleLoader(packageName, moduleName):
     '''
@@ -61,7 +65,6 @@ def moduleLoader(packageName, moduleName):
     return getattr(package, moduleName)
 
 
-
 @app.before_request
 def before():
     '''
@@ -74,7 +77,7 @@ def before():
     print '\n\n\nStart to handle request...'
     moduleName = str(request.headers.get('Module'))
     methodName = str(request.headers.get('Method'))
-    print dump_request_detail(request)
+    print dumpRequest(request)
     print moduleName
     params = request.form.to_dict()
     # module = moduleLoader('base', moduleName)
@@ -96,6 +99,7 @@ def before():
             log.exception(traceback.format_exc())
             errorResponseMaker()
 
+
 @app.after_request
 def after(response):
     '''
@@ -106,24 +110,6 @@ def after(response):
                 returned to the clients;
     '''
     return response
-
-def dump_request_detail(request):
-    '''
-    Author      : DBear
-    Time        : 2015-12-15 15 : 33
-    Description : Present the details of the coming request;
-    '''
-    request_detail = """
-        request.endpoint:{request.endpoint}
-        request.method:{request.method}
-        request.view_args:{request.view_args}
-        request.args:{request.args}
-        request.form:{request.form}
-        request.user_agent:{request.user_agent}
-        request.files:{request.files}
-        request.is_xhr:{request.is_xhr}
-        {request.headers}""".format(request=request).strip()
-    return request_detail
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5100, debug=True, threaded=True)

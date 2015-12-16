@@ -86,16 +86,35 @@ public class Connection
         return contentStringBuffer.toString();
     }
     
+    /*******************************************
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 16 : 26
+    Description : Just send patch to server updating DB;
+    *******************************************/
     public static String sendPatch(URL url, Map<String, String> data)
     {
     	return sendPatch(url, new HashMap<String, String>(), data);
     }
     
+    /*******************************************
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 16 : 27
+    Description : Trying to send patch to the server
+            updating DB and executing some operations;
+    *******************************************/
     public static String sendPatch(URL url, Map<String, String> headers, Map<String, String> data)
     {
     	return sendPatch0(url, headers, data);
     }
 
+    /*******************************************
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 16 : 27
+    Description : Used as base method for sendPatch overlapping; 
+    *******************************************/
 	private static String sendPatch0(URL url, Map<String, String> headers, Map<String, String> data)
 	{
 
@@ -210,6 +229,12 @@ public class Connection
 		return contentStringBuffer.toString();
     }
     
+    /*******************************************
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 16 : 28
+    Description : Deleting resources in DB and execute some operations in server;
+    *******************************************/
     public static String sendDelete(String urlString, Map<String, String> headers)
     {
     	CloseableHttpClient client = HttpClients.createDefault();
