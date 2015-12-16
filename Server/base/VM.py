@@ -1,18 +1,18 @@
 from utils.Connection import Connection
 from utils.OnceLogging import log, init
-from utils.Utils import XMLConverter
+from utils.XmlConverter import XmlConverter
+from time import sleep
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
 
-def test():
-    print "I'm in VM."
 
-def create(_id, name, memory, vcpu, diskDir, isoDir, bridgeSrc):
+def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     '''
-    coded by LHearen
-    E-mail: LHearen@126.com
-    Using limited parameters to create a VM and return its UUIDString;
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 09 : 43
+    Description : Using limited parameters to create a VM and return its UUIDString;
     '''
     uuid = _id
     print("Inside create")
@@ -29,18 +29,21 @@ def create(_id, name, memory, vcpu, diskDir, isoDir, bridgeSrc):
     tap2["mode"] = "r"
 
     vif = {"bridge": bridgeSrc}
+    if mac is not None:
+        vif["mac"] = mac;
 
     vbd = {"dev": "hda:disk"}
     vbd["uname"] = "tap:aio:" + diskDir
-    vbd["mode"] = "r"
+    vbd["mode"] = "w"
 
     vfb = {"location": "0.0.0.0:5900"}
     vfb["vnclisten"] = "0.0.0.0"
 
     console = {"location": "0"}
-    xml_config = XMLConverter.toVMXml(uuid, name, memory, vcpu, image, tap2,
+    xmlConfig = XmlConverter.toVMXml(uuid, name, memory, vcpu, image, tap2,
                                         vif, vbd, vfb, console)
-    return define_VM_by_xml(xml_config)
+    print xmlConfig
+    return define_VM_by_xml(xmlConfig)
 
 
 def define_VM_by_xml(xml_config):
@@ -51,10 +54,12 @@ def define_VM_by_xml(xml_config):
     automatically generated internal xml configuration file and
     initialize the extra configuration file for latter use.
     '''
-    log.debug(xml_config)
+    # log.debug(xml_config)
+    # log.error(xml_config)
     try:
         dom = conn.defineXML(xml_config)
     except Exception:
+        log.error("VM creation failed!")
         return None
     return dom.UUIDString()
 
@@ -69,8 +74,87 @@ def start(_id, flags=0):
     dom = conn.lookupByUUIDString(_id)
     try:
         dom.createWithFlags(int(flags))
-    except Exception:
-        log.error("Started dom %s failed" % _id)
+    except Exception, e:
+        log.error("Started dom %s failed! Message: %s" % (_id, e))
         return False
     else:
         return True
+
+def shutdown(_id, flags=0):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 13 : 49
+    Description : Shutdown the VM specified by uuid
+                if it cannot shutdown as usual, destroy it after a certain delay;
+    '''
+    delay = 3
+    dom = conn.lookupByUUIDString(_id)
+    if dom:
+        try:
+            dom.shutdownFlags(int(flags))
+            while delay > 0:
+                sleep(1)
+                if not dom.isActive(): return True
+                delay -= 1
+            if dom.isActive():
+                dom.destroyFlags(int(flags))
+            if not dom.isActive(): return True
+        except Exception, e:
+            log.error("VM %s shutdown failed! Message: %s" % (_id, e))
+    return False
+
+def delete(_id, flags=0):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 14 : 00
+    Description : destory the VM first if it's still active
+                and then undefine it;
+    '''
+    '''
+    Added by    : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 15 : 01
+    Description : update the mongodb here - delete the collection;
+    '''
+    dom = conn.lookupByUUIDString(_id)
+    if dom:
+        if dom.isActive(): dom.destroyFlags(int(flags))
+        dom.undefineFlags(int(flags))
+        try:
+             conn.lookupByUUIDString(_id)
+        except Exception, e:
+            log.error("VM %s deletion failed! Message: %s", (_id, e))
+            return True
+    return False
+
+def reboot(_id, flags=0):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 14 : 00
+    Description : waiting for a period of time until vm is off,
+                after which destroy it and then start it;
+    '''
+    unit = 2
+    dom = conn.lookupByUUIDString(_id)
+    if dom:
+        try:
+            dom.shutdownFlags(int(flags))
+            for i in range(3):
+                sleep(unit)
+                if not dom.isActive():
+                    break;
+            if dom.isActive(): dom.destroy()
+            sleep(unit)
+            if not dom.isActive(): dom.createWithFlags(int(flags))
+            else: return False
+            sleep(unit)
+            if not dom.isActive(): return False
+            else: return True
+        except Exception, e:
+            log.error("VM %s reboot failed!" % (_id, e))
+            return False
+
+

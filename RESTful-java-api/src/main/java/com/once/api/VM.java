@@ -6,31 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VM {
-	private String uuid = null;
+	private static final String urlString = "http://" + CONST.HOST + ":" + CONST.PORT + "/VM/";
 	
-    /*******************************************
-    Author      : LHearen
-    E-mail      : LHearen@126.com
-    Time        : 2015-12-15 16 : 08
-    Description : Used to specify a uuid for the VM;
-    *******************************************/	
-	public static void create(String uuid, String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
-    {
-		create0(uuid, name, memory, vcpu, diskDir, isoDir, bridgeSrc);
-    }
-
-    /*******************************************
-    Author      : LHearen
-    E-mail      : LHearen@126.com
-    Time        : 2015-12-15 16 : 08
-    Description : Using the default uuid created by server;
-    *******************************************/    
-	public static void create(String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
-    {
-		create0("27167fe7-fc9d-47d5-9cd0-717106ef67be", name, memory, vcpu, diskDir, isoDir, bridgeSrc);
-    }
-	
-
     /*******************************************
     Author: LHearen
     E-mail: LHearen@126.com
@@ -38,7 +15,7 @@ public class VM {
     Description: according to the given parameters
     to create a VM in remote host;
     *******************************************/         
-    public static void create0(String uuid, String name, int memory, int vcpu, String diskDir, String isoDir, String bridgeSrc) throws MalformedURLException
+    public static void create(VMConfig config) throws MalformedURLException
     {
     	/*
     	 * used to post a VM configuration to server;
@@ -47,22 +24,28 @@ public class VM {
         Map<String, String> header = new HashMap<String, String>();
         header.put("Module", "VM");
         header.put("Method", "create");
-//        String parameters = "{'uuid':" + "'vm'," + "'name':'" + name + "','memory':'" + Integer.toString(memory) + "','vcpu':'" + Integer.toString(vcpu) +
-//        		"','diskDir':'" + diskDir + "','isoDir':'" + isoDir + "','bridgeSrc':'" + bridgeSrc + "'}";
-//        header.put("Params", parameters);
-        URL url = new URL("HTTP", "133.133.135.13", 5100, "/VM/");
-        Map<String, String> data = new HashMap<String, String>();
-//        data.put("uuid", "74697a47-9eed-471e-9fd2-f925cf852612");
-        data.put("_id", uuid);
-        data.put("name", name);
-        data.put("memory", Integer.toString(memory));
-        data.put("vcpu", Integer.toString(vcpu));
-        data.put("diskDir", diskDir);
-        data.put("isoDir",  isoDir);
-        data.put("bridgeSrc", bridgeSrc);
-        System.out.println(data);
-        String response = Connection.sendPost(url, header, data);
+        URL url = new URL(urlString);
+        String response = Connection.sendPost(url, header, config.toMap());
         System.out.println(response);
+    }
+    
+    private static boolean sendMethod(String uuid, String method)
+    {
+    	Map<String, String> header = new HashMap<String, String>();
+        header.put("Module", "VM");
+        header.put("Method", method);
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("_id", uuid);
+        URL url = null;
+		try {
+			url = new URL(urlString);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		String response = Connection.sendPatch(url, header, data);
+		System.out.println(response);
+		return true;
     }
         
     /*******************************************
@@ -73,22 +56,50 @@ public class VM {
     *******************************************/
 	public static boolean start(String uuid)
 	{
-		Map<String, String> header = new HashMap<String, String>();
-        header.put("Module", "VM");
-        header.put("Method", "start");
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("_id", uuid);
-		URL url = null;
+		return sendMethod(uuid, "start");
+	}
+	
+	public static boolean shutdown(String uuid)
+	{
+		return sendMethod(uuid, "shutdown");
+	}
+
+	public static boolean delete(String uuid)
+	{
+		return sendMethod(uuid, "delete");
+	}
+	
+	public static boolean reboot(String uuid)
+	{
+		return sendMethod(uuid, "reboot");
+	}
+	
+	public static String isTemplate(String uuid)
+	{
+		URL url;
 		try {
-			url = new URL("HTTP", "133.133.135.13", 5100, "/VM/" + uuid);
+			url = new URL(urlString + uuid);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		String response = Connection.sendGet(url);
+		return response;
+	}
+	
+	public static boolean setTemplate(String uuid)
+	{
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isTemplate", "True");
+		URL url;
+		try {
+			url = new URL(urlString + uuid);
+		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			return false;
 		}
-		String response = Connection.sendPost(url, header, data);
+		String response = Connection.sendPatch(url, map);
 		System.out.println(response);
 		return true;
 	}
-
 }

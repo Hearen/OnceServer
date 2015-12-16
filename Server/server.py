@@ -10,6 +10,12 @@ def replace_uuid(items):
     print "I am inserting VM now."
 
 def hello(resourceName, items):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 09 : 54
+    Description : Used to test mongoDB insertion event;
+    '''
     print "####################################"
     print "hello world"
     print resourceName
@@ -71,13 +77,13 @@ def before():
     print dump_request_detail(request)
     print moduleName
     params = request.form.to_dict()
-    module = moduleLoader('base', moduleName)
-    print module
-    method = getattr(module, methodName)
-    retv = method(**params)
-    try:
-        print "inside try block"
-        if moduleName != "None":
+    # module = moduleLoader('base', moduleName)
+    # print module
+    # method = getattr(module, methodName)
+    # retv = method(**params)
+    if moduleName != "None":
+        try:
+            print "inside try block"
             module = moduleLoader('base', moduleName)
             print module
             method = getattr(module, methodName)
@@ -85,10 +91,10 @@ def before():
             if not retv:
                 print "Wrong result from customized function!"
                 errorResponseMaker()
-        print "leaving try block"
-    except Exception:
-        log.exception(traceback.format_exc())
-        errorResponseMaker()
+            print "leaving try block"
+        except Exception:
+            log.exception(traceback.format_exc())
+            errorResponseMaker()
 
 @app.after_request
 def after(response):

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-
 # We want to seamlessy run our API both locally and on Heroku. If running on
 # Heroku, sensible DB connection settings are stored in environment variables.
 # MONGO_HOST = os.environ.get('MONGO_HOST', 'localhost')
@@ -61,6 +59,9 @@ vm = {
 			'type': 'integer',
             'required': True,
 		 },
+        'mac':{
+            'type': 'string',
+        },
         'diskDir':{
             'type': 'string',
             'required': True,
@@ -79,13 +80,10 @@ vm = {
 		 'VIFs': {
 			'type': 'list',
 		 },
-		 'is_template': {
-			'type': 'boolean',
-             'default': False,
+		 'isTemplate': {
+			'type': 'string',
+             'default': 'False',
 		 },
-        'powerstate': {
-            'type': 'string',
-        },
     }
 }
 

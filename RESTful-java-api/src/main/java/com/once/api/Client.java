@@ -28,8 +28,16 @@ public class Client {
 	private static final String POST_URL = "http://localhost:9090/SpringMVCExample/home";
 
 	public static void main(String[] args) throws IOException {
-//		VM.create("vm", 1024, 2, "/home/res/images/test1.qcow2", "/home/res/iso/CentOS-7.1.iso", "ovs0");
-		VM.start("283c3420-fa82-460c-a19c-7181cbd21eae");
+		VMConfig config = new VMConfig("vm", 2, 1024, "/home/res/images/test1.qcow2", "/home/res/iso/CentOS-7.1.iso", "ovs0");
+		VM.create(config);
+		String uuid = "9ae89b00-639f-4b28-a38c-b7bb4910a7b1";
+//		VM.start(uuid);
+//		VM.shutdown(uuid);
+//		VM.reboot(uuid);
+//		VM.delete(uuid);
+		System.out.println(VM.isTemplate(uuid));
+		VM.setTemplate(uuid);
+		System.out.println(VM.isTemplate(uuid));
 //		URL url = new URL("HTTP", "133.133.135.13", 5100,
 //				"/VM/27167fe7-fc9d-47d5-9cd0-717106ef67be");
 //		 StringBuffer result = sendGET(url);

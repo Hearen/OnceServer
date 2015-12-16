@@ -15,6 +15,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPatch;
@@ -82,11 +83,91 @@ public class Connection
 			e.printStackTrace();
 			return null;
 		}
-        
-
         return contentStringBuffer.toString();
     }
+    
+    public static String sendPatch(URL url, Map<String, String> data)
+    {
+    	return sendPatch(url, new HashMap<String, String>(), data);
+    }
+    
+    public static String sendPatch(URL url, Map<String, String> headers, Map<String, String> data)
+    {
+    	return sendPatch0(url, headers, data);
+    }
 
+	private static String sendPatch0(URL url, Map<String, String> headers, Map<String, String> data)
+	{
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpPatch httpPatch = new HttpPatch(url.toString());
+		httpPatch.addHeader("User-Agent", CONST.USER_AGENT);
+		for(String key: headers.keySet())
+        {
+			httpPatch.addHeader(key, headers.get(key));
+        }
+		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		for (String key : data.keySet()) {
+			urlParameters.add(new BasicNameValuePair(key, data.get(key)));
+		}
+
+		HttpEntity params = null;
+		try {
+			params = new UrlEncodedFormEntity(urlParameters);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		httpPatch.setEntity(params);
+
+		CloseableHttpResponse httpResponse = null;
+		try {
+			httpResponse = httpClient.execute(httpPatch);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(
+					httpResponse.getEntity().getContent()));
+		} catch (UnsupportedOperationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String line;
+		StringBuffer contentStringBuffer = new StringBuffer();
+
+		try {
+			while ((line = reader.readLine()) != null) {
+				contentStringBuffer.append(line);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			httpClient.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return contentStringBuffer.toString();
+	}
+    
     /*******************************************
     Author: LHearen
     E-mail: LHearen@126.com
@@ -101,6 +182,46 @@ public class Connection
 		CloseableHttpResponse response;
 		try {
 			response = client.execute(get);
+			int statusCode = response.getStatusLine().getStatusCode();
+		}
+    	catch (Exception e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+		
+		StringBuffer contentStringBuffer = new StringBuffer();
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
+			String line;
+			
+			while ((line = reader.readLine()) != null) {
+				contentStringBuffer.append(line);
+			}
+			reader.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+		return contentStringBuffer.toString();
+    }
+    
+    public static String sendDelete(String urlString, Map<String, String> headers)
+    {
+    	CloseableHttpClient client = HttpClients.createDefault();
+    	HttpDelete httpDelete = new HttpDelete(urlString);
+    	httpDelete.addHeader("User-Agent", CONST.USER_AGENT);
+    	for(String key: headers.keySet())
+        {
+    		httpDelete.addHeader(key, headers.get(key));
+        }
+    	CloseableHttpResponse response;
+		try {
+			response = client.execute(httpDelete);
 			int statusCode = response.getStatusLine().getStatusCode();
 		}
     	catch (Exception e) 
