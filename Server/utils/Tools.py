@@ -4,7 +4,6 @@ E-mail      : LHearen@126.com
 Time        : 2015-12-16 10 : 28
 Description : Used to assist other modules;
 '''
-from pymongo import MongoClient
 
 def dumpRequest(request):
     '''
@@ -24,14 +23,3 @@ def dumpRequest(request):
         {request.headers}""".format(request=request).strip()
     return request_detail
 
-def VMRetriever(document, filterJson):
-    print "inside documentRetriever"
-    client = MongoClient('localhost', 27017)
-    db = client['server']
-    vm = db.VM
-    print vm.find_one()
-    print db
-    print dir(db)
-    print document
-    print dir(document)
-    return vm.find_one(filterJson)

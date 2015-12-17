@@ -30,12 +30,12 @@ public class Client {
 	public static void main(String[] args) throws IOException {
 		VMConfig config = new VMConfig("vm", 2, 1024, "/home/res/images/test1.qcow2", "/home/res/iso/CentOS-7.1.iso", "ovs0");
 //		VM.create(config);
-		String uuid = "9ae89b00-639f-4b28-a38c-b7bb4910a7b1";
+		String uuid = "103adb75-f41a-4dae-8bdc-c61e92c85e58";
 //		VM.start(uuid);
 //		VM.shutdown(uuid);
 //		VM.reboot(uuid);
-//		VM.delete(uuid);
-		System.out.println(VM.isTemplate(uuid));
+		VM.delete(uuid);
+//		System.out.println(VM.isTemplate(uuid));
 //		VM.setTemplate(uuid);
 //		System.out.println(VM.isTemplate(uuid));
 //		URL url = new URL("HTTP", "133.133.135.13", 5100,

@@ -2,7 +2,7 @@ from utils.Connection import Connection
 from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from time import sleep
-from utils.Tools import documentRetriever
+from utils.DBHelper import VMHelper
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
@@ -127,7 +127,8 @@ def delete(_id, flags=0):
              conn.lookupByUUIDString(_id)
         except Exception, e:
             log.error("VM %s deletion failed! Message: %s", (_id, e))
-            return True
+            filter = {"_id": _id}
+            return VMHelper.remove(filter)
     return False
 
 def reboot(_id, flags=0):
@@ -168,4 +169,5 @@ def isTemplate(_id):
     Description : Used to retrieve the isTemplate attribute from DB;
     '''
     print "inside isTemplate"
-    return documentRetriever("VM", '{"_id": _id}')
+    filter = {"_id": _id}
+    return VMHelper.retrieve("VM", filter)

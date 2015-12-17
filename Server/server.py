@@ -80,10 +80,10 @@ def before():
     print dumpRequest(request)
     print moduleName
     params = request.form.to_dict()
-    module = moduleLoader('base', moduleName)
-    print module
-    method = getattr(module, methodName)
-    retv = method(**params)
+    # module = moduleLoader('base', moduleName)
+    # print module
+    # method = getattr(module, methodName)
+    # retv = method(**params)
     if moduleName != "None":
         try:
             print "inside try block"
@@ -95,6 +95,8 @@ def before():
                 print "Wrong result from customized function!"
                 errorResponseMaker()
             print "leaving try block"
+            headers = {'Content-Type':'text/plain'}
+            return make_response("Successful!", 201, headers)
         except Exception:
             log.exception(traceback.format_exc())
             errorResponseMaker()

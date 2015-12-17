@@ -66,21 +66,7 @@ public class VM {
 
 	public static boolean delete(String uuid)
 	{
-		Map<String, String> header = new HashMap<String, String>();
-        header.put("Module", "VM");
-        header.put("Method", "delete");
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("_id", uuid);
-        URL url = null;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		String response = Connection.sendDelete(urlString+uuid, header, data);
-		System.out.println(response);
-		return true;
+		return sendMethod(uuid, "delete");
 	}
 	
 	public static boolean reboot(String uuid)
