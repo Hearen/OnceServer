@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -235,7 +236,7 @@ public class Connection
     Time        : 2015-12-16 16 : 28
     Description : Deleting resources in DB and execute some operations in server;
     *******************************************/
-    public static String sendDelete(String urlString, Map<String, String> headers)
+    public static String sendDelete(String urlString, Map<String, String> headers, Map<String, String> data)
     {
     	CloseableHttpClient client = HttpClients.createDefault();
     	HttpDelete httpDelete = new HttpDelete(urlString);
@@ -244,6 +245,19 @@ public class Connection
         {
     		httpDelete.addHeader(key, headers.get(key));
         }
+    	List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+		for (String key : data.keySet()) {
+			urlParameters.add(new BasicNameValuePair(key, data.get(key)));
+		}
+
+		HttpEntity params = null;
+		try {
+			params = new UrlEncodedFormEntity(urlParameters);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		((HttpResponse) httpDelete).setEntity(params);
     	CloseableHttpResponse response;
 		try {
 			response = client.execute(httpDelete);

@@ -66,7 +66,21 @@ public class VM {
 
 	public static boolean delete(String uuid)
 	{
-		return sendMethod(uuid, "delete");
+		Map<String, String> header = new HashMap<String, String>();
+        header.put("Module", "VM");
+        header.put("Method", "delete");
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("_id", uuid);
+        URL url = null;
+		try {
+			url = new URL(urlString);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		String response = Connection.sendDelete(urlString+uuid, header, data);
+		System.out.println(response);
+		return true;
 	}
 	
 	public static boolean reboot(String uuid)
@@ -74,17 +88,9 @@ public class VM {
 		return sendMethod(uuid, "reboot");
 	}
 	
-	public static String isTemplate(String uuid)
+	public static boolean isTemplate(String uuid)
 	{
-		URL url;
-		try {
-			url = new URL(urlString + uuid);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		}
-		String response = Connection.sendGet(url);
-		return response;
+		return sendMethod(uuid, "isTemplate");
 	}
 	
 	public static boolean setTemplate(String uuid)

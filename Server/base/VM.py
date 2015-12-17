@@ -2,6 +2,7 @@ from utils.Connection import Connection
 from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from time import sleep
+from utils.Tools import documentRetriever
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
@@ -158,3 +159,13 @@ def reboot(_id, flags=0):
             return False
 
 
+
+def isTemplate(_id):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-17 11 : 20
+    Description : Used to retrieve the isTemplate attribute from DB;
+    '''
+    print "inside isTemplate"
+    return documentRetriever("VM", '{"_id": _id}')
