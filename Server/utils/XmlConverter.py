@@ -8,6 +8,13 @@ class XmlConverter():
     '''
     @staticmethod
     def toVMXml(uuid, name, memory, vcpu, image, tap2, vif, vbd, vfb, console):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-23 15 : 31
+        Description : Using essential values to generate
+                a XML configuration string;
+        '''
         root = ET.Element("domain")
         root.set("type", 'xen')
 
@@ -162,23 +169,42 @@ class XmlConverter():
 
 
     @staticmethod
-    def toVBDXml(fileDir, diskTarget):
-        root = ET.Element("disk")
-        root.set('device', 'disk')
-        root.set('type','file')
+    def toSRXml(name, target, type='dir'):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-23 15 : 42
+        Description : Used to describe the storage pool configuration
+                    to create it;
+        '''
+        root = ET.Element("pool")
+        root.set("type", type)
 
-        source = ET.SubElement(root, 'source')
-        source.set('file', fileDir)
+        nameET = root.SubElement("name")
+        nameET.text = name
 
-        ET.SubElement(root, 'backingStore')
-        target = ET.SubElement(root, 'target')
-        target.set('bus', 'xen')
-        target.set('dev', diskTarget)
+        targetET = root.SubElement("target")
+        pathET = targetET.SubElement("path")
+        pathET.text = target
 
-        vbdXml = ET.tostring(root, 'utf-8')
+        return ET.tostring(root, 'utf-8')
 
-        return vbdXml
-
+    @staticmethod
+    def toVolumeXml(volumeName, volumeSize):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-23 16 : 30
+        Description : Used to define a XML configuration string to create a
+                    volume within a active pool;
+        '''
+        root = ET.Element("volume")
+        nameET = root.subElement("name")
+        nameET.text = volumeName
+        capacityET = root.subElement("capacity")
+        capacityET.set("unit", "M")
+        capacityET.text = volumeSize
+        return ET.tostring(root, 'utf-8')
 
     @staticmethod
     def toNetXml(name, bridge):

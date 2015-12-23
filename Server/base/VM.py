@@ -43,7 +43,7 @@ def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     console = {"location": "0"}
     xmlConfig = XmlConverter.toVMXml(uuid, name, memory, vcpu, image, tap2,
                                         vif, vbd, vfb, console)
-    print xmlConfig
+    # print xmlConfig
     return define_VM_by_xml(xmlConfig)
 
 
@@ -141,9 +141,13 @@ def reboot(_id, flags=0):
     '''
     unit = 2
     dom = conn.lookupByUUIDString(_id)
+    print dom
     if dom:
         try:
-            dom.shutdownFlags(int(flags))
+            try:
+                dom.shutdownFlags(int(flags))
+            except:
+                pass
             for i in range(3):
                 sleep(unit)
                 if not dom.isActive():
@@ -156,9 +160,8 @@ def reboot(_id, flags=0):
             if not dom.isActive(): return False
             else: return True
         except Exception, e:
-            log.error("VM %s reboot failed!" % (_id, e))
+            log.error("VM %s reboot failed! Message: %s" % (_id, e))
             return False
-
 
 
 def isTemplate(_id):
@@ -170,4 +173,7 @@ def isTemplate(_id):
     '''
     print "inside isTemplate"
     filter = {"_id": _id}
-    return VMHelper.retrieve("VM", filter)
+    print filter
+    res = VMHelper.retrieve(filter)["isTemplate"]
+    print res
+    return res

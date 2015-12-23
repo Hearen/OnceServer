@@ -5,6 +5,18 @@ Time        : 2015-12-16 10 : 28
 Description : Used to assist other modules;
 '''
 
+def moduleLoader(packageName, moduleName):
+    '''
+    Author: LHearen
+    E-mail: LHearen@126.com
+    Time  :	2015-12-15 15:19
+    Description: Used to load a module from the package
+                will only return the module but not introduce
+                the module to the current context unlike importlib;
+    '''
+    package = __import__(packageName, globals(), locals(), moduleName.split(), -1)
+    return getattr(package, moduleName)
+
 def dumpRequest(request):
     '''
     Author      : DBear

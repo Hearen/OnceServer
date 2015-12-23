@@ -1,4 +1,10 @@
 # Byte-compiled / optimized / DLL files
+# java *.class files
+*.class
+
+# python testing files
+*test*.py
+
 __pycache__/
 *.py[cod]
 

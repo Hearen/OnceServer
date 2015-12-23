@@ -37,7 +37,9 @@ class VMHelper():
         Parameter   : filter can be dictionary of list of dictionary;
         Return      : return the documents fitting the condition;
         '''
-        return VMHelper.__getVMCollection().find_one(filter)
+        col = VMHelper.__getVMCollection()
+        print col.find_one()
+        return col.find_one(filter)
 
     @staticmethod
     def remove(filter):
