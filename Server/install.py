@@ -15,7 +15,6 @@ app.on_insert_VM += VMInserting
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
-
 def errorResponseMaker():
     '''
     Author      : LHearen
@@ -62,7 +61,6 @@ def before():
         except Exception:
             log.exception(traceback.format_exc())
             errorResponseMaker()
-
 
 @app.after_request
 def after(response):
