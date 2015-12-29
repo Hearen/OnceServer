@@ -1,4 +1,4 @@
-package main.java.com.once.api;
+package com.once.api;
 
 /*******************************************
 Author: LHearen

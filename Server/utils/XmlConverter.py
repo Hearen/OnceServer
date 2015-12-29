@@ -1,4 +1,7 @@
 import xml.etree.ElementTree as ET
+from utils.OnceLogging import log, init
+init("/var/log/xen/libvirt.log", "DEBUG", log)
+
 class XmlConverter():
     '''
     Author: LHearen
@@ -216,4 +219,24 @@ class XmlConverter():
         bridge.set("name", bridge)
         netXml = ET.tostring(root, 'utf-8')
         return netXml
+    
+    @staticmethod
+    def toVIFXml(net_type, mac, source):
+        '''
+        Author      : Wu Yuewen
+        E-mail      : wuyuewen@otcaix.iscas.ac.cn
+        Time        : 2015-12-24 14 : 50
+        Description : Used to define a XML configuration string to create a
+                    interface;
+        '''
+        root = ET.Element('interface')
+        root.set('type', 'bridge')
+        if mac != None:
+            mac = ET.SubElement(root, "mac")
+            mac.set("address", str(mac)) 
+        source = ET.SubElement(root, 'source')
+        source.set('bridge', source)
+        vif_xml = ET.tostring(root, 'utf-8')
+        log.debug(vif_xml)
+        return vif_xml        
 

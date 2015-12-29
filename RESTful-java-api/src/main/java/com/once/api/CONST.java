@@ -1,4 +1,4 @@
-package main.java.com.once.api;
+package com.once.api;
 
 public class CONST {
 /*******************************************
@@ -9,6 +9,7 @@ Description: all constants to be used in this
 project will be stored here for consistency;
 *******************************************/
 	public static final String USER_AGENT = "Mozilla/5.0";
+//	public static final String CONTENT_TYPE= "application/json";
 	
 	public static final String HOST = "133.133.135.13";
 	public static final int PORT = 5100;

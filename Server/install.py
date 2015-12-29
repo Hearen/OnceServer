@@ -1,7 +1,8 @@
+import traceback
+import json
 from eve import Eve
 from utils.MyUUID import UUIDEncoder
 from utils.MyUUID import UUIDValidator
-import traceback
 from flask import request, make_response
 from utils.OnceLogging import log, init
 from utils.Tools import dumpRequest
@@ -35,22 +36,23 @@ def before():
     Description: Used to execute commands from clients;
     '''
     print '\n\n\nStart to handle request...'
-    moduleName = str(request.headers.get('Module'))
-    methodName = str(request.headers.get('Method'))
+    moduleName = request.headers.get('Module', None)
+    methodName = request.headers.get('Method', None)
     print dumpRequest(request)
     print moduleName
-    params = request.form.to_dict()
-    # module = moduleLoader('base', moduleName)
-    # print module
-    # method = getattr(module, methodName)
-    # retv = method(**params)
-    if moduleName != "None":
+    if moduleName != None:
+        params = request.form.to_dict()
+        print params
+        module = moduleLoader('base', str(moduleName))
+        print module
+        method = getattr(module, methodName)
+        retv = method(**params)
         try:
             print "inside try block"
-            module = moduleLoader('base', moduleName)
-            print module
-            method = getattr(module, methodName)
-            retv = method(**params)
+#             module = moduleLoader('base', moduleName)
+#             print module
+#             method = getattr(module, methodName)
+#             retv = method(**params)
             if not retv:
                 print "Wrong result from customized function!"
                 errorResponseMaker()
