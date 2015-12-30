@@ -86,28 +86,31 @@ vm = {
 }
 
 vif = {
-    'additional_lookup': {
-        'url': 'regex("[\w]+")',
-        'field': 'uuid'
-    },
+    'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
+#     'additional_lookup': {
+#         'url': 'regex("[\w]+")',
+#         'field': 'uuid'
+#     },
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
     # most global settings can be overridden at resource level
     'resource_methods': ['GET', 'POST', 'DELETE'],
     'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],
 	'schema': {
-		'uuid': {
-			'type': 'string',
-			'required': True,
+        '_id':{
+            'type': 'uuid',
             'unique': True,
-		},
-		'name': {
+        },
+        'vm_id':{
+            'type': 'uuid',
+        },
+		'net_type': {
 			'type': 'string',
 		},
 		'MAC': {
 			'type': 'string',
 		},
-		'bridge': {
+		'source': {
 			'type': 'string',
 		},
 	}
@@ -153,7 +156,7 @@ vbd = {
 # The DOMAIN dict explains which resources will be available and how they will
 # be accessible to the API consumer.
 DOMAIN = {
-    'VM': vm,
-	'VIF': vif,
-	'VBD': vbd,
+    'VMs': vm,
+	'VIFs': vif,
+	'VBDs': vbd,
 }

@@ -1,5 +1,6 @@
-package main.java.com.once.api;
+package com.once.api;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -14,8 +15,9 @@ public class VM {
     Time  :	2015-12-03 16:19
     Description: according to the given parameters
     to create a VM in remote host;
+     * @throws UnsupportedEncodingException 
     *******************************************/         
-    public static void create(VMConfig config) throws MalformedURLException
+    public static void create(VMConfig config) throws MalformedURLException, UnsupportedEncodingException
     {
     	/*
     	 * used to post a VM configuration to server;
