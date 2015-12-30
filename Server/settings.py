@@ -25,11 +25,6 @@ CACHE_EXPIRES = 20
 
 vm = {
     'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
-    # 'additional_lookup': {
-        # 'url': 'regex("[\w]+")',
-        # 'field': 'uuid'
-    # },
-    # 'id_field': 'uuid',
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
     # most global settings can be overridden at resource level
@@ -116,41 +111,57 @@ vif = {
 	}
 }
 
-vbd = {
-    'additional_lookup': {
-        'url': 'regex("[\w]+")',
-        'field': 'uuid'
-    },
+pool = {
+    'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
     # most global settings can be overridden at resource level
     'resource_methods': ['GET', 'POST', 'DELETE'],
     'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],
-	'schema': {
-		'uuid': {
-			'type': 'string',
-			'required': True,
+    'schema': {
+        '_id':{
+            'type': 'uuid',
             'unique': True,
-		},
-		'name': {
+        },
+		 'name': {
 			'type': 'string',
-		},
-		'path': {
+            'required': True,
+		 },
+		 'target': {
 			'type': 'string',
-		},
-		'mode': {
+            'required': True,
+		 },
+        'volumes': {
+            'type': 'list',
+        }
+    }
+}
+
+volume = {
+    'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
+    'cache_control': 'max-age=10,must-revalidate',
+    'cache_expires': 10,
+    # most global settings can be overridden at resource level
+    'resource_methods': ['GET', 'POST', 'DELETE'],
+    'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],
+    'schema': {
+        '_id':{
+            'type': 'uuid',
+            'unique': True,
+        },
+		 'poolName': {
 			'type': 'string',
-		},
-		'bootable': {
-			'type': 'boolean',
-		},
-		'type': {
+            'required': True,
+		 },
+		 'volName': {
 			'type': 'string',
-		},
-		'device': {
-			'type': 'string',
-		},
-	}
+            'required': True,
+		 },
+		 'volSize': {
+			'type': 'integer',
+            'required': True,
+		 },
+    }
 }
 
 # The DOMAIN dict explains which resources will be available and how they will
@@ -158,5 +169,6 @@ vbd = {
 DOMAIN = {
     'VMs': vm,
 	'VIFs': vif,
-	'VBDs': vbd,
+	'StoragePools': pool,
+    'Volumes':volume,
 }

@@ -32,15 +32,10 @@ public class Connection {
 	 * Description: encapulate all parameters in headers and post to a certain
 	 * url;
 	 *******************************************/
-	public static String sendPost(URL url, Map<String, String> headers,
-			Map<String, String> data) throws UnsupportedEncodingException {
+	public static String sendPost(String urlString, Map<String, String> data) throws UnsupportedEncodingException {
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost post = new HttpPost(url.toString());
-		headers.put("User-Agent", CONST.USER_AGENT);
-//		headers.put("Content-Type", CONST.CONTENT_TYPE);
-		for (String key : headers.keySet()) {
-			post.addHeader(key, headers.get(key));
-		}
+		HttpPost post = new HttpPost(urlString);
+		post.addHeader("User-Agent", CONST.USER_AGENT);
 
 		// JSONArray arry = new JSONArray();
 		// JSONObject j = new JSONObject(data);
@@ -112,16 +107,9 @@ public class Connection {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPatch httpPatch = new HttpPatch(url.toString());
 		httpPatch.addHeader("User-Agent", CONST.USER_AGENT);
-//		httpPatch.addHeader("Content-Type", CONST.CONTENT_TYPE);
 		for (String key : headers.keySet()) {
 			httpPatch.addHeader(key, headers.get(key));
 		}
-
-		// JSONArray arry = new JSONArray();
-		// JSONObject j = new JSONObject(data);
-		// arry.put(j);
-
-		// httpPatch.setEntity(new StringEntity(j.toString(), "utf-8"));
 
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 		for (String key : data.keySet()) {
@@ -189,13 +177,16 @@ public class Connection {
 	 * Author: LHearen E-mail: LHearen@126.com Time : 2015-12-03 16:20
 	 * Description: used to retrieve resources from eve;
 	 *******************************************/
-	public static String sendGet(URL url) {
+	public static String sendGet(String urlString, Map<String, String> headers) {
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpGet get = new HttpGet(url.toString());
-		get.addHeader("User-Agent", CONST.USER_AGENT);
+		HttpGet httpGet = new HttpGet(urlString);
+		httpGet.addHeader("User-Agent", CONST.USER_AGENT);
+		for (String key : headers.keySet()) {
+			httpGet.addHeader(key, headers.get(key));
+		}
 		CloseableHttpResponse response;
 		try {
-			response = client.execute(get);
+			response = client.execute(httpGet);
 			int statusCode = response.getStatusLine().getStatusCode();
 		} catch (Exception e) {
 			e.printStackTrace();

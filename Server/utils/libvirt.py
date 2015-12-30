@@ -235,20 +235,20 @@ def virEventAddTimeout(timeout, cb, opaque):
 def open(name=None):
     """This function should be called first to get a connection to the
     Hypervisor and xen store
-    
+
     If @name is None, if the LIBVIRT_DEFAULT_URI environment variable is set,
     then it will be used. Otherwise if the client configuration file
     has the "uri_default" parameter set, then it will be used. Finally
     probing will be done to determine a suitable default driver to activate.
     This involves trying each hypervisor in turn until one successfully opens.
-    
+
     If connecting to an unprivileged hypervisor driver which requires
     the libvirtd daemon to be active, it will automatically be launched
     if not already running. This can be prevented by setting the
     environment variable LIBVIRT_AUTOSTART=0
-    
+
     URIs are documented at http://libvirt.org/uri.html
-    
+
     virConnectClose should be used to release the resources after the connection
     is no longer needed. """
     ret = libvirtmod.virConnectOpen(name)
@@ -259,10 +259,10 @@ def openReadOnly(name=None):
     """This function should be called first to get a restricted connection to the
     library functionalities. The set of APIs usable are then restricted
     on the available methods to control the domains.
-    
+
     See virConnectOpen for notes about environment variables which can
     have an effect on opening drivers and freeing the connection resources
-    
+
     URIs are documented at http://libvirt.org/uri.html """
     ret = libvirtmod.virConnectOpenReadOnly(name)
     if ret is None:raise libvirtError('virConnectOpenReadOnly() failed')
@@ -278,7 +278,7 @@ def virEventRegisterDefaultImpl():
     that can be used by any client application which does
     not have a need to integrate with an external event
     loop impl.
-    
+
     Once registered, the application has to invoke virEventRunDefaultImpl() in
     a loop to process events.  Failure to do so may result in connections being
     closed unexpectedly as a result of keepalive timeout.  The default
@@ -294,7 +294,7 @@ def virEventRegisterImpl(addHandle, updateHandle, removeHandle, addTimeout, upda
     with an external event loop. Applications would use this
     to integrate with the libglib2 event loop, or libevent
     or the QT event loop.
-    
+
     Use of the virEventAddHandle() and similar APIs require that the
     corresponding handler is registered.  Use of the
     virConnectDomainEventRegisterAny() and similar APIs requires that
@@ -303,7 +303,7 @@ def virEventRegisterImpl(addHandle, updateHandle, removeHandle, addTimeout, upda
     configured to send keepalive messages, or if the client intends
     to call virConnectSetKeepAlive(), to avoid either side from
     unexpectedly closing the connection due to inactivity.
-    
+
     If an application does not need to integrate with an
     existing event loop implementation, then the
     virEventRegisterDefaultImpl() method can be used to setup
@@ -334,9 +334,9 @@ def virEventRunDefaultImpl():
     or a timeout (via virEventAddTimeout()) before calling this
     function, as it will block forever if there are no
     registered events.
-    
+
       static bool quit;
-    
+
       while (!quit) {
         if (virEventRunDefaultImpl() < 0)
           ...print error...
@@ -349,7 +349,7 @@ def virEventUpdateHandle(watch, events):
     """Change event set for a monitored file handle.  This function
     requires that an event loop has previously been registered with
     virEventRegisterImpl() or virEventRegisterDefaultImpl().
-    
+
     Will not fail if fd exists. """
     libvirtmod.virEventUpdateHandle(watch, events)
 
@@ -357,10 +357,10 @@ def virEventUpdateTimeout(timer, timeout):
     """Change frequency for a timer.  This function
     requires that an event loop has previously been registered with
     virEventRegisterImpl() or virEventRegisterDefaultImpl().
-    
+
     Setting frequency to -1 will disable the timer. Setting the frequency
     to zero will cause it to fire on every event loop iteration.
-    
+
     Will not fail if timer exists. """
     libvirtmod.virEventUpdateTimeout(timer, timeout)
 
@@ -370,7 +370,7 @@ def virEventUpdateTimeout(timer, timeout):
 
 def virGetLastError():
     """Provide a pointer to the last error caught at the library level
-    
+
     The error object is kept in thread local storage, so separate
     threads can safely access this concurrently. """
     ret = libvirtmod.virGetLastError()
@@ -388,14 +388,14 @@ def virGetLastErrorMessage():
 
 def virInitialize():
     """Initialize the library.
-    
+
     This method is invoked automatically by any of the virConnectOpen() API
     calls, and by virGetVersion(). Since release 1.0.0, there is no need to
     call this method even in a multithreaded application, since
     initialization is performed in a thread safe manner; but applications
     using an older version of the library should manually call this before
     setting up competing threads that attempt virConnectOpen in parallel.
-    
+
     The only other time it would be necessary to call virInitialize is if the
     application did not invoke virConnectOpen as its first API call, such
     as when calling virEventRegisterImpl() before setting up connections,
@@ -411,7 +411,7 @@ def virInitialize():
 
 def virResetLastError():
     """Reset the last error caught at the library level.
-    
+
     The error object is kept in thread local storage, so separate
     threads can safely access this concurrently, only resetting
     their own error object. """
@@ -472,7 +472,7 @@ class virDomain(object):
     def XMLDesc(self, flags=0):
         """Provide an XML description of the domain. The description may be reused
         later to relaunch the domain with virDomainCreateXML().
-        
+
         No security-sensitive data will be included unless @flags contains
         VIR_DOMAIN_XML_SECURE; this flag is rejected on read-only
         connections.  If @flags includes VIR_DOMAIN_XML_INACTIVE, then the
@@ -496,11 +496,11 @@ class virDomain(object):
     def attachDevice(self, xml):
         """Create a virtual device attachment to backend.  This function,
         having hotplug semantics, is only allowed on an active domain.
-        
+
         For compatibility, this method can also be used to change the media
         in an existing CDROM/Floppy device, however, applications are
         recommended to use the virDomainUpdateDeviceFlag method instead.
-        
+
         Be aware that hotplug changes might not persist across a domain going
         into S4 state (also known as hibernation) unless you also modify the
         persistent domain definition. """
@@ -520,11 +520,11 @@ class virDomain(object):
         error if unable to satisfy flags.  E.g. the hypervisor driver will
         return failure if LIVE is specified but it only supports modifying the
         persisted device allocation.
-        
+
         For compatibility, this method can also be used to change the media
         in an existing CDROM/Floppy device, however, applications are
         recommended to use the virDomainUpdateDeviceFlag method instead.
-        
+
         Be aware that hotplug changes might not persist across a domain going
         into S4 state (also known as hibernation) unless you also modify the
         persistent domain definition. """
@@ -562,7 +562,7 @@ class virDomain(object):
         command is to reduce the length of a backing file chain after taking an
         external disk snapshot.  To move data in the opposite direction, see
         virDomainBlockPull().
-        
+
         This command starts a long-running commit block job, whose status may
         be tracked by virDomainBlockJobInfo() with a job type of
         VIR_DOMAIN_BLOCK_JOB_TYPE_COMMIT, and the operation can be aborted with
@@ -570,7 +570,7 @@ class virDomain(object):
         raised to indicate the final status, and the job no longer exists.  If
         the job is aborted, it is up to the hypervisor whether starting a new
         job will resume from the same point, or start over.
-        
+
         As a special case, if @top is the active image (or None), and @flags
         includes VIR_DOMAIN_BLOCK_COMMIT_ACTIVE, the block job will have a type
         of VIR_DOMAIN_BLOCK_JOB_TYPE_ACTIVE_COMMIT, and operates in two phases.
@@ -583,7 +583,7 @@ class virDomain(object):
         (keeping @top as the active image, but now containing only the changes
         since the time the job ended) or to pivot the job (adjusting to @base as
         the active image, and invalidating @top).
-        
+
         Be aware that this command may invalidate files even if it is aborted;
         the user is cautioned against relying on the contents of invalidated
         intermediate files such as @top (when @top is not the active image)
@@ -593,16 +593,16 @@ class virDomain(object):
         has successfully completed).  However, the domain itself will not have
         any issues; the active layer remains valid throughout the entire commit
         operation.
-        
+
         Some hypervisors may support a shortcut where if @flags contains
         VIR_DOMAIN_BLOCK_COMMIT_DELETE, then this command will unlink all files
         that were invalidated, after the commit successfully completes.
-        
+
         If @flags contains VIR_DOMAIN_BLOCK_COMMIT_RELATIVE, the name recorded
         into the overlay of the @top image (if there is such image) as the
         path to the new backing file will be kept relative to other images.
         The operation will fail if libvirt can't infer the name.
-        
+
         By default, if @base is None, the commit target will be the bottom of
         the backing chain; if @flags contains VIR_DOMAIN_BLOCK_COMMIT_SHALLOW,
         then the immediate backing file of @top will be used instead.  If @top
@@ -612,14 +612,14 @@ class virDomain(object):
         the active layer in use by a running domain but @flags did not include
         VIR_DOMAIN_BLOCK_COMMIT_ACTIVE, or if @top is not the top-most file;
         restrictions may differ for online vs. offline domains.
-        
+
         The @disk parameter is either an unambiguous source name of the
         block device (the <source file='...'/> sub-element, such as
         "/path/to/image"), or the device target shorthand (the
         <target dev='...'/> sub-element, such as "vda").  Valid names
         can be found by calling virDomainGetXMLDesc() and inspecting
         elements within //domain/devices/disk.
-        
+
         The @base and @top parameters can be either paths to files within the
         backing chain, or the device target shorthand (the <target dev='...'/>
         sub-element, such as "vda") followed by an index to the backing chain
@@ -627,7 +627,7 @@ class virDomain(object):
         inspecting //disk//backingStore/@index in the domain XML. Thus, for
         example, "vda[3]" refers to the backing store with index equal to "3"
         in the chain of disk "vda".
-        
+
         The maximum bandwidth that will be used to do the commit can be
         specified with the @bandwidth parameter.  If set to 0, there is no
         limit.  If @flags includes VIR_DOMAIN_BLOCK_COMMIT_BANDWIDTH_BYTES,
@@ -674,14 +674,14 @@ class virDomain(object):
 
     def blockJobAbort(self, disk, flags=0):
         """Cancel the active block job on the given disk.
-        
+
         The @disk parameter is either an unambiguous source name of the
         block device (the <source file='...'/> sub-element, such as
         "/path/to/image"), or (since 0.9.5) the device target shorthand
         (the <target dev='...'/> sub-element, such as "vda").  Valid names
         can be found by calling virDomainGetXMLDesc() and inspecting
         elements within //domain/devices/disk.
-        
+
         If the current block job for @disk is VIR_DOMAIN_BLOCK_JOB_TYPE_PULL, then
         by default, this function performs a synchronous operation and the caller
         may assume that the operation has completed when 0 is returned.  However,
@@ -694,7 +694,7 @@ class virDomain(object):
         used); it is also possible to poll virDomainBlockJobInfo() to see if
         the job cancellation is still pending.  This type of job can be restarted
         to pick up from where it left off.
-        
+
         If the current block job for @disk is VIR_DOMAIN_BLOCK_JOB_TYPE_COPY, then
         the default is to abort the mirroring and revert to the source disk;
         likewise, if the current job is VIR_DOMAIN_BLOCK_JOB_TYPE_ACTIVE_COMMIT,
@@ -729,7 +729,7 @@ class virDomain(object):
         """Set the maximimum allowable bandwidth that a block job may consume.  If
         bandwidth is 0, the limit will revert to the hypervisor default of
         unlimited.
-        
+
         If @flags contains VIR_DOMAIN_BLOCK_JOB_SPEED_BANDWIDTH_BYTES, @bandwidth
         is in bytes/second; otherwise, it is in MiB/second.  Values larger than
         2^52 bytes/sec may be rejected due to overflow considerations based on
@@ -737,7 +737,7 @@ class virDomain(object):
         bytes/sec may cause overflow problems if later queried by
         virDomainGetBlockJobInfo() without scaling.  Hypervisors may further
         restrict the range of valid bandwidth values.
-        
+
         The @disk parameter is either an unambiguous source name of the
         block device (the <source file='...'/> sub-element, such as
         "/path/to/image"), or (since 0.9.5) the device target shorthand
@@ -770,14 +770,14 @@ class virDomain(object):
         the operation can be aborted with virDomainBlockJobAbort().  When finished,
         an asynchronous event is raised to indicate the final status.  To move
         data in the opposite direction, see virDomainBlockCommit().
-        
+
         The @disk parameter is either an unambiguous source name of the
         block device (the <source file='...'/> sub-element, such as
         "/path/to/image"), or (since 0.9.5) the device target shorthand
         (the <target dev='...'/> sub-element, such as "vda").  Valid names
         can be found by calling virDomainGetXMLDesc() and inspecting
         elements within //domain/devices/disk.
-        
+
         The maximum bandwidth that will be used to do the copy can be
         specified with the @bandwidth parameter.  If set to 0, there is no
         limit.  If @flags includes VIR_DOMAIN_BLOCK_PULL_BANDWIDTH_BYTES,
@@ -792,7 +792,7 @@ class virDomain(object):
         be possible for a later call to virDomainBlockJobSetSpeed() to
         succeed.  The actual speed can be determined with
         virDomainGetBlockJobInfo().
-        
+
         This is shorthand for virDomainBlockRebase() with a None base. """
         ret = libvirtmod.virDomainBlockPull(self._o, disk, bandwidth, flags)
         if ret == -1: raise libvirtError ('virDomainBlockPull() failed', dom=self)
@@ -802,7 +802,7 @@ class virDomain(object):
         """Populate a disk image with data from its backing image chain, and
         setting the backing image to @base, or alternatively copy an entire
         backing chain to a new file @base.
-        
+
         When @flags is 0, this starts a pull, where @base must be the absolute
         path of one of the backing images further up the chain, or None to
         convert the disk image so that it has no backing image.  Once all
@@ -815,11 +815,11 @@ class virDomain(object):
         event is raised to indicate the final status, and the job no longer
         exists.  If the job is aborted, a new one can be started later to
         resume from the same point.
-        
+
         If @flags contains VIR_DOMAIN_BLOCK_REBASE_RELATIVE, the name recorded
         into the active disk as the location for @base will be kept relative.
         The operation will fail if libvirt can't infer the name.
-        
+
         When @flags includes VIR_DOMAIN_BLOCK_REBASE_COPY, this starts a copy,
         where @base must be the name of a new file to copy the chain to.  By
         default, the copy will pull the entire source chain into the destination
@@ -841,7 +841,7 @@ class virDomain(object):
         type='file', but using VIR_DOMAIN_BLOCK_REBASE_COPY_DEV treats the
         destination as type='block' (affecting how virDomainGetBlockInfo() will
         report allocation after pivoting).
-        
+
         A copy job has two parts; in the first phase, the @bandwidth parameter
         affects how fast the source is pulled into the destination, and the job
         can only be canceled by reverting to the source file; progress in this
@@ -855,18 +855,18 @@ class virDomain(object):
         also be issued when the job transitions from pulling to mirroring.  If
         the job is aborted, a new job will have to start over from the beginning
         of the first phase.
-        
+
         Some hypervisors will restrict certain actions, such as virDomainSave()
         or virDomainDetachDevice(), while a copy job is active; they may
         also restrict a copy job to transient domains.
-        
+
         The @disk parameter is either an unambiguous source name of the
         block device (the <source file='...'/> sub-element, such as
         "/path/to/image"), or the device target shorthand (the
         <target dev='...'/> sub-element, such as "vda").  Valid names
         can be found by calling virDomainGetXMLDesc() and inspecting
         elements within //domain/devices/disk.
-        
+
         The @base parameter can be either a path to a file within the backing
         chain, or the device target shorthand (the <target dev='...'/>
         sub-element, such as "vda") followed by an index to the backing chain
@@ -874,7 +874,7 @@ class virDomain(object):
         inspecting //disk//backingStore/@index in the domain XML. Thus, for
         example, "vda[3]" refers to the backing store with index equal to "3"
         in the chain of disk "vda".
-        
+
         The maximum bandwidth that will be used to do the copy can be
         specified with the @bandwidth parameter.  If set to 0, there is no
         limit.  If @flags includes VIR_DOMAIN_BLOCK_REBASE_BANDWIDTH_BYTES,
@@ -889,7 +889,7 @@ class virDomain(object):
         be possible for a later call to virDomainBlockJobSetSpeed() to
         succeed.  The actual speed can be determined with
         virDomainGetBlockJobInfo().
-        
+
         When @base is None and @flags is 0, this is identical to
         virDomainBlockPull().  When @flags contains VIR_DOMAIN_BLOCK_REBASE_COPY,
         this command is shorthand for virDomainBlockCopy() where the destination
@@ -909,14 +909,14 @@ class virDomain(object):
         @size is in bytes instead.  @size is taken directly as the new
         size.  Depending on the file format, the hypervisor may round up
         to the next alignment boundary.
-        
+
         The @disk parameter is either an unambiguous source name of the
         block device (the <source file='...'/> sub-element, such as
         "/path/to/image"), or (since 0.9.5) the device target shorthand
         (the <target dev='...'/> sub-element, such as "vda").  Valid names
         can be found by calling virDomainGetXMLDesc() and inspecting
         elements within //domain/devices/disk.
-        
+
         Note that this call may fail if the underlying virtualization hypervisor
         does not support it; this call requires privileged access to the
         hypervisor. """
@@ -955,19 +955,19 @@ class virDomain(object):
         Note that for remote Xen Daemon the file path will be interpreted in
         the remote host. Hypervisors may require  the user to manually ensure
         proper permissions on the file named by @to.
-        
+
         If @flags includes VIR_DUMP_CRASH, then leave the guest shut off with
         a crashed state after the dump completes.  If @flags includes
         VIR_DUMP_LIVE, then make the core dump while continuing to allow
         the guest to run; otherwise, the guest is suspended during the dump.
         VIR_DUMP_RESET flag forces reset of the guest after dump.
         The above three flags are mutually exclusive.
-        
+
         Additionally, if @flags includes VIR_DUMP_BYPASS_CACHE, then libvirt
         will attempt to bypass the file system cache while creating the file,
         or fail if it cannot do so for the given system; this can allow less
         pressure on file system cache, but also risks slowing saves to NFS.
-        
+
         For more control over the output format, see virDomainCoreDumpWithFormat(). """
         ret = libvirtmod.virDomainCoreDump(self._o, to, flags)
         if ret == -1: raise libvirtError ('virDomainCoreDump() failed', dom=self)
@@ -978,18 +978,18 @@ class virDomain(object):
         Note that for remote Xen Daemon the file path will be interpreted in
         the remote host. Hypervisors may require  the user to manually ensure
         proper permissions on the file named by @to.
-        
+
         @dumpformat controls which format the dump will have; use of
         VIR_DOMAIN_CORE_DUMP_FORMAT_RAW mirrors what virDomainCoreDump() will
         perform.  Not all hypervisors are able to support all formats.
-        
+
         If @flags includes VIR_DUMP_CRASH, then leave the guest shut off with
         a crashed state after the dump completes.  If @flags includes
         VIR_DUMP_LIVE, then make the core dump while continuing to allow
         the guest to run; otherwise, the guest is suspended during the dump.
         VIR_DUMP_RESET flag forces reset of the guest after dump.
         The above three flags are mutually exclusive.
-        
+
         Additionally, if @flags includes VIR_DUMP_BYPASS_CACHE, then libvirt
         will attempt to bypass the file system cache while creating the file,
         or fail if it cannot do so for the given system; this can allow less
@@ -1010,27 +1010,27 @@ class virDomain(object):
     def createWithFlags(self, flags=0):
         """Launch a defined domain. If the call succeeds the domain moves from the
         defined to the running domains pools.
-        
+
         If the VIR_DOMAIN_START_PAUSED flag is set, or if the guest domain
         has a managed save image that requested paused state (see
         virDomainManagedSave()) the guest domain will be started, but its
         CPUs will remain paused. The CPUs can later be manually started
         using virDomainResume().  In all other cases, the guest domain will
         be running.
-        
+
         If the VIR_DOMAIN_START_AUTODESTROY flag is set, the guest
         domain will be automatically destroyed when the virConnectPtr
         object is finally released. This will also happen if the
         client application crashes / loses its connection to the
         libvirtd daemon. Any domains marked for auto destroy will
         block attempts at migration, save-to-file, or snapshots.
-        
+
         If the VIR_DOMAIN_START_BYPASS_CACHE flag is set, and there is a
         managed save file for this domain (created by virDomainManagedSave()),
         then libvirt will attempt to bypass the file system cache while restoring
         the file, or fail if it cannot do so for the given system; this can allow
         less pressure on file system cache, but also risks slowing loads from NFS.
-        
+
         If the VIR_DOMAIN_START_FORCE_BOOT flag is set, then any managed save
         file for this domain is discarded, and the domain boots from scratch. """
         ret = libvirtmod.virDomainCreateWithFlags(self._o, flags)
@@ -1042,7 +1042,7 @@ class virDomain(object):
         already and all resources used by it are given back to the hypervisor. This
         does not free the associated virDomainPtr object.
         This function may require privileged access.
-        
+
         virDomainDestroy first requests that a guest terminate
         (e.g. SIGTERM), then waits for it to comply. After a reasonable
         timeout, if the guest still exists, virDomainDestroy will
@@ -1051,7 +1051,7 @@ class virDomain(object):
         in the guest). To avoid this possibility, it's recommended to
         instead call virDomainDestroyFlags, sending the
         VIR_DOMAIN_DESTROY_GRACEFUL flag.
-        
+
         If the domain is transient and has any snapshot metadata (see
         virDomainSnapshotNum()), then that metadata will automatically
         be deleted when the domain quits. """
@@ -1064,7 +1064,7 @@ class virDomain(object):
         already and all resources used by it are given back to the hypervisor.
         This does not free the associated virDomainPtr object.
         This function may require privileged access.
-        
+
         Calling this function with no @flags set (equal to zero) is
         equivalent to calling virDomainDestroy, and after a reasonable
         timeout will forcefully terminate the guest (e.g. SIGKILL) if
@@ -1075,7 +1075,7 @@ class virDomain(object):
         return an error if the guest doesn't terminate by the end of the
         timeout; at that time, the management application can decide if
         calling again without VIR_DOMAIN_DESTROY_GRACEFUL is appropriate.
-        
+
         Another alternative which may produce cleaner results for the
         guest's disks is to use virDomainShutdown() instead, but that
         depends on guest support (some hypervisor/guest combinations may
@@ -1087,7 +1087,7 @@ class virDomain(object):
     def detachDevice(self, xml):
         """Destroy a virtual device attachment to backend.  This function,
         having hot-unplug semantics, is only allowed on an active domain.
-        
+
         Be aware that hotplug changes might not persist across a domain going
         into S4 state (also known as hibernation) unless you also modify the
         persistent domain definition. """
@@ -1107,11 +1107,11 @@ class virDomain(object):
         error if unable to satisfy flags.  E.g. the hypervisor driver will
         return failure if LIVE is specified but it only supports removing the
         persisted device allocation.
-        
+
         Some hypervisors may prevent this operation if there is a current
         block copy operation on the device being detached; in that case,
         use virDomainBlockJobAbort() to stop the block copy first.
-        
+
         Beware that depending on the hypervisor and device type, detaching a device
         from a running domain may be asynchronous. That is, calling
         virDomainDetachDeviceFlags may just request device removal while the device
@@ -1127,7 +1127,7 @@ class virDomain(object):
         asynchronous device removal that finishes shortly after the request into
         a synchronous removal. In other words, this API may wait a bit for the
         removal to complete in case it was not synchronous.
-        
+
         Be aware that hotplug changes might not persist across a domain going
         into S4 state (also known as hibernation) unless you also modify the
         persistent domain definition. """
@@ -1215,7 +1215,7 @@ class virDomain(object):
 
     def hostname(self, flags=0):
         """Get the hostname for that domain.
-        
+
         Dependent on hypervisor used, this may require a guest agent to be
         available. """
         ret = libvirtmod.virDomainGetHostname(self._o, flags)
@@ -1312,12 +1312,12 @@ class virDomain(object):
         This also implies that managed save only works on persistent domains,
         since the domain must still exist in order to use virDomainCreate() to
         restart it.
-        
+
         If @flags includes VIR_DOMAIN_SAVE_BYPASS_CACHE, then libvirt will
         attempt to bypass the file system cache while creating the file, or
         fail if it cannot do so for the given system; this can allow less
         pressure on file system cache, but also risks slowing saves to NFS.
-        
+
         Normally, the managed saved state will remember whether the domain
         was running or paused, and start will resume to the same state.
         Specifying VIR_DOMAIN_SAVE_RUNNING or VIR_DOMAIN_SAVE_PAUSED in
@@ -1382,12 +1382,12 @@ class virDomain(object):
         If VIR_DOMAIN_METADATA_ELEMENT is requested parameter @uri
         must be set to the name of the namespace the requested elements
         belong to, otherwise must be None.
-        
+
         If an element of the domain XML is not present, the resulting
         error will be VIR_ERR_NO_DOMAIN_METADATA.  This method forms
         a shortcut for seeing information from virDomainSetMetadata()
         without having to go through virDomainGetXMLDesc().
-        
+
         @flags controls whether the live domain or persistent
         configuration will be queried. """
         ret = libvirtmod.virDomainGetMetadata(self._o, type, uri, flags)
@@ -1397,7 +1397,7 @@ class virDomain(object):
     def migrate(self, dconn, flags=0, dname=None, uri=None, bandwidth=0):
         """Migrate the domain object from its current host to the destination
         host given by dconn (a connection to the destination host).
-        
+
         Flags may be one of more of the following:
           VIR_MIGRATE_LIVE      Do not pause the VM during migration
           VIR_MIGRATE_PEER2PEER Direct connection between source & destination hosts
@@ -1416,50 +1416,50 @@ class virDomain(object):
                                         automatically when supported).
           VIR_MIGRATE_UNSAFE    Force migration even if it is considered unsafe.
           VIR_MIGRATE_OFFLINE Migrate offline
-        
+
         VIR_MIGRATE_TUNNELLED requires that VIR_MIGRATE_PEER2PEER be set.
         Applications using the VIR_MIGRATE_PEER2PEER flag will probably
         prefer to invoke virDomainMigrateToURI, avoiding the need to
         open connection to the destination host themselves.
-        
+
         If a hypervisor supports renaming domains during migration,
         then you may set the dname parameter to the new name (otherwise
         it keeps the same name).  If this is not supported by the
         hypervisor, dname must be None or else you will get an error.
-        
+
         If the VIR_MIGRATE_PEER2PEER flag is set, the uri parameter
         must be a valid libvirt connection URI, by which the source
         libvirt driver can connect to the destination libvirt. If
         omitted, the dconn connection object will be queried for its
         current URI.
-        
+
         If the VIR_MIGRATE_PEER2PEER flag is NOT set, the URI parameter
         takes a hypervisor specific format. The hypervisor capabilities
         XML includes details of the support URI schemes. If omitted
         the dconn will be asked for a default URI.
-        
+
         If you want to copy non-shared storage within migration you
         can use either VIR_MIGRATE_NON_SHARED_DISK or
         VIR_MIGRATE_NON_SHARED_INC as they are mutually exclusive.
-        
+
         In either case it is typically only necessary to specify a
         URI if the destination host has multiple interfaces and a
         specific interface is required to transmit migration data.
-        
+
         The maximum bandwidth (in MiB/s) that will be used to do migration
         can be specified with the bandwidth parameter.  If set to 0,
         libvirt will choose a suitable default.  Some hypervisors do
         not support this feature and will return an error if bandwidth
         is not 0.
-        
+
         To see which features are supported by the current hypervisor,
         see virConnectGetCapabilities, /capabilities/host/migration_features.
-        
+
         There are many limitations on migration imposed by the underlying
         technology - for example it may not be possible to migrate between
         different processors even with the same architecture, or between
         different types of hypervisor.
-        
+
         virDomainFree should be used to free the resources after the
         returned domain object is no longer needed. """
         if dconn is None: dconn__o = None
@@ -1472,7 +1472,7 @@ class virDomain(object):
     def migrate2(self, dconn, dxml=None, flags=0, dname=None, uri=None, bandwidth=0):
         """Migrate the domain object from its current host to the destination
         host given by dconn (a connection to the destination host).
-        
+
         Flags may be one of more of the following:
           VIR_MIGRATE_LIVE      Do not pause the VM during migration
           VIR_MIGRATE_PEER2PEER Direct connection between source & destination hosts
@@ -1491,50 +1491,50 @@ class virDomain(object):
                                         automatically when supported).
           VIR_MIGRATE_UNSAFE    Force migration even if it is considered unsafe.
           VIR_MIGRATE_OFFLINE Migrate offline
-        
+
         VIR_MIGRATE_TUNNELLED requires that VIR_MIGRATE_PEER2PEER be set.
         Applications using the VIR_MIGRATE_PEER2PEER flag will probably
         prefer to invoke virDomainMigrateToURI, avoiding the need to
         open connection to the destination host themselves.
-        
+
         If a hypervisor supports renaming domains during migration,
         then you may set the dname parameter to the new name (otherwise
         it keeps the same name).  If this is not supported by the
         hypervisor, dname must be None or else you will get an error.
-        
+
         If the VIR_MIGRATE_PEER2PEER flag is set, the uri parameter
         must be a valid libvirt connection URI, by which the source
         libvirt driver can connect to the destination libvirt. If
         omitted, the dconn connection object will be queried for its
         current URI.
-        
+
         If the VIR_MIGRATE_PEER2PEER flag is NOT set, the URI parameter
         takes a hypervisor specific format. The hypervisor capabilities
         XML includes details of the support URI schemes. If omitted
         the dconn will be asked for a default URI.
-        
+
         If you want to copy non-shared storage within migration you
         can use either VIR_MIGRATE_NON_SHARED_DISK or
         VIR_MIGRATE_NON_SHARED_INC as they are mutually exclusive.
-        
+
         In either case it is typically only necessary to specify a
         URI if the destination host has multiple interfaces and a
         specific interface is required to transmit migration data.
-        
+
         The maximum bandwidth (in MiB/s) that will be used to do migration
         can be specified with the bandwidth parameter.  If set to 0,
         libvirt will choose a suitable default.  Some hypervisors do
         not support this feature and will return an error if bandwidth
         is not 0.
-        
+
         To see which features are supported by the current hypervisor,
         see virConnectGetCapabilities, /capabilities/host/migration_features.
-        
+
         There are many limitations on migration imposed by the underlying
         technology - for example it may not be possible to migrate between
         different processors even with the same architecture, or between
         different types of hypervisor.
-        
+
         If the hypervisor supports it, @dxml can be used to alter
         host-specific portions of the domain XML that will be used on
         the destination.  For example, it is possible to alter the
@@ -1546,7 +1546,7 @@ class virDomain(object):
         @dxml cannot be used to rename the domain during migration (use
         @dname for that purpose).  Domain name in @dxml must match the
         original domain name.
-        
+
         virDomainFree should be used to free the resources after the
         returned domain object is no longer needed. """
         if dconn is None: dconn__o = None
@@ -1615,7 +1615,7 @@ class virDomain(object):
     def migrateToURI(self, duri, flags=0, dname=None, bandwidth=0):
         """Migrate the domain object from its current host to the destination
         host given by duri.
-        
+
         Flags may be one of more of the following:
           VIR_MIGRATE_LIVE      Do not pause the VM during migration
           VIR_MIGRATE_PEER2PEER Direct connection between source & destination hosts
@@ -1634,7 +1634,7 @@ class virDomain(object):
                                         automatically when supported).
           VIR_MIGRATE_UNSAFE    Force migration even if it is considered unsafe.
           VIR_MIGRATE_OFFLINE Migrate offline
-        
+
         The operation of this API hinges on the VIR_MIGRATE_PEER2PEER flag.
         If the VIR_MIGRATE_PEER2PEER flag is NOT set, the duri parameter
         takes a hypervisor specific format. The uri_transports element of the
@@ -1643,32 +1643,32 @@ class virDomain(object):
         if the VIR_MIGRATE_PEER2PEER flag is not set, then it may be necessary
         to use the alternative virDomainMigrate API providing and explicit
         virConnectPtr for the destination host.
-        
+
         If the VIR_MIGRATE_PEER2PEER flag IS set, the duri parameter
         must be a valid libvirt connection URI, by which the source
         libvirt driver can connect to the destination libvirt.
-        
+
         VIR_MIGRATE_TUNNELLED requires that VIR_MIGRATE_PEER2PEER be set.
-        
+
         If you want to copy non-shared storage within migration you
         can use either VIR_MIGRATE_NON_SHARED_DISK or
         VIR_MIGRATE_NON_SHARED_INC as they are mutually exclusive.
-        
+
         If a hypervisor supports renaming domains during migration,
         the dname parameter specifies the new name for the domain.
         Setting dname to None keeps the domain name the same.  If domain
         renaming is not supported by the hypervisor, dname must be None or
         else an error will be returned.
-        
+
         The maximum bandwidth (in MiB/s) that will be used to do migration
         can be specified with the bandwidth parameter.  If set to 0,
         libvirt will choose a suitable default.  Some hypervisors do
         not support this feature and will return an error if bandwidth
         is not 0.
-        
+
         To see which features are supported by the current hypervisor,
         see virConnectGetCapabilities, /capabilities/host/migration_features.
-        
+
         There are many limitations on migration imposed by the underlying
         technology - for example it may not be possible to migrate between
         different processors even with the same architecture, or between
@@ -1680,7 +1680,7 @@ class virDomain(object):
     def migrateToURI2(self, dconnuri=None, miguri=None, dxml=None, flags=0, dname=None, bandwidth=0):
         """Migrate the domain object from its current host to the destination
         host given by duri.
-        
+
         Flags may be one of more of the following:
           VIR_MIGRATE_LIVE      Do not pause the VM during migration
           VIR_MIGRATE_PEER2PEER Direct connection between source & destination hosts
@@ -1699,30 +1699,30 @@ class virDomain(object):
                                         automatically when supported).
           VIR_MIGRATE_UNSAFE    Force migration even if it is considered unsafe.
           VIR_MIGRATE_OFFLINE Migrate offline
-        
+
         The operation of this API hinges on the VIR_MIGRATE_PEER2PEER flag.
-        
+
         If the VIR_MIGRATE_PEER2PEER flag is set, the @dconnuri parameter
         must be a valid libvirt connection URI, by which the source
         libvirt driver can connect to the destination libvirt. If the
         VIR_MIGRATE_PEER2PEER flag is NOT set, then @dconnuri must be
         None.
-        
+
         If the VIR_MIGRATE_TUNNELLED flag is NOT set, then the @miguri
         parameter allows specification of a URI to use to initiate the
         VM migration. It takes a hypervisor specific format. The uri_transports
         element of the hypervisor capabilities XML includes details of the
         supported URI schemes.
-        
+
         VIR_MIGRATE_TUNNELLED requires that VIR_MIGRATE_PEER2PEER be set.
-        
+
         If you want to copy non-shared storage within migration you
         can use either VIR_MIGRATE_NON_SHARED_DISK or
         VIR_MIGRATE_NON_SHARED_INC as they are mutually exclusive.
         As of 1.2.11 disks of some types ('file' and 'volume') are
         precreated automatically, if there's a pool defined on the
         destination for the disk path.
-        
+
         If a hypervisor supports changing the configuration of the guest
         during migration, the @dxml parameter specifies the new config
         for the guest. The configuration must include an identical set
@@ -1731,22 +1731,22 @@ class virDomain(object):
         changed in the XML. Hypervisors will validate this and refuse to
         allow migration if the provided XML would cause a change in the
         guest ABI,
-        
+
         If a hypervisor supports renaming domains during migration,
         the dname parameter specifies the new name for the domain.
         Setting dname to None keeps the domain name the same.  If domain
         renaming is not supported by the hypervisor, dname must be None or
         else an error will be returned.
-        
+
         The maximum bandwidth (in MiB/s) that will be used to do migration
         can be specified with the bandwidth parameter.  If set to 0,
         libvirt will choose a suitable default.  Some hypervisors do
         not support this feature and will return an error if bandwidth
         is not 0.
-        
+
         To see which features are supported by the current hypervisor,
         see virConnectGetCapabilities, /capabilities/host/migration_features.
-        
+
         There are many limitations on migration imposed by the underlying
         technology - for example it may not be possible to migrate between
         different processors even with the same architecture, or between
@@ -1797,7 +1797,7 @@ class virDomain(object):
         then the first channel is opened. The channel is associated with
         the passed in @st stream, which should have been opened in
         non-blocking mode for bi-directional I/O.
-        
+
         By default, when @flags is 0, the open will fail if libvirt detects
         that the channel is already in use by another client; passing
         VIR_DOMAIN_CHANNEL_FORCE will cause libvirt to forcefully remove the
@@ -1815,16 +1815,16 @@ class virDomain(object):
         device is opened. The console is associated with the passed
         in @st stream, which should have been opened in non-blocking
         mode for bi-directional I/O.
-        
+
         By default, when @flags is 0, the open will fail if libvirt
         detects that the console is already in use by another client;
         passing VIR_DOMAIN_CONSOLE_FORCE will cause libvirt to forcefully
         remove the other client prior to opening this console.
-        
+
         If flag VIR_DOMAIN_CONSOLE_SAFE the console is opened only in the
         case where the hypervisor driver supports safe (mutually exclusive)
         console handling.
-        
+
         Older servers did not support either flag, and also did not forbid
         simultaneous clients on a console, with potentially confusing results.
         When passing @flags of 0 in order to support a wider range of server
@@ -1840,13 +1840,13 @@ class virDomain(object):
         the graphics backend of @dom. If @dom has multiple graphics
         backends configured, then @idx will determine which one is
         opened, starting from @idx 0.
-        
+
         To disable any authentication, pass the VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH
         constant for @flags.
-        
+
         The caller should use an anonymous socketpair to open
         @fd before invocation.
-        
+
         This method can only be used when connected to a local
         libvirt hypervisor, over a UNIX domain socket. Attempts
         to use this method over a TCP connection will always fail """
@@ -1860,10 +1860,10 @@ class virDomain(object):
         handed to the hypervisor.
         If @dom has multiple graphics backends configured, then @idx will determine
         which one is opened, starting from @idx 0.
-        
+
         To disable any authentication, pass the VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH
         constant for @flags.
-        
+
         This method can only be used when connected to a local
         libvirt hypervisor, over a UNIX domain socket. Attempts
         to use this method over a TCP connection will always fail. """
@@ -1877,10 +1877,10 @@ class virDomain(object):
         resume normal operation after that many seconds, if nothing else has
         resumed it earlier.  Some hypervisors require that @duration be 0, for
         an indefinite suspension.
-        
+
         Dependent on hypervisor used, this may require a
         guest agent to be available, e.g. QEMU.
-        
+
         Beware that at least for QEMU, the domain's process will be terminated
         when VIR_NODE_SUSPEND_TARGET_DISK is used and a new process will be
         launched when libvirt is asked to wake up the domain. As a result of
@@ -1933,16 +1933,16 @@ class virDomain(object):
         Additionally, the hypervisor may check and support the domain
         'on_reboot' XML setting resulting in a domain that shuts down instead
         of rebooting.
-        
+
         If @flags is set to zero, then the hypervisor will choose the
         method of shutdown it considers best. To have greater control
         pass one or more of the virDomainRebootFlagValues. The order
         in which the hypervisor tries each shutdown method is undefined,
         and a hypervisor is not required to support all methods.
-        
+
         To use guest agent (VIR_DOMAIN_REBOOT_GUEST_AGENT) the domain XML
         must have <channel> configured.
-        
+
         Due to implementation limitations in some drivers (the qemu driver,
         for instance) it is not advised to migrate or save a guest that is
         rebooting as a result of this API. Migrating such a guest can lead
@@ -1955,7 +1955,7 @@ class virDomain(object):
         """Reset a domain immediately without any guest OS shutdown.
         Reset emulates the power reset button on a machine, where all
         hardware sees the RST line set and reinitializes internal state.
-        
+
         Note that there is a risk of data loss caused by reset without any
         guest OS shutdown. """
         ret = libvirtmod.virDomainReset(self._o, flags)
@@ -1993,7 +1993,7 @@ class virDomain(object):
         a file on disk. After the call, if successful, the domain is not
         listed as running anymore (this ends the life of a transient domain).
         Use virDomainRestore() to restore a domain after saving.
-        
+
         See virDomainSaveFlags() for more control.  Also, a save file can
         be inspected or modified slightly with virDomainSaveImageGetXMLDesc()
         and virDomainSaveImageDefineXML(). """
@@ -2006,28 +2006,28 @@ class virDomain(object):
         a file on disk. After the call, if successful, the domain is not
         listed as running anymore (this ends the life of a transient domain).
         Use virDomainRestore() to restore a domain after saving.
-        
+
         If the hypervisor supports it, @dxml can be used to alter
         host-specific portions of the domain XML that will be used when
         restoring an image.  For example, it is possible to alter the
         backing filename that is associated with a disk device, in order to
         prepare for file renaming done as part of backing up the disk
         device while the domain is stopped.
-        
+
         If @flags includes VIR_DOMAIN_SAVE_BYPASS_CACHE, then libvirt will
         attempt to bypass the file system cache while creating the file, or
         fail if it cannot do so for the given system; this can allow less
         pressure on file system cache, but also risks slowing saves to NFS.
-        
+
         Normally, the saved state file will remember whether the domain was
         running or paused, and restore defaults to the same state.
         Specifying VIR_DOMAIN_SAVE_RUNNING or VIR_DOMAIN_SAVE_PAUSED in
         @flags will override what state gets saved into the file.  These
         two flags are mutually exclusive.
-        
+
         A save file can be inspected or modified slightly with
         virDomainSaveImageGetXMLDesc() and virDomainSaveImageDefineXML().
-        
+
         Some hypervisors may prevent this operation if there is a current
         block copy operation; in that case, use virDomainBlockJobAbort()
         to stop the block copy first. """
@@ -2065,11 +2065,11 @@ class virDomain(object):
         """Take a screenshot of current domain console as a stream. The image format
         is hypervisor specific. Moreover, some hypervisors supports multiple
         displays per domain. These can be distinguished by @screen argument.
-        
+
         This call sets up a stream; subsequent use of stream API is necessary
         to transfer actual data, determine how much data is successfully
         transferred, and detect any errors.
-        
+
         The screen ID is the sequential number of screen. In case of multiple
         graphics cards, heads are enumerated before devices, e.g. having
         two graphics cards, both with four heads, screen ID 5 addresses
@@ -2108,25 +2108,25 @@ class virDomain(object):
 
     def sendProcessSignal(self, pid_value, signum, flags=0):
         """Send a signal to the designated process in the guest
-        
+
         The signal numbers must be taken from the virDomainProcessSignal
         enum. These will be translated to the corresponding signal
         number for the guest OS, by the guest agent delivering the
         signal. If there is no mapping from virDomainProcessSignal to
         the native OS signals, this API will report an error.
-        
+
         If @pid_value is an integer greater than zero, it is
         treated as a process ID. If @pid_value is an integer
         less than zero, it is treated as a process group ID.
         All the @pid_value numbers are from the container/guest
         namespace. The value zero is not valid.
-        
+
         Not all hypervisors will support sending signals to
         arbitrary processes or process groups. If this API is
         implemented the minimum requirement is to be able to
         use @pid_value == 1 (i.e. kill init). No other value is
         required to be supported.
-        
+
         If the @signum is VIR_DOMAIN_PROCESS_SIGNAL_NOP then this
         API will simply report whether the process is running in
         the container/guest. """
@@ -2172,7 +2172,7 @@ class virDomain(object):
         domain. If domain is None, then this change the amount of memory reserved
         to Domain0 i.e. the domain where the application runs.
         This function may require privileged access to the hypervisor.
-        
+
         This command is hypervisor-specific for whether active, persistent,
         or both configurations are changed; for more control, use
         virDomainSetMemoryFlags(). """
@@ -2185,7 +2185,7 @@ class virDomain(object):
         domain. If domain is None, then this change the amount of memory reserved
         to Domain0 i.e. the domain where the application runs.
         This function may require privileged access to the hypervisor.
-        
+
         This command only changes the runtime configuration of the domain,
         so can only be called on an active domain. """
         ret = libvirtmod.virDomainSetMemory(self._o, memory)
@@ -2197,7 +2197,7 @@ class virDomain(object):
         domain. If domain is None, then this change the amount of memory reserved
         to Domain0 i.e. the domain where the application runs.
         This function may require privileged access to the hypervisor.
-        
+
         @flags may include VIR_DOMAIN_AFFECT_LIVE or VIR_DOMAIN_AFFECT_CONFIG.
         Both flags may be set. If VIR_DOMAIN_AFFECT_LIVE is set, the change affects
         a running domain and will fail if domain is not active.
@@ -2230,7 +2230,7 @@ class virDomain(object):
     def setMemoryStatsPeriod(self, period, flags=0):
         """Dynamically change the domain memory balloon driver statistics collection
         period. Use 0 to disable and a positive value to enable.
-        
+
         @flags may include VIR_DOMAIN_AFFECT_LIVE or VIR_DOMAIN_AFFECT_CONFIG.
         Both flags may be set. If VIR_DOMAIN_AFFECT_LIVE is set, the change affects
         a running domain and will fail if domain is not active.
@@ -2239,7 +2239,7 @@ class virDomain(object):
         (that is, @flags is VIR_DOMAIN_AFFECT_CURRENT), then an inactive domain
         modifies persistent setup, while an active domain is hypervisor-dependent
         on whether just live or both live and persistent state is changed.
-        
+
         Not all hypervisors can support all flag combinations. """
         ret = libvirtmod.virDomainSetMemoryStatsPeriod(self._o, period, flags)
         if ret == -1: raise libvirtError ('virDomainSetMemoryStatsPeriod() failed', dom=self)
@@ -2252,16 +2252,16 @@ class virDomain(object):
         newlines are permitted, and should be short (although the length is
         not enforced). For these two options @key and @uri are irrelevant and
         must be set to None.
-        
+
         For type VIR_DOMAIN_METADATA_ELEMENT @metadata  must be well-formed
         XML belonging to namespace defined by @uri with local name @key.
-        
+
         Passing None for @metadata says to remove that element from the
         domain XML (passing the empty string leaves the element present).
-        
+
         The resulting metadata will be present in virDomainGetXMLDesc(),
         as well as quick access through virDomainGetMetadata().
-        
+
         @flags controls whether the live domain, persistent configuration,
         or both will be modified. """
         ret = libvirtmod.virDomainSetMetadata(self._o, type, metadata, key, uri, flags)
@@ -2299,10 +2299,10 @@ class virDomain(object):
         Note that this call may fail if the underlying virtualization hypervisor
         does not support it or if growing the number is arbitrarily limited.
         This function may require privileged access to the hypervisor.
-        
+
         Note that if this call is executed before the guest has finished booting,
         the guest may fail to process the change.
-        
+
         This command only changes the runtime configuration of the domain,
         so can only be called on an active domain.  It is hypervisor-dependent
         whether it also affects persistent configuration; for more control,
@@ -2316,7 +2316,7 @@ class virDomain(object):
         Note that this call may fail if the underlying virtualization hypervisor
         does not support it or if growing the number is arbitrarily limited.
         This function may require privileged access to the hypervisor.
-        
+
         @flags may include VIR_DOMAIN_AFFECT_LIVE to affect a running
         domain (which may fail if domain is not active), or
         VIR_DOMAIN_AFFECT_CONFIG to affect the next boot via the XML
@@ -2325,22 +2325,22 @@ class virDomain(object):
         then an inactive domain modifies persistent setup, while an active domain
         is hypervisor-dependent on whether just live or both live and persistent
         state is changed.
-        
+
         Note that if this call is executed before the guest has finished booting,
         the guest may fail to process the change.
-        
+
         If @flags includes VIR_DOMAIN_VCPU_MAXIMUM, then
         VIR_DOMAIN_AFFECT_LIVE must be clear, and only the maximum virtual
         CPU limit is altered; generally, this value must be less than or
         equal to virConnectGetMaxVcpus().  Otherwise, this call affects the
         current virtual CPU limit, which must be less than or equal to the
         maximum limit.
-        
+
         If @flags includes VIR_DOMAIN_VCPU_GUEST, then the state of processors is
         modified inside the guest instead of the hypervisor. This flag can only
         be used with live guests and is incompatible with VIR_DOMAIN_VCPU_MAXIMUM.
         The usage of this flag may require a guest agent configured.
-        
+
         Not all hypervisors can support all flag combinations. """
         ret = libvirtmod.virDomainSetVcpusFlags(self._o, nvcpus, flags)
         if ret == -1: raise libvirtError ('virDomainSetVcpusFlags() failed', dom=self)
@@ -2356,7 +2356,7 @@ class virDomain(object):
         stable state rather than having the (virtual) power cord pulled, and
         this command returns as soon as the shutdown request is issued rather
         than blocking until the guest is no longer running.
-        
+
         If the domain is transient and has any snapshot metadata (see
         virDomainSnapshotNum()), then that metadata will automatically
         be deleted when the domain quits. """
@@ -2374,17 +2374,17 @@ class virDomain(object):
         stable state rather than having the (virtual) power cord pulled, and
         this command returns as soon as the shutdown request is issued rather
         than blocking until the guest is no longer running.
-        
+
         If the domain is transient and has any snapshot metadata (see
         virDomainSnapshotNum()), then that metadata will automatically
         be deleted when the domain quits.
-        
+
         If @flags is set to zero, then the hypervisor will choose the
         method of shutdown it considers best. To have greater control
         pass one or more of the virDomainShutdownFlagValues. The order
         in which the hypervisor tries each shutdown method is undefined,
         and a hypervisor is not required to support all methods.
-        
+
         To use guest agent (VIR_DOMAIN_SHUTDOWN_GUEST_AGENT) the domain XML
         must have <channel> configured. """
         ret = libvirtmod.virDomainShutdownFlags(self._o, flags)
@@ -2398,7 +2398,7 @@ class virDomain(object):
     def snapshotCreateXML(self, xmlDesc, flags=0):
         """Creates a new snapshot of a domain based on the snapshot xml
         contained in xmlDesc.
-        
+
         If @flags is 0, the domain can be active, in which case the
         snapshot will be a system checkpoint (both disk state and runtime
         VM state such as RAM contents), where reverting to the snapshot is
@@ -2408,7 +2408,7 @@ class virDomain(object):
         just the disk state prior to booting.  The newly created snapshot
         becomes current (see virDomainSnapshotCurrent()), and is a child
         of any previous current snapshot.
-        
+
         If @flags includes VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE, then this
         is a request to reinstate snapshot metadata that was previously
         discarded, rather than creating a new snapshot.  This can be used
@@ -2428,36 +2428,36 @@ class virDomain(object):
         snapshot appears to be possible (for example, disk images have
         snapshot contents by the requested name).  Not all hypervisors
         support these flags.
-        
+
         If @flags includes VIR_DOMAIN_SNAPSHOT_CREATE_NO_METADATA, then the
         domain's disk images are modified according to @xmlDesc, but then
         the just-created snapshot has its metadata deleted.  This flag is
         incompatible with VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE.
-        
+
         If @flags includes VIR_DOMAIN_SNAPSHOT_CREATE_HALT, then the domain
         will be inactive after the snapshot completes, regardless of whether
         it was active before; otherwise, a running domain will still be
         running after the snapshot.  This flag is invalid on transient domains,
         and is incompatible with VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE.
-        
+
         If @flags includes VIR_DOMAIN_SNAPSHOT_CREATE_LIVE, then the domain
         is not paused while creating the snapshot. This increases the size
         of the memory dump file, but reduces downtime of the guest while
         taking the snapshot. Some hypervisors only support this flag during
         external checkpoints.
-        
+
         If @flags includes VIR_DOMAIN_SNAPSHOT_CREATE_DISK_ONLY, then the
         snapshot will be limited to the disks described in @xmlDesc, and no
         VM state will be saved.  For an active guest, the disk image may be
         inconsistent (as if power had been pulled), and specifying this
         with the VIR_DOMAIN_SNAPSHOT_CREATE_HALT flag risks data loss.
-        
+
         If @flags includes VIR_DOMAIN_SNAPSHOT_CREATE_QUIESCE, then the
         libvirt will attempt to use guest agent to freeze and thaw all
         file systems in use within domain OS. However, if the guest agent
         is not present, an error is thrown. Moreover, this flag requires
         VIR_DOMAIN_SNAPSHOT_CREATE_DISK_ONLY to be passed as well.
-        
+
         By default, if the snapshot involves external files, and any of the
         destination files already exist as a non-empty regular file, the
         snapshot is rejected to avoid losing contents of those files.
@@ -2468,7 +2468,7 @@ class virDomain(object):
         file names, rather than the default of creating with absolute backing
         file names). Note that setting incorrect metadata in the pre-created
         image may lead to the VM being unable to start.
-        
+
         Be aware that although libvirt prefers to report errors up front with
         no other effect, some hypervisors have certain types of failures where
         the overall command can easily fail even though the guest configuration
@@ -2482,11 +2482,11 @@ class virDomain(object):
         changes can be done atomically, making failure recovery simpler (note
         that it is still possible to fail after disks have changed, but only
         in the much rarer cases of running out of memory or disk space).
-        
+
         Some hypervisors may prevent this operation if there is a current
         block copy operation; in that case, use virDomainBlockJobAbort()
         to stop the block copy first.
-        
+
         virDomainSnapshotFree should be used to free the resources after the
         snapshot object is no longer needed. """
         ret = libvirtmod.virDomainSnapshotCreateXML(self._o, xmlDesc, flags)
@@ -2496,7 +2496,7 @@ class virDomain(object):
 
     def snapshotCurrent(self, flags=0):
         """Get the current snapshot for a domain, if any.
-        
+
         virDomainSnapshotFree should be used to free the resources after the
         snapshot object is no longer needed. """
         ret = libvirtmod.virDomainSnapshotCurrent(self._o, flags)
@@ -2527,7 +2527,7 @@ class virDomain(object):
 
     def snapshotNum(self, flags=0):
         """Provides the number of domain snapshots for this domain.
-        
+
         By default, this command covers all snapshots; it is also possible to
         limit things to just snapshots with no parents, when @flags includes
         VIR_DOMAIN_SNAPSHOT_LIST_ROOTS.  Additional filters are provided in
@@ -2540,21 +2540,21 @@ class virDomain(object):
         are set.  When setting bits from more than one group, it is possible to
         select an impossible combination, in that case a hypervisor may return
         either 0 or an error.
-        
+
         The first group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_LEAVES and
         VIR_DOMAIN_SNAPSHOT_LIST_NO_LEAVES, to filter based on snapshots that
         have no further children (a leaf snapshot).
-        
+
         The next group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_METADATA and
         VIR_DOMAIN_SNAPSHOT_LIST_NO_METADATA, for filtering snapshots based on
         whether they have metadata that would prevent the removal of the last
         reference to a domain.
-        
+
         The next group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_INACTIVE,
         VIR_DOMAIN_SNAPSHOT_LIST_ACTIVE, and VIR_DOMAIN_SNAPSHOT_LIST_DISK_ONLY,
         for filtering snapshots based on what domain state is tracked by the
         snapshot.
-        
+
         The next group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_INTERNAL and
         VIR_DOMAIN_SNAPSHOT_LIST_EXTERNAL, for filtering snapshots based on
         whether the snapshot is stored inside the disk images or as
@@ -2593,7 +2593,7 @@ class virDomain(object):
         """Undefine a domain. If the domain is running, it's converted to
         transient domain, without stopping it. If the domain is inactive,
         the domain configuration is removed.
-        
+
         If the domain has a managed save image (see
         virDomainHasManagedSaveImage()), or if it is inactive and has any
         snapshot metadata (see virDomainSnapshotNum()), then the undefine will
@@ -2606,11 +2606,11 @@ class virDomain(object):
         """Undefine a domain. If the domain is running, it's converted to
         transient domain, without stopping it. If the domain is inactive,
         the domain configuration is removed.
-        
+
         If the domain has a managed save image (see virDomainHasManagedSaveImage()),
         then including VIR_DOMAIN_UNDEFINE_MANAGED_SAVE in @flags will also remove
         that file, and omitting the flag will cause the undefine process to fail.
-        
+
         If the domain is inactive and has any snapshot metadata (see
         virDomainSnapshotNum()), then including
         VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA in @flags will also remove
@@ -2619,7 +2619,7 @@ class virDomain(object):
         metadata until the (now-transient) domain halts, regardless of
         whether this flag is present.  On hypervisors where snapshots do
         not use libvirt metadata, this flag has no effect.
-        
+
         If the domain has any nvram specified, then including
         VIR_DOMAIN_UNDEFINE_NVRAM will also remove that file, and omitting the flag
         will cause the undefine process to fail. """
@@ -2639,7 +2639,7 @@ class virDomain(object):
         error if unable to satisfy flags.  E.g. the hypervisor driver will
         return failure if LIVE is specified but it only supports modifying the
         persisted device allocation.
-        
+
         This method is used for actions such changing CDROM/Floppy device
         media, altering the graphics configuration such as password,
         reconfiguring the NIC device backend connectivity, etc. """
@@ -2672,7 +2672,7 @@ class virDomain(object):
         this call may fail if the underlying virtualization hypervisor does
         not support it.  This function may require privileged access to the
         hypervisor.
-        
+
         If @flags includes VIR_DOMAIN_AFFECT_LIVE, this will query a
         running domain (which will fail if domain is not active); if
         it includes VIR_DOMAIN_AFFECT_CONFIG, this will query the XML
@@ -2680,11 +2680,11 @@ class virDomain(object):
         If neither flag is set (that is, VIR_DOMAIN_AFFECT_CURRENT),
         then the configuration queried depends on whether the domain
         is currently running.
-        
+
         If @flags includes VIR_DOMAIN_VCPU_MAXIMUM, then the maximum
         virtual CPU limit is queried.  Otherwise, this call queries the
         current virtual CPU count.
-        
+
         If @flags includes VIR_DOMAIN_VCPU_GUEST, then the state of the processors
         is queried in the guest instead of the hypervisor. This flag is only usable
         on live domains. Guest agent may be needed for this flag to be available. """
@@ -2816,7 +2816,7 @@ class virNetwork(object):
     def XMLDesc(self, flags=0):
         """Provide an XML description of the network. The description may be reused
         later to relaunch the network with virNetworkCreateXML().
-        
+
         Normally, if a network included a physical function, the output includes
         all virtual functions tied to that physical interface.  If @flags includes
         VIR_NETWORK_XML_INACTIVE, then the expansion of virtual interfaces is
@@ -2932,7 +2932,7 @@ class virInterface(object):
         """VIR_INTERFACE_XML_INACTIVE - return the static configuration,
                                           suitable for use redefining the
                                           interface via virInterfaceDefineXML()
-        
+
         Provide an XML description of the interface. If
         VIR_INTERFACE_XML_INACTIVE is set, the description may be reused
         later to redefine the interface with virInterfaceDefineXML(). If it
@@ -2944,7 +2944,7 @@ class virInterface(object):
 
     def create(self, flags=0):
         """Activate an interface (i.e. call "ifup").
-        
+
         If there was an open network config transaction at the time this
         interface was defined (that is, if virInterfaceChangeBegin() had
         been called), the interface will be brought back down (and then
@@ -2957,7 +2957,7 @@ class virInterface(object):
         """deactivate an interface (ie call "ifdown")
         This does not remove the interface from the config, and
         does not free the associated virInterfacePtr object.
-        
+
         If there is an open network config transaction at the time this
         interface is destroyed (that is, if virInterfaceChangeBegin() had
         been called), and if the interface is later undefined and then
@@ -2981,7 +2981,7 @@ class virInterface(object):
     def undefine(self):
         """Undefine an interface, ie remove it from the config.
         This does not free the associated virInterfacePtr object.
-        
+
         Normally this change in the interface configuration is
         permanent/persistent, but if virInterfaceChangeBegin() has been
         previously called (i.e. if an interface config transaction is
@@ -3059,7 +3059,7 @@ class virStoragePool(object):
     def build(self, flags=0):
         """Currently only filesystem pool accepts flags VIR_STORAGE_POOL_BUILD_OVERWRITE
         and VIR_STORAGE_POOL_BUILD_NO_OVERWRITE.
-        
+
         Build the underlying storage pool """
         ret = libvirtmod.virStoragePoolBuild(self._o, flags)
         if ret == -1: raise libvirtError ('virStoragePoolBuild() failed', pool=self)
@@ -3075,12 +3075,12 @@ class virStoragePool(object):
         """Create a storage volume within a pool based
         on an XML description. Not all pools support
         creation of volumes.
-        
+
         Since 1.0.1 VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
         in flags can be used to get higher performance with
         qcow2 image files which don't support full preallocation,
         by creating a sparse image file with metadata.
-        
+
         virStorageVolFree should be used to free the resources after the
         storage volume object is no longer needed. """
         ret = libvirtmod.virStorageVolCreateXML(self._o, xmlDesc, flags)
@@ -3093,12 +3093,12 @@ class virStoragePool(object):
         'clonevol' volume as input. Information for the new
         volume (name, perms)  are passed via a typical volume
         XML description.
-        
+
         Since 1.0.1 VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
         in flags can be used to get higher performance with
         qcow2 image files which don't support full preallocation,
         by creating a sparse image file with metadata.
-        
+
         virStorageVolFree should be used to free the resources after the
         storage volume object is no longer needed. """
         if clonevol is None: clonevol__o = None
@@ -3195,7 +3195,7 @@ class virStoragePool(object):
     def storageVolLookupByName(self, name):
         """Fetch a pointer to a storage volume based on its name
         within a pool
-        
+
         virStorageVolFree should be used to free the resources after the
         storage volume object is no longer needed. """
         ret = libvirtmod.virStorageVolLookupByName(self._o, name)
@@ -3264,7 +3264,7 @@ class virStorageVol(object):
         """Download the content of the volume as a stream. If @length
         is zero, then the remaining contents of the volume after
         @offset will be downloaded.
-        
+
         This call sets up an asynchronous stream; subsequent use of
         stream APIs is necessary to transfer the actual data,
         determine how much data is successfully transferred, and
@@ -3320,19 +3320,19 @@ class virStorageVol(object):
         exceed the remaining free space in the parent pool.  The contents of
         the new capacity will appear as all zero bytes. The capacity value will
         be rounded to the granularity supported by the hypervisor.
-        
+
         Normally, the operation will attempt to affect capacity with a minimum
         impact on allocation (that is, the default operation favors a sparse
         resize).  If @flags contains VIR_STORAGE_VOL_RESIZE_ALLOCATE, then the
         operation will ensure that allocation is sufficient for the new
         capacity; this may make the operation take noticeably longer.
-        
+
         Normally, the operation treats @capacity as the new size in bytes;
         but if @flags contains VIR_STORAGE_VOL_RESIZE_DELTA, then @capacity
         represents the size difference to add to the current size.  It is
         up to the storage pool implementation whether unaligned requests are
         rounded up to the next valid boundary, or rejected.
-        
+
         Normally, this operation should only be used to enlarge capacity;
         but if @flags contains VIR_STORAGE_VOL_RESIZE_SHRINK, it is possible to
         attempt a reduction in capacity even though it might cause data loss.
@@ -3346,7 +3346,7 @@ class virStorageVol(object):
 
     def storagePoolLookupByVolume(self):
         """Fetch a storage pool which contains a particular volume
-        
+
         virStoragePoolFree should be used to free the resources after the
         storage pool object is no longer needed. """
         ret = libvirtmod.virStoragePoolLookupByVolume(self._o)
@@ -3360,13 +3360,13 @@ class virStorageVol(object):
         volume. Otherwise, if @length is non-zero, an error
         will be raised if an attempt is made to upload greater
         than @length bytes of data.
-        
+
         This call sets up an asynchronous stream; subsequent use of
         stream APIs is necessary to transfer the actual data,
         determine how much data is successfully transferred, and
         detect any errors. The results will be unpredictable if
         another active stream is writing to the storage volume.
-        
+
         When the data stream is closed whether the upload is successful
         or not the target storage pool will be refreshed to reflect pool
         and volume changes as a result of the upload. Depending on
@@ -3427,7 +3427,7 @@ class virConnect(object):
         be called before any transaction with interface configuration.
         Once it is known that a new configuration works, it can be committed via
         virInterfaceChangeCommit(), which frees the restore point.
-        
+
         If virInterfaceChangeBegin() is called when a transaction is
         already opened, this function will fail, and a
         VIR_ERR_INVALID_OPERATION will be logged. """
@@ -3438,7 +3438,7 @@ class virConnect(object):
     def changeCommit(self, flags=0):
         """This commits the changes made to interfaces and frees the restore point
         created by virInterfaceChangeBegin().
-        
+
         If virInterfaceChangeCommit() is called when a transaction is not
         opened, this function will fail, and a VIR_ERR_INVALID_OPERATION
         will be logged. """
@@ -3449,7 +3449,7 @@ class virConnect(object):
     def changeRollback(self, flags=0):
         """This cancels changes made to interfaces settings by restoring previous
         state created by virInterfaceChangeBegin().
-        
+
         If virInterfaceChangeRollback() is called when a transaction is not
         opened, this function will fail, and a VIR_ERR_INVALID_OPERATION
         will be logged. """
@@ -3466,7 +3466,7 @@ class virConnect(object):
         not be called if further interaction with the Hypervisor are needed
         especially if there is running domain which need further monitoring by
         the application.
-        
+
         Connections are reference counted; the count is explicitly
         increased by the initial open (virConnectOpen, virConnectOpenAuth,
         and the like) as well as virConnectRef; it is also temporarily
@@ -3505,18 +3505,18 @@ class virConnect(object):
         The domain is not persistent, so its definition will disappear when it
         is destroyed, or if the host is restarted (see virDomainDefineXML() to
         define persistent domains).
-        
+
         If the VIR_DOMAIN_START_PAUSED flag is set, the guest domain
         will be started, but its CPUs will remain paused. The CPUs
         can later be manually started using virDomainResume.
-        
+
         If the VIR_DOMAIN_START_AUTODESTROY flag is set, the guest
         domain will be automatically destroyed when the virConnectPtr
         object is finally released. This will also happen if the
         client application crashes / loses its connection to the
         libvirtd daemon. Any domains marked for auto destroy will
         block attempts at migration, save-to-file, or snapshots.
-        
+
         virDomainFree should be used to free the resources after the
         domain object is no longer needed. """
         ret = libvirtmod.virDomainCreateXML(self._o, xmlDesc, flags)
@@ -3529,12 +3529,12 @@ class virConnect(object):
         This definition is persistent, until explicitly undefined with
         virDomainUndefine(). A previous definition for this domain would be
         overridden if it already exists.
-        
+
         Some hypervisors may prevent this operation if there is a current
         block copy operation on a transient domain with the same id as the
         domain being defined; in that case, use virDomainBlockJobAbort() to
         stop the block copy first.
-        
+
         virDomainFree should be used to free the resources after the
         domain object is no longer needed. """
         ret = libvirtmod.virDomainDefineXML(self._o, xml)
@@ -3547,12 +3547,12 @@ class virConnect(object):
         This definition is persistent, until explicitly undefined with
         virDomainUndefine(). A previous definition for this domain would be
         overridden if it already exists.
-        
+
         Some hypervisors may prevent this operation if there is a current
         block copy operation on a transient domain with the same id as the
         domain being defined; in that case, use virDomainBlockJobAbort() to
         stop the block copy first.
-        
+
         virDomainFree should be used to free the resources after the
         domain object is no longer needed. """
         ret = libvirtmod.virDomainDefineXMLFlags(self._o, xml, flags)
@@ -3576,6 +3576,42 @@ class virConnect(object):
         if ret is None: raise libvirtError ('virConnectDomainXMLToNative() failed', conn=self)
         return ret
 
+    def poolCreateXML(self, xmlDesc, flags=0):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-30 14 : 13
+        Description : Define a pool via a xml description and try to start it
+                    xmlDesc - XML description for new pool
+                    flags - not used yet, so callers should always pass 0
+                    return -  a virStoragePoolPtr object,
+                    or NULL if creation failed
+        '''
+        ret = libvirtmod.virStoragePoolDefineXML(self._o, xmlDesc, flags)
+        if ret is None: raise libvirtError('virStoragePoolDefineXML() failed', conn=self)
+        start_ret = libvirtmod.virStoragePoolCreate(ret, flags)
+        if start_ret == -1: libvirtError('virStoragePoolCreate() failed', conn=self)
+        auto_ret = libvirtmod.virStoragePoolSetAutostart(ret, 1)
+        if auto_ret == -1: raise libvirtError('virStoragePoolSetAutostart() failed', conn=self)
+        __tmp = virStoragePool(self, _obj=ret)
+        return __tmp
+
+    def listAllStoragePoolsNames(self, flags=3):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-30 15 : 39
+        Description : Used to list all filtered pools -
+                    an array of pools' names will be returned.
+        '''
+        ret = libvirtmod.virConnectListAllStoragePools(self._o, flags)
+        if ret is None:
+            raise libvirtError("virConnectListAllStoragePools() failed", conn=self)
+        names = list()
+        for poolptr in ret:
+            names.append(virStoragePool(self, _obj=poolptr).name())
+        return names
+
     #
     # virConnect functions from module libvirt-storage
     #
@@ -3587,7 +3623,7 @@ class virConnect(object):
         srcSpec (optional for some storage pool types, e.g. local ones) is
         an instance of the storage pool's source element specifying where
         to look for the pools.
-        
+
         srcSpec is not required for some types (e.g., those querying
         local storage resources only) """
         ret = libvirtmod.virConnectFindStoragePoolSources(self._o, type, srcSpec, flags)
@@ -3786,7 +3822,7 @@ class virConnect(object):
 
     def interfaceDefineXML(self, xml, flags=0):
         """Define an interface (or modify existing interface configuration).
-        
+
         Normally this change in the interface configuration is immediately
         permanent/persistent, but if virInterfaceChangeBegin() has been
         previously called (i.e. if an interface config transaction is
@@ -3796,7 +3832,7 @@ class virConnect(object):
         explicitly removed using virInterfaceChangeRollback(), or will be
         automatically removed during the next reboot of the system running
         libvirtd.
-        
+
         virInterfaceFree should be used to free the resources after the
         interface object is no longer needed. """
         ret = libvirtmod.virInterfaceDefineXML(self._o, xml, flags)
@@ -3806,7 +3842,7 @@ class virConnect(object):
 
     def interfaceLookupByMACString(self, macstr):
         """Try to lookup an interface on the given hypervisor based on its MAC.
-        
+
         virInterfaceFree should be used to free the resources after the
         interface object is no longer needed. """
         ret = libvirtmod.virInterfaceLookupByMACString(self._o, macstr)
@@ -3816,7 +3852,7 @@ class virConnect(object):
 
     def interfaceLookupByName(self, name):
         """Try to lookup an interface on the given hypervisor based on its name.
-        
+
         virInterfaceFree should be used to free the resources after the
         interface object is no longer needed. """
         ret = libvirtmod.virInterfaceLookupByName(self._o, name)
@@ -3830,7 +3866,7 @@ class virConnect(object):
 
     def isAlive(self):
         """Determine if the connection to the hypervisor is still alive
-        
+
         A connection will be classed as alive if it is either local, or running
         over a channel (TCP or UNIX socket) which is not closed. """
         ret = libvirtmod.virConnectIsAlive(self._o)
@@ -3845,7 +3881,7 @@ class virConnect(object):
 
     def isSecure(self):
         """Determine if the connection to the hypervisor is secure
-        
+
         A connection will be classed as secure if it is either
         encrypted, or running over a channel which is not exposed
         to eavesdropping (eg a UNIX domain socket, or pipe) """
@@ -3947,7 +3983,7 @@ class virConnect(object):
         """Try to find a domain based on the hypervisor ID number
         Note that this won't work for inactive domains which have an ID of -1,
         in that case a lookup based on the Name or UUId need to be done instead.
-        
+
         virDomainFree should be used to free the resources after the
         domain object is no longer needed. """
         ret = libvirtmod.virDomainLookupByID(self._o, id)
@@ -3957,7 +3993,7 @@ class virConnect(object):
 
     def lookupByName(self, name):
         """Try to lookup a domain on the given hypervisor based on its name.
-        
+
         virDomainFree should be used to free the resources after the
         domain object is no longer needed. """
         ret = libvirtmod.virDomainLookupByName(self._o, name)
@@ -3982,7 +4018,7 @@ class virConnect(object):
 
     def lookupByUUIDString(self, uuidstr):
         """Try to lookup a domain on the given hypervisor based on its UUID.
-        
+
         virDomainFree should be used to free the resources after the
         domain object is no longer needed. """
         ret = libvirtmod.virDomainLookupByUUIDString(self._o, uuidstr)
@@ -3997,7 +4033,7 @@ class virConnect(object):
     def networkCreateXML(self, xmlDesc):
         """Create and start a new virtual network, based on an XML description
         similar to the one returned by virNetworkGetXMLDesc()
-        
+
         virNetworkFree should be used to free the resources after the
         network object is no longer needed. """
         ret = libvirtmod.virNetworkCreateXML(self._o, xmlDesc)
@@ -4007,7 +4043,7 @@ class virConnect(object):
 
     def networkDefineXML(self, xml):
         """Define a network, but does not create it
-        
+
         virNetworkFree should be used to free the resources after the
         network object is no longer needed. """
         ret = libvirtmod.virNetworkDefineXML(self._o, xml)
@@ -4017,7 +4053,7 @@ class virConnect(object):
 
     def networkLookupByName(self, name):
         """Try to lookup a network on the given hypervisor based on its name.
-        
+
         virNetworkFree should be used to free the resources after the
         network object is no longer needed. """
         ret = libvirtmod.virNetworkLookupByName(self._o, name)
@@ -4054,13 +4090,13 @@ class virConnect(object):
     def newStream(self, flags=0):
         """Creates a new stream object which can be used to perform
         streamed I/O with other public API function.
-        
+
         When no longer needed, a stream object must be released
         with virStreamFree. If a data stream has been used,
         then the application must call virStreamFinish or
         virStreamAbort before free'ing to, in order to notify
         the driver of termination.
-        
+
         If a non-blocking data stream is required passed
         VIR_STREAM_NONBLOCK for flags, otherwise pass 0. """
         ret = libvirtmod.virStreamNew(self._o, flags)
@@ -4075,7 +4111,7 @@ class virConnect(object):
     def nodeDeviceCreateXML(self, xmlDesc, flags=0):
         """Create a new device on the VM host machine, for example, virtual
         HBAs created using vport_create.
-        
+
         virNodeDeviceFree should be used to free the resources after the
         node device object is no longer needed. """
         ret = libvirtmod.virNodeDeviceCreateXML(self._o, xmlDesc, flags)
@@ -4085,7 +4121,7 @@ class virConnect(object):
 
     def nodeDeviceLookupByName(self, name):
         """Lookup a node device by its name.
-        
+
         virNodeDeviceFree should be used to free the resources after the
         node device object is no longer needed. """
         ret = libvirtmod.virNodeDeviceLookupByName(self._o, name)
@@ -4095,7 +4131,7 @@ class virConnect(object):
 
     def nodeDeviceLookupSCSIHostByWWN(self, wwnn, wwpn, flags=0):
         """Lookup SCSI Host which is capable with 'fc_host' by its WWNN and WWPN.
-        
+
         virNodeDeviceFree should be used to free the resources after the
         node device object is no longer needed. """
         ret = libvirtmod.virNodeDeviceLookupSCSIHostByWWN(self._o, wwnn, wwpn, flags)
@@ -4149,7 +4185,7 @@ class virConnect(object):
 
     def numOfDevices(self, cap, flags=0):
         """Provides the number of node devices.
-        
+
         If the optional 'cap'  argument is non-None, then the count
         will be restricted to devices with the specified capability """
         ret = libvirtmod.virNodeNumOfDevices(self._o, cap, flags)
@@ -4223,7 +4259,7 @@ class virConnect(object):
     def nwfilterDefineXML(self, xmlDesc):
         """Define a new network filter, based on an XML description
         similar to the one returned by virNWFilterGetXMLDesc()
-        
+
         virNWFilterFree should be used to free the resources after the
         nwfilter object is no longer needed. """
         ret = libvirtmod.virNWFilterDefineXML(self._o, xmlDesc)
@@ -4233,7 +4269,7 @@ class virConnect(object):
 
     def nwfilterLookupByName(self, name):
         """Try to lookup a network filter on the given hypervisor based on its name.
-        
+
         virNWFilterFree should be used to free the resources after the
         nwfilter object is no longer needed. """
         ret = libvirtmod.virNWFilterLookupByName(self._o, name)
@@ -4258,7 +4294,7 @@ class virConnect(object):
 
     def nwfilterLookupByUUIDString(self, uuidstr):
         """Try to lookup an nwfilter on the given hypervisor based on its UUID.
-        
+
         virNWFilterFree should be used to free the resources after the
         nwfilter object is no longer needed. """
         ret = libvirtmod.virNWFilterLookupByUUIDString(self._o, uuidstr)
@@ -4272,7 +4308,7 @@ class virConnect(object):
 
     def restore(self, frm):
         """This method will restore a domain saved to disk by virDomainSave().
-        
+
         See virDomainRestoreFlags() for more control. """
         ret = libvirtmod.virDomainRestore(self._o, frm)
         if ret == -1: raise libvirtError ('virDomainRestore() failed', conn=self)
@@ -4280,19 +4316,19 @@ class virConnect(object):
 
     def restoreFlags(self, frm, dxml=None, flags=0):
         """This method will restore a domain saved to disk by virDomainSave().
-        
+
         If the hypervisor supports it, @dxml can be used to alter
         host-specific portions of the domain XML that will be used when
         restoring an image.  For example, it is possible to alter the
         backing filename that is associated with a disk device, in order to
         prepare for file renaming done as part of backing up the disk
         device while the domain is stopped.
-        
+
         If @flags includes VIR_DOMAIN_SAVE_BYPASS_CACHE, then libvirt will
         attempt to bypass the file system cache while restoring the file, or
         fail if it cannot do so for the given system; this can allow less
         pressure on file system cache, but also risks slowing restores from NFS.
-        
+
         Normally, the saved state file will remember whether the domain was
         running or paused, and restore defaults to the same state.
         Specifying VIR_DOMAIN_SAVE_RUNNING or VIR_DOMAIN_SAVE_PAUSED in
@@ -4306,13 +4342,13 @@ class virConnect(object):
         """This updates the definition of a domain stored in a saved state
         file.  @file must be a file created previously by virDomainSave()
         or virDomainSaveFlags().
-        
+
         @dxml can be used to alter host-specific portions of the domain XML
         that will be used when restoring an image.  For example, it is
         possible to alter the backing filename that is associated with a
         disk device, to match renaming done as part of backing up the disk
         device while the domain is stopped.
-        
+
         Normally, the saved state file will remember whether the domain was
         running or paused, and restore defaults to the same state.
         Specifying VIR_DOMAIN_SAVE_RUNNING or VIR_DOMAIN_SAVE_PAUSED in
@@ -4327,7 +4363,7 @@ class virConnect(object):
         """This method will extract the XML describing the domain at the time
         a saved state file was created.  @file must be a file created
         previously by virDomainSave() or virDomainSaveFlags().
-        
+
         No security-sensitive data will be included unless @flags contains
         VIR_DOMAIN_XML_SECURE; this flag is rejected on read-only
         connections.  For this API, @flags should not contain either
@@ -4344,10 +4380,10 @@ class virConnect(object):
         """If XML specifies a UUID, locates the specified secret and replaces all
         attributes of the secret specified by UUID by attributes specified in xml
         (any attributes not specified in xml are discarded).
-        
+
         Otherwise, creates a new secret with an automatically chosen UUID, and
         initializes its attributes from xml.
-        
+
         virSecretFree should be used to free the resources after the
         secret object is no longer needed. """
         ret = libvirtmod.virSecretDefineXML(self._o, xml, flags)
@@ -4373,7 +4409,7 @@ class virConnect(object):
     def secretLookupByUUIDString(self, uuidstr):
         """Try to lookup a secret on the given hypervisor based on its UUID.
         Uses the printable string value to describe the UUID
-        
+
         virSecretFree should be used to free the resources after the
         secret object is no longer needed. """
         ret = libvirtmod.virSecretLookupByUUIDString(self._o, uuidstr)
@@ -4385,7 +4421,7 @@ class virConnect(object):
         """Try to lookup a secret on the given hypervisor based on its usage
         The usageID is unique within the set of secrets sharing the
         same usageType value.
-        
+
         virSecretFree should be used to free the resources after the
         secret object is no longer needed. """
         ret = libvirtmod.virSecretLookupByUsage(self._o, usageType, usageID)
@@ -4405,12 +4441,12 @@ class virConnect(object):
         <= 0, no keepalive messages will be sent.  When @count is 0, the connection
         will be automatically closed after @interval seconds of inactivity without
         sending any keepalive messages.
-        
+
         Note: The client has to implement and run an event loop with
         virEventRegisterImpl() or virEventRegisterDefaultImpl() to be able to
         use keepalive messages.  Failure to do so may result in connections
         being closed unexpectedly.
-        
+
         Note: This API function controls only keepalive messages sent by the client.
         If the server is configured to use keepalive you still need to run the event
         loop to respond to them, even if you disable keepalives by this function. """
@@ -4436,7 +4472,7 @@ class virConnect(object):
         """Create a new storage based on its XML description. The
         pool is not persistent, so its definition will disappear
         when it is destroyed, or if the host is restarted
-        
+
         virStoragePoolFree should be used to free the resources after the
         storage pool object is no longer needed. """
         ret = libvirtmod.virStoragePoolCreateXML(self._o, xmlDesc, flags)
@@ -4447,7 +4483,7 @@ class virConnect(object):
     def storagePoolDefineXML(self, xml, flags=0):
         """Define a new inactive storage pool based on its XML description. The
         pool is persistent, until explicitly undefined.
-        
+
         virStoragePoolFree should be used to free the resources after the
         storage pool object is no longer needed. """
         ret = libvirtmod.virStoragePoolDefineXML(self._o, xml, flags)
@@ -4457,7 +4493,7 @@ class virConnect(object):
 
     def storagePoolLookupByName(self, name):
         """Fetch a storage pool based on its unique name
-        
+
         virStoragePoolFree should be used to free the resources after the
         storage pool object is no longer needed. """
         ret = libvirtmod.virStoragePoolLookupByName(self._o, name)
@@ -4467,7 +4503,7 @@ class virConnect(object):
 
     def storagePoolLookupByUUID(self, uuid):
         """Fetch a storage pool based on its globally unique id
-        
+
         virStoragePoolFree should be used to free the resources after the
         storage pool object is no longer needed. """
         ret = libvirtmod.virStoragePoolLookupByUUID(self._o, uuid)
@@ -4477,7 +4513,7 @@ class virConnect(object):
 
     def storagePoolLookupByUUIDString(self, uuidstr):
         """Fetch a storage pool based on its globally unique id
-        
+
         virStoragePoolFree should be used to free the resources after the
         storage pool object is no longer needed. """
         ret = libvirtmod.virStoragePoolLookupByUUIDString(self._o, uuidstr)
@@ -4488,7 +4524,7 @@ class virConnect(object):
     def storageVolLookupByKey(self, key):
         """Fetch a pointer to a storage volume based on its
         globally unique key
-        
+
         virStorageVolFree should be used to free the resources after the
         storage volume object is no longer needed. """
         ret = libvirtmod.virStorageVolLookupByKey(self._o, key)
@@ -4499,7 +4535,7 @@ class virConnect(object):
     def storageVolLookupByPath(self, path):
         """Fetch a pointer to a storage volume based on its
         locally (host) unique path
-        
+
         virStorageVolFree should be used to free the resources after the
         storage volume object is no longer needed. """
         ret = libvirtmod.virStorageVolLookupByPath(self._o, path)
@@ -4526,16 +4562,16 @@ class virConnect(object):
 
     def virConnGetLastError(self):
         """Provide a pointer to the last error caught on that connection
-        
+
         This method is not protected against access from multiple
         threads. In a multi-threaded application, always use the
         global virGetLastError() API which is backed by thread
         local storage.
-        
+
         If the connection object was discovered to be invalid by
         an API call, then the error will be reported against the
         global error object.
-        
+
         Since 0.6.0, all errors reported in the per-connection object
         are also duplicated in the global error object. As such an
         application can always use virGetLastError(). This method
@@ -4546,7 +4582,7 @@ class virConnect(object):
     def virConnResetLastError(self):
         """The error object is kept in thread local storage, so separate
         threads can safely access this concurrently.
-        
+
         Reset the last error caught on that connection """
         libvirtmod.virConnResetLastError(self._o)
 
@@ -5097,7 +5133,7 @@ class virNodeDevice(object):
     def detachFlags(self, driverName, flags=0):
         """Detach the node device from the node itself so that it may be
         assigned to a guest domain.
-        
+
         Depending on the hypervisor, this may involve operations such as
         unbinding any device drivers from the device, binding the device to
         a dummy device driver and resetting the device. Different backend
@@ -5105,10 +5141,10 @@ class virNodeDevice(object):
         devices. For example, QEMU's "kvm" backend driver (the default)
         expects the device to be bound to "pci-stub", but its "vfio"
         backend driver expects the device to be bound to "vfio-pci".
-        
+
         If the device is currently in use by the node, this method may
         fail.
-        
+
         Once the device is not assigned to any guest, it may be re-attached
         to the node using the virNodeDeviceReAttach() method. """
         ret = libvirtmod.virNodeDeviceDetachFlags(self._o, driverName, flags)
@@ -5118,17 +5154,17 @@ class virNodeDevice(object):
     def dettach(self):
         """Dettach the node device from the node itself so that it may be
         assigned to a guest domain.
-        
+
         Depending on the hypervisor, this may involve operations such
         as unbinding any device drivers from the device, binding the
         device to a dummy device driver and resetting the device.
-        
+
         If the device is currently in use by the node, this method may
         fail.
-        
+
         Once the device is not assigned to any guest, it may be re-attached
         to the node using the virNodeDeviceReattach() method.
-        
+
         If the caller needs control over which backend driver will be used
         during PCI device assignment (to use something other than the
         default, for example VFIO), the newer virNodeDeviceDetachFlags()
@@ -5170,11 +5206,11 @@ class virNodeDevice(object):
     def reAttach(self):
         """Re-attach a previously dettached node device to the node so that it
         may be used by the node again.
-        
+
         Depending on the hypervisor, this may involve operations such
         as resetting the device, unbinding it from a dummy device driver
         and binding it to its appropriate driver.
-        
+
         If the device is currently in use by a guest, this method may fail. """
         ret = libvirtmod.virNodeDeviceReAttach(self._o)
         if ret == -1: raise libvirtError ('virNodeDeviceReAttach() failed')
@@ -5183,12 +5219,12 @@ class virNodeDevice(object):
     def reset(self):
         """Reset a previously dettached node device to the node before or
         after assigning it to a guest.
-        
+
         The exact reset semantics depends on the hypervisor and device
         type but, for example, KVM will attempt to reset PCI devices with
         a Function Level Reset, Secondary Bus Reset or a Power Management
         D-State reset.
-        
+
         If the reset will affect other devices which are currently in use,
         this function may fail. """
         ret = libvirtmod.virNodeDeviceReset(self._o)
@@ -5394,7 +5430,7 @@ class virStream(object):
         on the stream. For output streams this should be called once
         all data has been written. For input streams this should be
         called once virStreamRecv returns end-of-file.
-        
+
         This method is a synchronization point for all asynchronous
         errors, so if this returns a success code the application can
         be sure that all data has been successfully processed. """
@@ -5560,7 +5596,7 @@ class virDomainSnapshot(object):
 
     def delete(self, flags=0):
         """Delete the snapshot.
-        
+
         If @flags is 0, then just this snapshot is deleted, and changes
         from this snapshot are automatically merged into children
         snapshots.  If @flags includes VIR_DOMAIN_SNAPSHOT_DELETE_CHILDREN,
@@ -5568,7 +5604,7 @@ class virDomainSnapshot(object):
         @flags includes VIR_DOMAIN_SNAPSHOT_DELETE_CHILDREN_ONLY, then any
         descendant snapshots are deleted, but this snapshot remains.  These
         two flags are mutually exclusive.
-        
+
         If @flags includes VIR_DOMAIN_SNAPSHOT_DELETE_METADATA_ONLY, then
         any snapshot metadata tracked by libvirt is removed while keeping
         the snapshot contents intact; if a hypervisor does not require any
@@ -5586,7 +5622,7 @@ class virDomainSnapshot(object):
 
     def getParent(self, flags=0):
         """Get the parent snapshot for @snapshot, if any.
-        
+
         virDomainSnapshotFree should be used to free the resources after the
         snapshot object is no longer needed. """
         ret = libvirtmod.virDomainSnapshotGetParent(self._o, flags)
@@ -5596,7 +5632,7 @@ class virDomainSnapshot(object):
 
     def getXMLDesc(self, flags=0):
         """Provide an XML description of the domain snapshot.
-        
+
         No security-sensitive data will be included unless @flags contains
         VIR_DOMAIN_XML_SECURE; this flag is rejected on read-only
         connections.  For this API, @flags should not contain either
@@ -5635,7 +5671,7 @@ class virDomainSnapshot(object):
 
     def numChildren(self, flags=0):
         """Provides the number of child snapshots for this domain snapshot.
-        
+
         By default, this command covers only direct children; it is also possible
         to expand things to cover all descendants, when @flags includes
         VIR_DOMAIN_SNAPSHOT_LIST_DESCENDANTS.  Also, some filters are provided in
@@ -5648,21 +5684,21 @@ class virDomainSnapshot(object):
         are set.  When setting bits from more than one group, it is possible to
         select an impossible combination, in that case a hypervisor may return
         either 0 or an error.
-        
+
         The first group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_LEAVES and
         VIR_DOMAIN_SNAPSHOT_LIST_NO_LEAVES, to filter based on snapshots that
         have no further children (a leaf snapshot).
-        
+
         The next group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_METADATA and
         VIR_DOMAIN_SNAPSHOT_LIST_NO_METADATA, for filtering snapshots based on
         whether they have metadata that would prevent the removal of the last
         reference to a domain.
-        
+
         The next group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_INACTIVE,
         VIR_DOMAIN_SNAPSHOT_LIST_ACTIVE, and VIR_DOMAIN_SNAPSHOT_LIST_DISK_ONLY,
         for filtering snapshots based on what domain state is tracked by the
         snapshot.
-        
+
         The next group of @flags is VIR_DOMAIN_SNAPSHOT_LIST_INTERNAL and
         VIR_DOMAIN_SNAPSHOT_LIST_EXTERNAL, for filtering snapshots based on
         whether the snapshot is stored inside the disk images or as

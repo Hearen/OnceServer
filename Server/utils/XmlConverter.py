@@ -172,7 +172,7 @@ class XmlConverter():
 
 
     @staticmethod
-    def toSRXml(name, target, type='dir'):
+    def toSRXml(uuidString, name, target, type='dir'):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
@@ -183,11 +183,14 @@ class XmlConverter():
         root = ET.Element("pool")
         root.set("type", type)
 
-        nameET = root.SubElement("name")
+        nameET = ET.SubElement(root, "name")
         nameET.text = name
 
-        targetET = root.SubElement("target")
-        pathET = targetET.SubElement("path")
+        uuidET = ET.SubElement(root, "uuid")
+        uuidET.text = uuidString
+
+        targetET = ET.SubElement(root, "target")
+        pathET = ET.SubElement(targetET, "path")
         pathET.text = target
 
         return ET.tostring(root, 'utf-8')
@@ -200,11 +203,12 @@ class XmlConverter():
         Time        : 2015-12-23 16 : 30
         Description : Used to define a XML configuration string to create a
                     volume within a active pool;
+        Additional  : volumeSize with the unit of 1MB
         '''
         root = ET.Element("volume")
-        nameET = root.subElement("name")
+        nameET = ET.SubElement(root, "name")
         nameET.text = volumeName
-        capacityET = root.subElement("capacity")
+        capacityET = ET.SubElement(root, "capacity")
         capacityET.set("unit", "M")
         capacityET.text = volumeSize
         return ET.tostring(root, 'utf-8')
@@ -219,7 +223,7 @@ class XmlConverter():
         bridge.set("name", bridge)
         netXml = ET.tostring(root, 'utf-8')
         return netXml
-    
+
     @staticmethod
     def toVIFXml(net_type, mac, source):
         '''
@@ -233,10 +237,10 @@ class XmlConverter():
         root.set('type', 'bridge')
         if mac != None:
             mac = ET.SubElement(root, "mac")
-            mac.set("address", str(mac)) 
+            mac.set("address", str(mac))
         source = ET.SubElement(root, 'source')
         source.set('bridge', source)
         vif_xml = ET.tostring(root, 'utf-8')
         log.debug(vif_xml)
-        return vif_xml        
+        return vif_xml
 
