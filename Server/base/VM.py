@@ -124,7 +124,7 @@ def delete(_id, flags=0):
         if dom.isActive(): dom.destroyFlags(int(flags))
         dom.undefineFlags(int(flags))
         try:
-             conn.lookupByUUIDString(_id)
+            conn.lookupByUUIDString(_id)
         except Exception, e:
             log.error("VM %s deletion failed! Message: %s", (_id, e))
             filter = {"_id": _id}

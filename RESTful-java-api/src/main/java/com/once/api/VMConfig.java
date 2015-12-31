@@ -14,7 +14,7 @@ public class VMConfig {
 	//a default uuid should be provided to support Eve validation
 	//if no uuid will be provided by the clients, the serer will 
 	//replace it with the newly created uuid of the vm;
-	private String uuid = "27167fe7-fc9d-47d5-9cd0-717106ef67be";
+	private String uuid;
 	
 	private String name;
 	private int memory;

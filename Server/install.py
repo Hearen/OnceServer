@@ -12,7 +12,7 @@ from utils.Tools import moduleLoader
 def hello(resource, item):
     print "\n\non_pre_POST is here!\n\n"
 app = Eve(__name__, json_encoder=UUIDEncoder, validator=UUIDValidator)
-app.on_insert += inserting
+# app.on_insert += inserting
 app.on_insert_VM += VMInserting
 app.on_pre_POST += hello
 

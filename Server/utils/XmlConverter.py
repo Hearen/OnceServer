@@ -38,9 +38,9 @@ class XmlConverter():
         currentmemElement.text = str(memory)
         currentmemElement.set("unit", 'KiB')
 
-        vcpu = ET.SubElement(root, "vcpu")
-        vcpu.text = vcpu
-        vcpu.set("placement", 'static')
+        vcpuET = ET.SubElement(root, "vcpu")
+        vcpuET.text = vcpu
+        vcpuET.set("placement", 'static')
 
         os = ET.SubElement(root,"os")
 
@@ -172,7 +172,7 @@ class XmlConverter():
 
 
     @staticmethod
-    def toSRXml(uuidString, name, target, type='dir'):
+    def toSRXml(name, target, type='dir'):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
@@ -183,14 +183,11 @@ class XmlConverter():
         root = ET.Element("pool")
         root.set("type", type)
 
-        nameET = ET.SubElement(root, "name")
+        nameET = root.SubElement("name")
         nameET.text = name
 
-        uuidET = ET.SubElement(root, "uuid")
-        uuidET.text = uuidString
-
-        targetET = ET.SubElement(root, "target")
-        pathET = ET.SubElement(targetET, "path")
+        targetET = root.SubElement("target")
+        pathET = targetET.SubElement("path")
         pathET.text = target
 
         return ET.tostring(root, 'utf-8')
@@ -203,12 +200,11 @@ class XmlConverter():
         Time        : 2015-12-23 16 : 30
         Description : Used to define a XML configuration string to create a
                     volume within a active pool;
-        Additional  : volumeSize with the unit of 1MB
         '''
         root = ET.Element("volume")
-        nameET = ET.SubElement(root, "name")
+        nameET = root.subElement("name")
         nameET.text = volumeName
-        capacityET = ET.SubElement(root, "capacity")
+        capacityET = root.subElement("capacity")
         capacityET.set("unit", "M")
         capacityET.text = volumeSize
         return ET.tostring(root, 'utf-8')
@@ -216,14 +212,14 @@ class XmlConverter():
     @staticmethod
     def toNetXml(name, bridge):
         root = ET.Element("network")
-        name = ET.SubElement(root, "name")
-        name.text = name
+        net_name = ET.SubElement(root, "name")
+        net_name.text = name
 
-        bridge = ET.SubElement(root, "bridge")
-        bridge.set("name", bridge)
+        br = ET.SubElement(root, "bridge")
+        br.set("name", bridge)
         netXml = ET.tostring(root, 'utf-8')
         return netXml
-
+    
     @staticmethod
     def toVIFXml(net_type, mac, source):
         '''
@@ -234,13 +230,15 @@ class XmlConverter():
                     interface;
         '''
         root = ET.Element('interface')
-        root.set('type', 'bridge')
-        if mac != None:
-            mac = ET.SubElement(root, "mac")
-            mac.set("address", str(mac))
-        source = ET.SubElement(root, 'source')
-        source.set('bridge', source)
+        if net_type:
+            root.set('type', net_type)
+        if mac:
+            mac_addr = ET.SubElement(root, "mac")
+            mac_addr.set("address", str(mac))
+        if source:
+            source_bridge = ET.SubElement(root, 'source')
+            source_bridge.set('bridge', source)
         vif_xml = ET.tostring(root, 'utf-8')
         log.debug(vif_xml)
-        return vif_xml
+        return vif_xml        
 

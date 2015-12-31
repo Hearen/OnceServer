@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class VM {
-	private static final String urlString = "http://" + CONST.HOST + ":" + CONST.PORT + "/VM/";
+	private static final String urlString = "http://" + CONST.HOST + ":" + CONST.PORT + "/VMs/";
 	
     /*******************************************
     Author: LHearen
