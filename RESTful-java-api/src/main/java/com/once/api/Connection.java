@@ -225,10 +225,10 @@ public class Connection {
 	 * Description : Deleting resources in DB and execute some operations in
 	 * server;
 	 *******************************************/
-	public static String sendDelete(String urlString,
+	public static String sendDelete(URL url,
 			Map<String, String> headers, Map<String, String> data) {
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpDelete httpDelete = new HttpDelete(urlString);
+		HttpDelete httpDelete = new HttpDelete(url.toString());
 		httpDelete.addHeader("User-Agent", CONST.USER_AGENT);
 		for (String key : headers.keySet()) {
 			httpDelete.addHeader(key, headers.get(key));

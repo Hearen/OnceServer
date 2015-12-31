@@ -11,7 +11,7 @@ from utils.DBEventHandler import VMInserting
 from utils.Tools import moduleLoader
 
 app = Eve(__name__, json_encoder=UUIDEncoder, validator=UUIDValidator)
-app.on_insert += inserting
+# app.on_insert += inserting
 app.on_insert_VM += VMInserting
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)

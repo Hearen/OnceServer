@@ -38,9 +38,9 @@ class XmlConverter():
         currentmemElement.text = str(memory)
         currentmemElement.set("unit", 'KiB')
 
-        vcpu = ET.SubElement(root, "vcpu")
-        vcpu.text = vcpu
-        vcpu.set("placement", 'static')
+        vcpuET = ET.SubElement(root, "vcpu")
+        vcpuET.text = vcpu
+        vcpuET.set("placement", 'static')
 
         os = ET.SubElement(root,"os")
 
@@ -212,11 +212,11 @@ class XmlConverter():
     @staticmethod
     def toNetXml(name, bridge):
         root = ET.Element("network")
-        name = ET.SubElement(root, "name")
-        name.text = name
+        net_name = ET.SubElement(root, "name")
+        net_name.text = name
 
-        bridge = ET.SubElement(root, "bridge")
-        bridge.set("name", bridge)
+        br = ET.SubElement(root, "bridge")
+        br.set("name", bridge)
         netXml = ET.tostring(root, 'utf-8')
         return netXml
     
@@ -231,11 +231,12 @@ class XmlConverter():
         '''
         root = ET.Element('interface')
         root.set('type', 'bridge')
-        if mac != None:
-            mac = ET.SubElement(root, "mac")
-            mac.set("address", str(mac)) 
-        source = ET.SubElement(root, 'source')
-        source.set('bridge', source)
+        if mac:
+            mac_addr = ET.SubElement(root, "mac")
+            mac_addr.set("address", str(mac))
+        if source:
+            source_bridge = ET.SubElement(root, 'source')
+            source_bridge.set('bridge', source)
         vif_xml = ET.tostring(root, 'utf-8')
         log.debug(vif_xml)
         return vif_xml        

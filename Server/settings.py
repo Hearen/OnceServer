@@ -107,7 +107,7 @@ vif = {
 		'net_type': {
 			'type': 'string',
 		},
-		'MAC': {
+		'mac': {
 			'type': 'string',
 		},
 		'source': {
