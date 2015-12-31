@@ -1,7 +1,7 @@
 # OnceServer API Documentation
 This documentation is used to specify the details of the APIs in server side which might be updated when the whole structure comes to its stable state.
 
-## Method Calling Mode
+## Methods Calling Mode
 1. The client side (a java or web client) would invoke a encapsulated *POST* method to transfer method information and the parameters the method needs to the server; 
 
 2. the server side will automatically dispatch the called method before the data transferred to the normal *eve handling process* in which process the data will be handled in RESTful way and the data will meantime validated according to the *settings.py*. 
@@ -22,10 +22,10 @@ This documentation is used to specify the details of the APIs in server side whi
 ### Storage Methods
 - createPool -- create a storage pool and return *True* if done successfully otherwise return *False*;
 - deletePool -- delete a storage pool and return *True* if done successfully otherwise return *False*;
-- listPools -- return a string composed by names of pools created but return *False* if something unexpected happened;
+- listPools -- return a string composed by names of pools created and separated by comma but return *False* if something unexpected happened;
 - createVolume -- create a volume and return *True* if done successfully otherwise return *False*; 
 - deleteVolume -- delete a volume and return *True* if done successfully otherwise return *False*; 
-- listVolumes -- list all volumes in a pool specified a poolName and return a string composed of names of volumes but return *False* if something unexpected occurred;
+- listVolumes -- list all volumes in a pool specified by a pool name and return a string composed of names of volumes which is separated by comma but return *False* if something unexpected occurred;
 
 ### VIF Methods
 - create -- create a VIF according to the provided parameters return uuidString if created successfully, otherwise return *False*;
