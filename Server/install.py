@@ -1,5 +1,4 @@
 import traceback
-import json
 from eve import Eve
 from utils.MyUUID import UUIDEncoder
 from utils.MyUUID import UUIDValidator
@@ -10,9 +9,12 @@ from utils.DBEventHandler import inserting
 from utils.DBEventHandler import VMInserting
 from utils.Tools import moduleLoader
 
+def hello(resource, item):
+    print "\n\non_pre_POST is here!\n\n"
 app = Eve(__name__, json_encoder=UUIDEncoder, validator=UUIDValidator)
 # app.on_insert += inserting
 app.on_insert_VM += VMInserting
+app.on_pre_POST += hello
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
@@ -36,17 +38,24 @@ def before():
     Description: Used to execute commands from clients;
     '''
     print '\n\n\nStart to handle request...'
-    moduleName = request.headers.get('Module', None)
-    methodName = request.headers.get('Method', None)
     print dumpRequest(request)
+    data = request.form.to_dict()
+    print data
+    moduleName = data['Module']
+    del data['Module']
+    print data
+    methodName = data['Method']
+    del data['Method']
+    print data
     print moduleName
     if moduleName != None:
-        params = request.form.to_dict()
+        params = data
         print params
         module = moduleLoader('base', str(moduleName))
         print module
         method = getattr(module, methodName)
         retv = method(**params)
+        print retv
         try:
             print "inside try block"
 #             module = moduleLoader('base', moduleName)

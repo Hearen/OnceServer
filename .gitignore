@@ -5,6 +5,9 @@
 # python testing files
 *test*.py
 
+# testing resources
+/res
+
 __pycache__/
 *.py[cod]
 
