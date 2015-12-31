@@ -53,3 +53,42 @@ class VMHelper():
         '''
         return VMHelper.__getVMCollection().delete_many(filter)
 
+class VBDHelper():
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-31 11:00
+    Description : Used to access and remove documents in StoragePools and Volumes;
+    '''
+
+    @staticmethod
+    def __getPoolCollection():
+        client = MongoClient('localhost', 27017)
+        db = client['server']
+        return db.StoragePools
+
+    @staticmethod
+    def __getVolumeCollection():
+        client = MongoClient('localhost', 27017)
+        db = client['server']
+        return db.Volumes
+
+    @staticmethod
+    def removePool(filter):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-31 11:04
+        Description : Using a dictionary filter to remove some documents;
+        '''
+        return VBDHelper.__getPoolCollection().delete_many(filter)
+
+    @staticmethod
+    def removeVolume(filter):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-31 11:04
+        Description : Using a dictionary filter to remove some volumes;
+        '''
+        return VBDHelper.__getVolumeCollection().delete_many(filter)

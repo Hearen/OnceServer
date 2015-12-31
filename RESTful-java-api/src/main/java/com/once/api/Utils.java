@@ -1,5 +1,6 @@
 package com.once.api;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -15,19 +16,11 @@ archive certain goals;
 public class Utils {
 	public static boolean sendMethod(String urlString, String moduleName, String methodName, String uuid)
 	{
-		Map<String, String> header = new HashMap<String, String>();
-        header.put("Module", moduleName);
-        header.put("Method", methodName);
         Map<String, String> data = new HashMap<String, String>();
         data.put("_id", uuid);
-        URL url = null;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		String response = Connection.sendPatch(url, header, data);
+        data.put("Module", moduleName);
+        data.put("Method", methodName);
+		String response = Connection.sendPost(urlString, data);
 		System.out.println(response);
 		return true;
 	}

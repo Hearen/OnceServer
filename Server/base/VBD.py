@@ -2,6 +2,7 @@ from utils.Connection import Connection
 from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from utils.libvirt import libvirtError
+from utils.DBHelper import VBDHelper
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
@@ -40,6 +41,8 @@ def deletePool(_id):
         pool.destroy()
     try:
         pool.undefine()
+        filter = {"_id": _id}
+        VBDHelper.removePool(filter)
     except libvirtError, e:
         log.debug("pool %s cannot be removed! Message: %s" % (_id, e))
         return "Pool is busy!"
@@ -109,6 +112,8 @@ def deleteVolume(_id, poolName, volName):
         return False
     try:
         volume.delete()
+        filter = {"_id": _id}
+        VBDHelper.removeVolume(filter)
     except libvirtError, e:
         log.debug("Volume %s deletion failed! Message: %s" % (volName, e))
         return False

@@ -21,9 +21,14 @@ public class Storage {
         System.out.println(response);
 	}
 	
-	public static boolean deletePool(String uuidString)
+	public static void deletePool(String uuidString) throws UnsupportedEncodingException
 	{
-		return Utils.sendMethod(urlString+"/StoragePools/", "VBD", "deletePool", uuidString);
+		Map<String, String> data = new HashMap<String, String>();
+        data.put("Module", "VBD");
+        data.put("Method", "deletePool");
+        data.put("_id", uuidString);
+        String response = Connection.sendPost(urlString+"/StoragePools/", data);
+        System.out.println(response);
 	}
 	
 	public static String listPools() throws UnsupportedEncodingException

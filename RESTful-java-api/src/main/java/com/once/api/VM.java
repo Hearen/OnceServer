@@ -68,16 +68,9 @@ public class VM {
 	
 	public static boolean setTemplate(String uuid)
 	{
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("isTemplate", "True");
-		URL url;
-		try {
-			url = new URL(urlString + uuid);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		String response = Connection.sendPatch(url, map);
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("isTemplate", "True");
+		String response = Connection.sendPost(urlString+uuid, data);
 		System.out.println(response);
 		return true;
 	}
