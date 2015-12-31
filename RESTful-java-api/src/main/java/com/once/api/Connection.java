@@ -26,6 +26,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BasicListHeaderIterator;
 
+import com.once.api.OnceHttpDelete;
+
 public class Connection {
 	/*******************************************
 	 * Author: LHearen E-mail: LHearen@126.com Time : 2015-12-03 16:20
@@ -228,7 +230,7 @@ public class Connection {
 	public static String sendDelete(URL url,
 			Map<String, String> headers, Map<String, String> data) {
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpDelete httpDelete = new HttpDelete(url.toString());
+		OnceHttpDelete httpDelete = new OnceHttpDelete(url.toString());
 		httpDelete.addHeader("User-Agent", CONST.USER_AGENT);
 		for (String key : headers.keySet()) {
 			httpDelete.addHeader(key, headers.get(key));
@@ -238,14 +240,13 @@ public class Connection {
 			urlParameters.add(new BasicNameValuePair(key, data.get(key)));
 		}
 
-		HttpEntity params = null;
 		try {
-			params = new UrlEncodedFormEntity(urlParameters);
-		} catch (UnsupportedEncodingException e) {
+			httpDelete.setEntity(new UrlEncodedFormEntity(urlParameters, "utf-8"));
+		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
-		((HttpResponse) httpDelete).setEntity(params);
+		
 		CloseableHttpResponse response;
 		try {
 			response = client.execute(httpDelete);

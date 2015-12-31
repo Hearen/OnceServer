@@ -230,7 +230,8 @@ class XmlConverter():
                     interface;
         '''
         root = ET.Element('interface')
-        root.set('type', 'bridge')
+        if net_type:
+            root.set('type', net_type)
         if mac:
             mac_addr = ET.SubElement(root, "mac")
             mac_addr.set("address", str(mac))

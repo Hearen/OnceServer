@@ -32,7 +32,7 @@ def create(_id, vm_id, net_type, mac, source, flags=0):
         log.exception(traceback.print_exc())
         return False
     
-def delete(_id, vm_id, mac, flags=0):
+def delete(_id, vm_id, net_type, mac, source, flags=0):
     '''
     added by Wu Yuewen
     E-mail: wuyuewen@otcaix.iscas.ac.cn
