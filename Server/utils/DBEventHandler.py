@@ -17,19 +17,7 @@ def VMInserting(items):
     Usage       : app.on_insert_VM += VMInserting
     '''
     print "I am inserting VM now."
-
-
-def inserting(resourceName, items):
-    '''
-    Author      : LHearen
-    E-mail      : LHearen@126.com
-    Time        : 2015-12-16 09 : 54
-    Description : Used to test mongoDB insertion event - any resource;
-    Usage       : app.on_insert += inserting
-    '''
     print "####################################"
-    print "hello world"
-    print resourceName
     print items
     print "uuid transferred from client"
     print items[0]["_id"]
@@ -43,3 +31,17 @@ def inserting(resourceName, items):
     items[0]["_id"] = uuidString
     print "####################################"
 
+
+
+def inserting(resourceName, items):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2015-12-16 09 : 54
+    Description : Used to test mongoDB insertion event - any resource;
+    Usage       : app.on_insert += inserting
+    '''
+    print "\n\ninserting db\n\n"
+    print resourceName
+    print items
+    print items[0]
