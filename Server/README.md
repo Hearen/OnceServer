@@ -30,3 +30,8 @@ This documentation is used to specify the details of the APIs in server side whi
 #### VIF Methods
 - create -- create a VIF according to the provided parameters return uuidString if created successfully, otherwise return *False*;
 - delete -- delete a VIF by its uuidString and return *True* if it is done successfully, otherwise return *False*;
+
+#### Contact
+*Author: LHearen*
+
+*E-mail: LHearen@126.com*
