@@ -172,7 +172,7 @@ class XmlConverter():
 
 
     @staticmethod
-    def toSRXml(name, target, type='dir'):
+    def toSRXml(id, name, target, poolType='dir'):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
@@ -180,14 +180,17 @@ class XmlConverter():
         Description : Used to describe the storage pool configuration
                     to create it;
         '''
+        print name
+        print target
+        print poolType
         root = ET.Element("pool")
-        root.set("type", type)
-
-        nameET = root.SubElement("name")
+        root.set("type", poolType)
+        idET = ET.SubElement(root, "uuid")
+        idET.text = id
+        nameET = ET.SubElement(root, "name")
         nameET.text = name
-
-        targetET = root.SubElement("target")
-        pathET = targetET.SubElement("path")
+        targetET = ET.SubElement(root, "target")
+        pathET = ET.SubElement(targetET, "path")
         pathET.text = target
 
         return ET.tostring(root, 'utf-8')
@@ -202,9 +205,9 @@ class XmlConverter():
                     volume within a active pool;
         '''
         root = ET.Element("volume")
-        nameET = root.subElement("name")
+        nameET = ET.subElement(root,"name")
         nameET.text = volumeName
-        capacityET = root.subElement("capacity")
+        capacityET = ET.subElement(root, "capacity")
         capacityET.set("unit", "M")
         capacityET.text = volumeSize
         return ET.tostring(root, 'utf-8')
@@ -219,7 +222,7 @@ class XmlConverter():
         br.set("name", bridge)
         netXml = ET.tostring(root, 'utf-8')
         return netXml
-    
+
     @staticmethod
     def toVIFXml(net_type, mac, source):
         '''
@@ -240,5 +243,5 @@ class XmlConverter():
             source_bridge.set('bridge', source)
         vif_xml = ET.tostring(root, 'utf-8')
         log.debug(vif_xml)
-        return vif_xml        
+        return vif_xml
 
