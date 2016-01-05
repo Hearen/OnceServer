@@ -6,6 +6,9 @@ from utils.DBHelper import VBDHelper
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
+PoolUUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
+VolumeUUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
+
 
 def createPool(_id, name, target):
     '''
@@ -14,6 +17,11 @@ def createPool(_id, name, target):
     Time        : 2015-12-30 10 : 17
     Description : Using indispensible factors to create a pool;
     '''
+    if len(_id) < 5:
+        from utils.UUIDGenerator import createString
+        global PoolUUIDString
+        _id = createString()
+    PoolUUIDString = _id
     config = XmlConverter.toSRXml(_id, name, target)
     print "pool xml config"
     print config
@@ -72,6 +80,9 @@ def createVolume(_id, poolName, volName, volSize):
     Time        : 2015-12-30 15 : 43
     Description : Create a volume in a existed pool specified by a pool name;
     '''
+    from utils.UUIDGenerator import createString
+    global VolumeUUIDString
+    VolumeUUIDString = createString()
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:

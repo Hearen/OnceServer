@@ -5,6 +5,7 @@ from utils.XmlConverter import XmlConverter
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
+VIFUUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
 
 def create(_id, vm_id, net_type, mac, source, flags=0):
     '''
@@ -20,6 +21,11 @@ def create(_id, vm_id, net_type, mac, source, flags=0):
     specifies that the device shall be allocated to the persisted domain
     configuration only.
     '''
+    if len(_id) < 5:
+        from utils.UUIDGenerator import createString
+        global VIFUUIDString
+        _id = createString()
+    VIFUUIDString = _id
     try:
         dom = conn.lookupByUUIDString(vm_id)
         if dom:

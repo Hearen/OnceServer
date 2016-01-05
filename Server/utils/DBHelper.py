@@ -26,6 +26,32 @@ class VMHelper():
         db = client['server']
         return db.VM
 
+    @staticmethod
+    def insert(dataDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-04 14:02
+        Description : Used to insert the whole VM parameters to VM collection;
+        '''
+        col = VMHelper.__getVMCollection()
+        res = col.insert(dataDict)
+        return res
+
+    @staticmethod
+    def update(filter, dataDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-04 14:32
+        Description : Update certain fields in specified documents;
+        '''
+        col = VMHelper.__getVMCollection()
+        params = {"$set": dataDict}
+        res = col.update(filter, params)
+        return res
+
+
 
     @staticmethod
     def retrieve(filter):

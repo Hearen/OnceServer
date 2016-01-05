@@ -205,9 +205,9 @@ class XmlConverter():
                     volume within a active pool;
         '''
         root = ET.Element("volume")
-        nameET = ET.subElement(root,"name")
+        nameET = ET.SubElement(root,"name")
         nameET.text = volumeName
-        capacityET = ET.subElement(root, "capacity")
+        capacityET = ET.SubElement(root, "capacity")
         capacityET.set("unit", "M")
         capacityET.text = volumeSize
         return ET.tostring(root, 'utf-8')

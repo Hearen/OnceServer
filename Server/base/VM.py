@@ -3,9 +3,14 @@ from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from time import sleep
 from utils.DBHelper import VMHelper
+from utils.UUIDGenerator import createString
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
+UUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
+
+def hello():
+    print "testing hello in VM"
 
 
 def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
@@ -17,9 +22,14 @@ def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     '''
     uuid = _id
     print("Inside create")
+    print uuid
     if len(uuid) < 5:
-        uuid = None
-    uuid = None
+        uuid = createString()
+
+    global UUIDString
+    UUIDString = uuid
+    print UUIDString
+    print uuid
     hvm = {"loader": "/usr/lib/xen/boot/hvmloader"}
     hvm["boot"] = "cdrom"
     hvm["device_model"] = "/usr/lib64/xen/bin/qemu-system-i386"

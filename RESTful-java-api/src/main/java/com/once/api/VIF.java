@@ -17,7 +17,7 @@ public class VIF {
     to create a VIF in remote host;
      * @throws UnsupportedEncodingException 
     *******************************************/  
-    public static void create(VIFConfig config) throws MalformedURLException, UnsupportedEncodingException
+    public static void create(VIFConfig config)
     {
     	/*
     	 * used to post a VM configuration to server;
@@ -26,7 +26,8 @@ public class VIF {
     	Map<String, String> data = config.toMap();
     	data.put("Module", "VIF");
     	data.put("Method", "create");
-        String response = Connection.sendPost(urlString,config.toMap());
+    	System.out.println(data.toString());
+        String response = Connection.sendPost(urlString,data);
         System.out.println(response);
     }
     

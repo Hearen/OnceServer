@@ -7,13 +7,21 @@ from utils.OnceLogging import log, init
 from utils.Tools import dumpRequest
 from utils.DBEventHandler import inserting
 from utils.DBEventHandler import VMInserting
+from utils.DBEventHandler import VolumeInserting
+from utils.DBEventHandler import PoolInserting
 from utils.Tools import moduleLoader
 
 def hello(resource, item):
     print "\n\non_pre_POST is here!\n\n"
+
+def test(items):
+    print "testing volumes"
 app = Eve(__name__, json_encoder=UUIDEncoder, validator=UUIDValidator)
-# app.on_insert += inserting
-app.on_insert_VM += VMInserting
+app.on_insert += inserting
+app.on_insert_VMs += VMInserting
+app.on_insert_Volumes += VolumeInserting
+app.on_insert_StoragePools += PoolInserting
+# app.on_insert_Volumes += test
 app.on_pre_POST += hello
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
@@ -56,6 +64,7 @@ def before():
         method = getattr(module, methodName)
         retv = method(**params)
         print retv
+        print "install.py"
         try:
             print "inside try block"
 #             module = moduleLoader('base', moduleName)

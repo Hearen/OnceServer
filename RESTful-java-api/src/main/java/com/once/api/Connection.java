@@ -29,8 +29,7 @@ import org.apache.http.message.BasicListHeaderIterator;
 public class Connection {
 	/*******************************************
 	 * Author: LHearen E-mail: LHearen@126.com Time : 2015-12-03 16:20
-	 * Description: encapulate all parameters in headers and post to a certain
-	 * url;
+	 * Description: encapulate all parameters in data and post it to a certain url;
 	 *******************************************/
 	public static String sendPost(String urlString, Map<String, String> data)
 	{
@@ -79,5 +78,4 @@ public class Connection {
 		}
 		return contentStringBuffer.toString();
 	}
-
 }

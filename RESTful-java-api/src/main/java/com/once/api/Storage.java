@@ -14,7 +14,8 @@ public class Storage {
         Map<String, String> data = new HashMap<String, String>();
         data.put("Module", "VBD");
         data.put("Method", "createPool");
-        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
+//        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
+        data.put("_id", "");
         data.put("name", poolName);
         data.put("target", target);
         String response = Connection.sendPost(urlString+"/StoragePools/", data);
@@ -36,7 +37,8 @@ public class Storage {
 		Map<String, String> data = new HashMap<String, String>();
         data.put("Module", "VBD");
         data.put("Method", "listPools");
-        Connection.sendPost(urlString+"/StoragePools/", data);
+        String response = Connection.sendPost(urlString+"/StoragePools/", data);
+        System.out.println(response);
 		return "";
 	}
 	
