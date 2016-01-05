@@ -24,7 +24,7 @@ class VMHelper():
         '''
         client = MongoClient('localhost', 27017)
         db = client['server']
-        return db.VM
+        return db.VMs
 
     @staticmethod
     def insert(dataDict):
@@ -39,7 +39,7 @@ class VMHelper():
         return res
 
     @staticmethod
-    def update(filter, dataDict):
+    def update(filterDict, dataDict):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
@@ -48,36 +48,36 @@ class VMHelper():
         '''
         col = VMHelper.__getVMCollection()
         params = {"$set": dataDict}
-        res = col.update(filter, params)
+        res = col.update(filterDict, params)
         return res
 
 
 
     @staticmethod
-    def retrieve(filter):
+    def retrieve(filterDict):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
         Time        : 2015-12-17 14 : 24
         Description : Using filterJson to filter the result from collection vm;
-        Parameter   : filter can be dictionary of list of dictionary;
+        Parameter   : filterDict can be dictionary of list of dictionary;
         Return      : return the documents fitting the condition;
         '''
         col = VMHelper.__getVMCollection()
         print col.find_one()
-        return col.find_one(filter)
+        return col.find_one(filterDict)
 
     @staticmethod
-    def remove(filter):
+    def remove(filterDict):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
         Time        : 2015-12-17 14 : 42
         Description : Used to remove certain documents in VM collection;
-        Parameter   : filter can be dictionary of list of dictionary;
+        Parameter   : filterDict can be dictionary of list of dictionary;
         Return      : the amount of documents removed;
         '''
-        return VMHelper.__getVMCollection().delete_many(filter)
+        return VMHelper.__getVMCollection().delete_many(filterDict)
 
 class VBDHelper():
     '''
@@ -100,21 +100,79 @@ class VBDHelper():
         return db.Volumes
 
     @staticmethod
-    def removePool(filter):
+    def removePool(filterDict):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
         Time        : 2015-12-31 11:04
-        Description : Using a dictionary filter to remove some documents;
+        Description : Using a dictionary filterDict to remove some documents;
         '''
-        return VBDHelper.__getPoolCollection().delete_many(filter)
+        return VBDHelper.__getPoolCollection().delete_many(filterDict)
 
     @staticmethod
-    def removeVolume(filter):
+    def removeVolume(filterDict):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
         Time        : 2015-12-31 11:04
-        Description : Using a dictionary filter to remove some volumes;
+        Description : Using a dictionary filterDict to remove some volumes;
         '''
-        return VBDHelper.__getVolumeCollection().delete_many(filter)
+        return VBDHelper.__getVolumeCollection().delete_many(filterDict)
+
+class VIFHelper:
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-05 10:36
+    Description : Used to carry out some mongodb operations;
+    '''
+    @staticmethod
+    def __getCollection():
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-17 14 : 45
+        Description : Used to provide vm collection object for further use;
+        '''
+        client = MongoClient('localhost', 27017)
+        db = client['server']
+        return db.VIFs
+
+    @staticmethod
+    def update(filterDict, dataDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-04 14:32
+        Description : Update certain fields in VIFs filtered documents;
+        '''
+        col = VIFHelper.__getCollection()
+        params = {"$set": dataDict}
+        res = col.update(filterDict, params)
+        return res
+
+    @staticmethod
+    def retrieve(filterDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-17 14 : 24
+        Description : Using filterJson to filter the result from collection vm;
+        Parameter   : filterDict can be dictionary of list of dictionary;
+        Return      : return the documents fitting the condition;
+        '''
+        col = VIFHelper.__getVMCollection()
+        return col.find_one(filterDict)
+
+    @staticmethod
+    def remove(filterDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2015-12-17 14 : 42
+        Description : Used to remove certain documents in VIFs collection;
+        Parameter   : filterDict can be dictionary of list of dictionary;
+        Return      : the amount of documents removed;
+        '''
+        print "inside VIFHelper remove"
+        return VIFHelper.__getCollection().delete_many(filterDict)

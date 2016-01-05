@@ -96,13 +96,10 @@ vif = {
             'type': 'uuid',
             'unique': True,
         },
-        'vm_id':{
-            'type': 'uuid',
-        },
-		'net_type': {
+		'name': {
 			'type': 'string',
 		},
-		'mac': {
+		'macString': {
 			'type': 'string',
 		},
 		'source': {

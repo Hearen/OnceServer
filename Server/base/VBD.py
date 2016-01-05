@@ -23,9 +23,6 @@ def createPool(_id, name, target):
         _id = createString()
     PoolUUIDString = _id
     config = XmlConverter.toSRXml(_id, name, target)
-    print "pool xml config"
-    print config
-    print "pool xml config end"
     try:
         conn.poolCreateXML(config)
     except libvirtError, e:
@@ -44,16 +41,16 @@ def deletePool(_id):
         pool = conn.storagePoolLookupByUUIDString(_id)
     except libvirtError, e:
         log.debug("pool %s not found! Message: %s" % (_id, e))
-        return "Pool not found"
+        return False
     if pool.isActive():
         pool.destroy()
     try:
         pool.undefine()
-        filter = {"_id": _id}
-        VBDHelper.removePool(filter)
+        filterDict = {"_id": _id}
+        VBDHelper.removePool(filterDict)
     except libvirtError, e:
         log.debug("pool %s cannot be removed! Message: %s" % (_id, e))
-        return "Pool is busy!"
+        return False
     return True
 
 def listPools():
@@ -80,9 +77,11 @@ def createVolume(_id, poolName, volName, volSize):
     Time        : 2015-12-30 15 : 43
     Description : Create a volume in a existed pool specified by a pool name;
     '''
-    from utils.UUIDGenerator import createString
+    if len(_id) < 5:
+        from utils.UUIDGenerator import createString
+        _id = createString()
     global VolumeUUIDString
-    VolumeUUIDString = createString()
+    VolumeUUIDString = _id
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
@@ -93,10 +92,11 @@ def createVolume(_id, poolName, volName, volSize):
         pool.create()
     try:
         pool.createXML(config)
+        return VolumeUUIDString
     except libvirtError, e:
         log.debug("Volume %s creation failed! Message: %s" % (volName, e))
         return False
-    return True
+    return False
 
 def deleteVolume(_id, poolName, volName):
     '''
@@ -104,12 +104,6 @@ def deleteVolume(_id, poolName, volName):
     E-mail      : LHearen@126.com
     Time        : 2015-12-30 10 : 31
     Description : Used to delete a volume in a specified pool;
-    '''
-    '''
-    Added by    : LHearen
-    E-mail      : LHearen@126.com
-    Time        : 2015-12-30 16:19
-    Description : _id is currently designed to handle DB separately;
     '''
     try:
         pool = conn.storagePoolLookupByName(poolName)
@@ -123,8 +117,8 @@ def deleteVolume(_id, poolName, volName):
         return False
     try:
         volume.delete()
-        filter = {"_id": _id}
-        VBDHelper.removeVolume(filter)
+        filterDict = {"_id": _id}
+        VBDHelper.removeVolume(filterDict)
     except libvirtError, e:
         log.debug("Volume %s deletion failed! Message: %s" % (volName, e))
         return False

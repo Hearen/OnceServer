@@ -9,10 +9,6 @@ init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
 UUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
 
-def hello():
-    print "testing hello in VM"
-
-
 def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     '''
     Author      : LHearen
@@ -32,7 +28,7 @@ def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     print uuid
     hvm = {"loader": "/usr/lib/xen/boot/hvmloader"}
     hvm["boot"] = "cdrom"
-    hvm["device_model"] = "/usr/lib64/xen/bin/qemu-system-i386"
+    hvm["device_model"] = "/usr/lib/xen/bin/qemu-system-i386"
     image = {"hvm": hvm}
 
     tap2 = {"dev": "hdc:cdrom"}
@@ -137,8 +133,11 @@ def delete(_id, flags=0):
             conn.lookupByUUIDString(_id)
         except Exception, e:
             log.error("VM %s deletion failed! Message: %s", (_id, e))
-            filter = {"_id": _id}
-            return VMHelper.remove(filter)
+            filterDict = {"_id": _id}
+            ret = VMHelper.remove(filterDict)
+            print ret
+            print ret.nRemoved
+            return ret
     return False
 
 def reboot(_id, flags=0):
@@ -182,8 +181,8 @@ def isTemplate(_id):
     Description : Used to retrieve the isTemplate attribute from DB;
     '''
     print "inside isTemplate"
-    filter = {"_id": _id}
-    print filter
-    res = VMHelper.retrieve(filter)["isTemplate"]
+    filterDict = {"_id": _id}
+    print filterDict
+    res = VMHelper.retrieve(filterDict)["isTemplate"]
     print res
     return res

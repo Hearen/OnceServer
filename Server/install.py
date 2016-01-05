@@ -2,14 +2,19 @@ import traceback
 from eve import Eve
 from utils.MyUUID import UUIDEncoder
 from utils.MyUUID import UUIDValidator
-from flask import request, make_response
+from flask import request
 from utils.OnceLogging import log, init
 from utils.Tools import dumpRequest
 from utils.DBEventHandler import inserting
 from utils.DBEventHandler import VMInserting
 from utils.DBEventHandler import VolumeInserting
 from utils.DBEventHandler import PoolInserting
+from utils.DBEventHandler import VIFInserting
 from utils.Tools import moduleLoader
+from utils.Tools import errorResponseMaker
+from utils.Tools import responseMaker
+
+
 
 def hello(resource, item):
     print "\n\non_pre_POST is here!\n\n"
@@ -21,20 +26,12 @@ app.on_insert += inserting
 app.on_insert_VMs += VMInserting
 app.on_insert_Volumes += VolumeInserting
 app.on_insert_StoragePools += PoolInserting
+app.on_insert_VIFs += VIFInserting
 # app.on_insert_Volumes += test
 app.on_pre_POST += hello
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
-def errorResponseMaker():
-    '''
-    Author      : LHearen
-    E-mail      : LHearen@126.com
-    Time        : 2015-12-15 15 : 30
-    Description : Used to handle exception response;
-    '''
-    headers = {'Content-Type':'text/plain'}
-    return make_response("User function failed", 403, headers)
 
 @app.before_request
 def before():
@@ -62,16 +59,25 @@ def before():
         module = moduleLoader('base', str(moduleName))
         print module
         method = getattr(module, methodName)
-        retv = method(**params)
-        print retv
-        print "install.py"
+        ret = method(**params)
+        print ret
+        print methodName
+        print('create' not in methodName)
+        if 'create' not in methodName:
+            print "it's not create*"
+            if ret:
+                print "executed successfully!"
+                return responseMaker(ret)
+            else:
+                print "Failed!"
+                return errorResponseMaker()
         try:
             print "inside try block"
 #             module = moduleLoader('base', moduleName)
 #             print module
 #             method = getattr(module, methodName)
 #             retv = method(**params)
-            if not retv:
+            if not ret:
                 print "Wrong result from customized function!"
                 errorResponseMaker()
             print "leaving try block"
@@ -84,13 +90,6 @@ def before():
 
 @app.after_request
 def after(response):
-    '''
-    Author      : LHearen
-    E-mail      : LHearen@126.com
-    Time        : 2015-12-15 15 : 32
-    Description : Used to further post-process the response
-                returned to the clients;
-    '''
     return response
 
 

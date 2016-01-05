@@ -80,7 +80,7 @@ def VIFInserting(items):
     print "inside VIFInserting"
     import sys
     sys.path.append(RootDir)
-    from base.VBD import VIFUUIDString
+    from base.VIF import VIFUUIDString
     print items[0]['_id']
     items[0]['_id'] = VIFUUIDString
     print "replacing VIF uuidstring"

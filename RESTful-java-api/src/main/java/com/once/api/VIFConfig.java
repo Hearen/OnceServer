@@ -14,43 +14,26 @@ Description : Used to record the basic configuration
  *******************************************/  
 public class VIFConfig {
 
-	private String uuid;
-	private String vmUuid;
-	private String netType;
-	private String mac;
+	private String uuidString;
+	private String name;
+	private String macString;
 	private String source;
 	
-	public VIFConfig(String uuid, String vmUuid, String netType, String mac,
-			String source) {
+	public VIFConfig(String uuidString, String name, String source, String macString) {
 		super();
-		this.uuid = uuid;
-		this.vmUuid = vmUuid;
-		this.netType = netType;
-		this.mac = mac;
+		this.uuidString = uuidString;
+		this.name = name;
+		this.macString = macString;
 		this.source = source;
 	}
 
 	public Map<String, String> toMap()
 	{
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("_id", uuid);
-		map.put("vm_id", vmUuid);
-		map.put("net_type", netType);
-		map.put("mac", mac);
+		map.put("_id", uuidString);
+		map.put("name", name);
+		map.put("macString", macString);
 		map.put("source", source);
 		return map;
-	}
-
-	public String toString()
-	{
-		StringWriter writer = new StringWriter();
-		PrintWriter print = new PrintWriter(writer);
-		print.printf("%1$20s: %2$s\n", "_id", this.uuid);
-		print.printf("%1$20s: %2$s\n", "vm_id", this.vmUuid);
-		print.printf("%1$20s: %2$s\n", "net_type", this.netType);
-		print.printf("%1$20s: %2$s\n", "mac", this.mac);
-		print.printf("%1$20s: %2$s\n", "source", this.source);
-		return writer.toString();
-	}
-	
+	}	
 }

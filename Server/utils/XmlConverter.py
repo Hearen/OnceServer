@@ -59,7 +59,7 @@ class XmlConverter():
         on_crash = ET.SubElement(root,"on_crash")
         on_crash.text = "destroy"
 
-        device = ['cdrom','hd']
+        device = ['hd', 'cdrom']
         for key in image:
             typeET = ET.SubElement(os, "type")
             typeET.text = key
@@ -213,13 +213,23 @@ class XmlConverter():
         return ET.tostring(root, 'utf-8')
 
     @staticmethod
-    def toNetXml(name, bridge):
+    def toNetXml(uuidString, name, source, macString):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-05 10:10
+        Description : Used to create or define a virtual network card;
+        '''
         root = ET.Element("network")
-        net_name = ET.SubElement(root, "name")
-        net_name.text = name
-
-        br = ET.SubElement(root, "bridge")
-        br.set("name", bridge)
+        nameET = ET.SubElement(root, "name")
+        nameET.text = name
+        uuidET = ET.SubElement(root, "uuid")
+        uuidET.text = uuidString
+        bridgeET = ET.SubElement(root, "bridge")
+        bridgeET.set("name", source)
+        if macString == None:
+            macET = ET.SubElement(root, "mac")
+            macET.set("address", macString)
         netXml = ET.tostring(root, 'utf-8')
         return netXml
 
