@@ -27,7 +27,7 @@ def createPool(_id, name, target):
         conn.poolCreateXML(config)
     except libvirtError, e:
         log.debug("pool %s creation failed! Message: %s" % (name, e))
-        return False
+        return None
     return True
 
 def deletePool(_id):
@@ -41,7 +41,7 @@ def deletePool(_id):
         pool = conn.storagePoolLookupByUUIDString(_id)
     except libvirtError, e:
         log.debug("pool %s not found! Message: %s" % (_id, e))
-        return False
+        return None
     if pool.isActive():
         pool.destroy()
     try:
@@ -50,7 +50,7 @@ def deletePool(_id):
         VBDHelper.removePool(filterDict)
     except libvirtError, e:
         log.debug("pool %s cannot be removed! Message: %s" % (_id, e))
-        return False
+        return None
     return True
 
 def listPools():
@@ -64,7 +64,7 @@ def listPools():
         poolNames = conn.listAllStoragePoolsNames()
     except libvirtError, e:
         log.debug("pool listing error! Message: %s" % e)
-        return False
+        return None
     if len(poolNames) > 0:
         return ','.join(poolNames)
     else:
@@ -86,7 +86,7 @@ def createVolume(_id, poolName, volName, volSize):
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
         log.debug("pool %s not found! Message: %s" % (poolName, e))
-        return False
+        return None
     config = XmlConverter.toVolumeXml(volName, volSize)
     if not pool.isActive():
         pool.create()
@@ -95,8 +95,8 @@ def createVolume(_id, poolName, volName, volSize):
         return VolumeUUIDString
     except libvirtError, e:
         log.debug("Volume %s creation failed! Message: %s" % (volName, e))
-        return False
-    return False
+        return None
+    return None
 
 def deleteVolume(_id, poolName, volName):
     '''
@@ -109,19 +109,19 @@ def deleteVolume(_id, poolName, volName):
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
         log.debug("pool %s not found! Message: %s" % (poolName, e))
-        return False
+        return None
     try:
         volume = pool.storageVolLookupByName(volName)
     except libvirtError, e:
         log.debug("volume %ss not found! Message: %s" % (volName, e))
-        return False
+        return None
     try:
         volume.delete()
         filterDict = {"_id": _id}
         VBDHelper.removeVolume(filterDict)
     except libvirtError, e:
         log.debug("Volume %s deletion failed! Message: %s" % (volName, e))
-        return False
+        return None
     return True
 
 def listVolumes(poolName):
@@ -135,11 +135,11 @@ def listVolumes(poolName):
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
         log.debug("pool %s not found! Message: %s" % (poolName, e))
-        return False
+        return None
     try:
         volumes = pool.listAllVolumes()
     except libvirtError, e:
         log.debug("%s pool.listAllVolumes method failed! Message: %s" % (poolName, e))
-        return False
+        return None
     volNames = ','.join([vol.name() for vol in volumes])
     return volNames

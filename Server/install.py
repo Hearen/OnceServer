@@ -1,4 +1,3 @@
-import traceback
 from eve import Eve
 from utils.MyUUID import UUIDEncoder
 from utils.MyUUID import UUIDValidator
@@ -32,61 +31,40 @@ app.on_pre_POST += hello
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
-
 @app.before_request
 def before():
     '''
-    Author: DBear
-    Re-coded by LHearen
-    E-mail: LHearen@126.com
-    Time  :	2015-12-14 15:46
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-06 10:52
     Description: Used to execute commands from clients;
     '''
     print '\n\n\nStart to handle request...'
     print dumpRequest(request)
     data = request.form.to_dict()
     print data
-    moduleName = data['Module']
-    del data['Module']
-    print data
-    methodName = data['Method']
-    del data['Method']
-    print data
-    print moduleName
-    if moduleName != None:
+    if 'Module' in data:
+        moduleName = data['Module']
+        methodName = data['Method']
+        del data['Module']
+        del data['Method']
         params = data
         print params
         module = moduleLoader('base', str(moduleName))
-        print module
         method = getattr(module, methodName)
         ret = method(**params)
+        print "return value"
         print ret
-        print methodName
-        print('create' not in methodName)
         if 'create' not in methodName:
             print "it's not create*"
-            if ret:
+            print(ret == None)
+            if ret != None:
                 print "executed successfully!"
+                print str(ret)
                 return responseMaker(ret)
             else:
                 print "Failed!"
                 return errorResponseMaker()
-        try:
-            print "inside try block"
-#             module = moduleLoader('base', moduleName)
-#             print module
-#             method = getattr(module, methodName)
-#             retv = method(**params)
-            if not ret:
-                print "Wrong result from customized function!"
-                errorResponseMaker()
-            print "leaving try block"
-            # make_response will avoid Eve data validation and DB insertion
-            # headers = {'Content-Type':'text/plain'}
-            # return make_response("Successful!", 201, headers)
-        except Exception:
-            log.exception(traceback.format_exc())
-            errorResponseMaker()
 
 @app.after_request
 def after(response):

@@ -25,7 +25,7 @@ def create(_id, name, source, macString):
         conn.networkDefineXML(xmlConfig)
     except Exception:
         log.exception(traceback.print_exc())
-        return False
+        return None
     return True
 
 def delete(_id):
@@ -43,5 +43,5 @@ def delete(_id):
         VIFHelper.remove({"_id": _id})
     except Exception, e:
         log.debug("VIF.delete Failed! Message: %s" %e)
-        return False
+        return None
     return True

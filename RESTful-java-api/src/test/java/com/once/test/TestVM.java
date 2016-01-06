@@ -10,14 +10,17 @@ public class TestVM {
 		VMConfig config = new VMConfig("vm", 2, 1024, "/home/res/images/vm.qcow2", "/home/res/iso/CentOS-7.1.iso", "ovs0");
 		String uuidString = "57f28539-489f-0a5f-0bf4-9abe45c62763";
 		config.setUUID(uuidString);
-		VM.create(config);
+//		VM.create(config);
 //		VM.start(uuidString);
 //		VM.shutdown(uuidString);
 //		VM.reboot(uuidString);
-//		VM.delete(uuidString);
-//		System.out.println(VM.isTemplate(uuidString));
+		VM.delete(uuidString);
+//		VM.isTemplate(uuidString);
 //		VM.setTemplate(uuidString);
-//		System.out.println(VM.isTemplate(uuidString));
+//		VM.isTemplate(uuidString);
+//		
+//		VM.unsetTemplate(uuidString);
+//		VM.isTemplate(uuidString);
 	}
 
 }

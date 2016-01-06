@@ -24,18 +24,13 @@ CACHE_CONTROL = 'max-age=20'
 CACHE_EXPIRES = 20
 
 vm = {
-    'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
+    'item_url': 'regex("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")',
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
     # most global settings can be overridden at resource level
     'resource_methods': ['GET', 'POST', 'DELETE'],
     'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],
     'schema': {
-         # 'uuid': {
-			# 'type': 'string',
-			# 'required': True,
-            # 'unique': True,
-         # },
         '_id':{
             'type': 'uuid',
             'unique': True,
@@ -81,7 +76,7 @@ vm = {
 }
 
 vif = {
-    'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
+    'item_url': 'regex("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")',
 #     'additional_lookup': {
 #         'url': 'regex("[\w]+")',
 #         'field': 'uuid'
@@ -109,7 +104,7 @@ vif = {
 }
 
 pool = {
-    'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
+    'item_url': 'regex("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")',
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
     # most global settings can be overridden at resource level
@@ -135,7 +130,7 @@ pool = {
 }
 
 volume = {
-    'item_url': 'regex("[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}")',
+    'item_url': 'regex("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")',
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
     # most global settings can be overridden at resource level

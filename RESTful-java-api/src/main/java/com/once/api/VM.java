@@ -41,37 +41,38 @@ public class VM {
     Time        : 2015-12-15 16 : 09
     Description : Used to start a VM specified by uuid;
     *******************************************/
-	public static boolean start(String uuid)
+	public static boolean start(String uuidString)
 	{
-		return sendMethod(uuid, "start");
+		return sendMethod(uuidString, "start");
 	}
 	
-	public static boolean shutdown(String uuid)
+	public static boolean shutdown(String uuidString)
 	{
-		return sendMethod(uuid, "shutdown");
+		return sendMethod(uuidString, "shutdown");
 	}
 
-	public static boolean delete(String uuid)
+	public static boolean delete(String uuidString)
 	{
-		return sendMethod(uuid, "delete");
+		return sendMethod(uuidString, "delete");
 	}
 	
-	public static boolean reboot(String uuid)
+	public static boolean reboot(String uuidString)
 	{
-		return sendMethod(uuid, "reboot");
+		return sendMethod(uuidString, "reboot");
 	}
 	
-	public static boolean isTemplate(String uuid)
+	public static boolean isTemplate(String uuidString)
 	{
-		return sendMethod(uuid, "isTemplate");
+		return sendMethod(uuidString, "isTemplate");
 	}
 	
-	public static boolean setTemplate(String uuid)
+	public static boolean setTemplate(String uuidString)
 	{
-		Map<String, String> data = new HashMap<String, String>();
-		data.put("isTemplate", "True");
-		String response = Connection.sendPost(urlString+uuid, data);
-		System.out.println(response);
-		return true;
+		return sendMethod(uuidString, "setTemplate");
+	}
+	
+	public static boolean unsetTemplate(String uuidString)
+	{
+		return sendMethod(uuidString, "unsetTemplate");
 	}
 }

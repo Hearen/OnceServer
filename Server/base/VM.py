@@ -83,7 +83,7 @@ def start(_id, flags=0):
         dom.createWithFlags(int(flags))
     except Exception, e:
         log.error("Started dom %s failed! Message: %s" % (_id, e))
-        return False
+        return None
     else:
         return True
 
@@ -109,7 +109,7 @@ def shutdown(_id, flags=0):
             if not dom.isActive(): return True
         except Exception, e:
             log.error("VM %s shutdown failed! Message: %s" % (_id, e))
-    return False
+    return None
 
 def delete(_id, flags=0):
     '''
@@ -117,28 +117,32 @@ def delete(_id, flags=0):
     E-mail      : LHearen@126.com
     Time        : 2015-12-16 14 : 00
     Description : destory the VM first if it's still active
-                and then undefine it;
+                and then undefine it and delete the document in db;
     '''
-    '''
-    Added by    : LHearen
-    E-mail      : LHearen@126.com
-    Time        : 2015-12-16 15 : 01
-    Description : update the mongodb here - delete the collection;
-    '''
-    dom = conn.lookupByUUIDString(_id)
+    dom = None
+    try:
+        dom = conn.lookupByUUIDString(_id)
+    except Exception, e:
+        log.debug("VM %s not found!" % _id)
+        return None
     if dom:
         if dom.isActive(): dom.destroyFlags(int(flags))
-        dom.undefineFlags(int(flags))
+        try:
+            dom.undefineFlags(int(flags))
+        except Exception, e:
+            log.debug("VM %s deletion failed! Message: %s" % (_id, e))
         try:
             conn.lookupByUUIDString(_id)
         except Exception, e:
-            log.error("VM %s deletion failed! Message: %s", (_id, e))
+            log.error("VM %s deletion failed! Message: %s" % (_id, e))
             filterDict = {"_id": _id}
             ret = VMHelper.remove(filterDict)
-            print ret
-            print ret.nRemoved
-            return ret
-    return False
+            if ret['ok'] > 0:
+                return True
+            else:
+                log.debug("mongodb deletion failed!")
+                return None
+    return None
 
 def reboot(_id, flags=0):
     '''
@@ -149,29 +153,57 @@ def reboot(_id, flags=0):
                 after which destroy it and then start it;
     '''
     unit = 2
-    dom = conn.lookupByUUIDString(_id)
-    print dom
-    if dom:
+    dom = None
+    try:
+        dom = conn.lookupByUUIDString(_id)
+    except Exception:
+        log.debug("VM %s not found!" % _id)
+        return None
+    try:
+        dom.shutdownFlags(int(flags))
+    except:
+        pass
+    for i in range(3):
+        sleep(unit)
+        if not dom.isActive():
+            break;
+    if dom.isActive():
         try:
-            try:
-                dom.shutdownFlags(int(flags))
-            except:
-                pass
-            for i in range(3):
-                sleep(unit)
-                if not dom.isActive():
-                    break;
-            if dom.isActive(): dom.destroy()
-            sleep(unit)
-            if not dom.isActive(): dom.createWithFlags(int(flags))
-            else: return False
-            sleep(unit)
-            if not dom.isActive(): return False
-            else: return True
-        except Exception, e:
-            log.error("VM %s reboot failed! Message: %s" % (_id, e))
-            return False
+            dom.destroy()
+        except:
+            pass
+    if not dom.isActive():
+        try:
+            dom.createWithFlags(int(flags))
+        except:
+            pass
+    else: return None
+    if not dom.isActive(): return None
+    else: return True
 
+def setTemplate(_id):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-06 14:02
+    Description : Used to set the VM specified by _id template;
+    '''
+    ret = VMHelper.update({"_id": _id}, {"isTemplate": True})
+    if ret['ok'] > 0:
+        return True
+    return None
+
+def unsetTemplate(_id):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-06 14:02
+    Description : Used to set the VM specified by _id not template;
+    '''
+    ret = VMHelper.update({"_id": _id}, {"isTemplate": False})
+    if ret['ok'] > 0:
+        return True
+    return None
 
 def isTemplate(_id):
     '''
@@ -180,9 +212,8 @@ def isTemplate(_id):
     Time        : 2015-12-17 11 : 20
     Description : Used to retrieve the isTemplate attribute from DB;
     '''
-    print "inside isTemplate"
-    filterDict = {"_id": _id}
-    print filterDict
-    res = VMHelper.retrieve(filterDict)["isTemplate"]
-    print res
-    return res
+    print "inside isTemplate ****************"
+    ret = VMHelper.retrieve({"_id": _id})["isTemplate"]
+    if str(ret).lower() == 'false':
+        return False
+    else: return True

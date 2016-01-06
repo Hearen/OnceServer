@@ -1,0 +1,1 @@
+curl -X POST -d '[{"_id": "57f28539-489f-0a5f-0bf4-9abe45c62763", "name": "bama"}]' -H 'Content-Type: application/json' http://localhost:5100/invoices

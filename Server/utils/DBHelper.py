@@ -77,7 +77,7 @@ class VMHelper():
         Parameter   : filterDict can be dictionary of list of dictionary;
         Return      : the amount of documents removed;
         '''
-        return VMHelper.__getVMCollection().delete_many(filterDict)
+        return VMHelper.__getVMCollection().remove(filterDict)
 
 class VBDHelper():
     '''
@@ -107,7 +107,7 @@ class VBDHelper():
         Time        : 2015-12-31 11:04
         Description : Using a dictionary filterDict to remove some documents;
         '''
-        return VBDHelper.__getPoolCollection().delete_many(filterDict)
+        return VBDHelper.__getPoolCollection().remove(filterDict)
 
     @staticmethod
     def removeVolume(filterDict):
@@ -117,7 +117,7 @@ class VBDHelper():
         Time        : 2015-12-31 11:04
         Description : Using a dictionary filterDict to remove some volumes;
         '''
-        return VBDHelper.__getVolumeCollection().delete_many(filterDict)
+        return VBDHelper.__getVolumeCollection().remove(filterDict)
 
 class VIFHelper:
     '''
@@ -175,4 +175,4 @@ class VIFHelper:
         Return      : the amount of documents removed;
         '''
         print "inside VIFHelper remove"
-        return VIFHelper.__getCollection().delete_many(filterDict)
+        return VIFHelper.__getCollection().remove(filterDict)

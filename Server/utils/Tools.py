@@ -54,5 +54,5 @@ def responseMaker(content):
     Description : Used to handle methods' reponse except create* ones;
     '''
     headers = {'Content-Type':'text/plain'}
-    return make_response(str(content), 403, headers)
+    return make_response(str(content), 200, headers)
 
