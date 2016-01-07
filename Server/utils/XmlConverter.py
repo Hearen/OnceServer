@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 from utils.OnceLogging import log, init
-from utils.Tools import logNotFound
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
 class XmlConverter():
@@ -273,3 +272,4 @@ class XmlConverter():
         targetET.set("dev", target)
         diskXml = ET.tostring(root, "utf-8")
         return diskXml
+

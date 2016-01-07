@@ -14,7 +14,7 @@ public class TestVM {
 //		VM.start(uuidString);
 //		VM.shutdown(uuidString);
 //		VM.reboot(uuidString);
-		VM.delete(uuidString);
+//		VM.delete(uuidString);
 //		VM.isTemplate(uuidString);
 //		VM.setTemplate(uuidString);
 //		VM.isTemplate(uuidString);

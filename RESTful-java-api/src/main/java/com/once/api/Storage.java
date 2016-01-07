@@ -78,4 +78,30 @@ public class Storage {
         String response = Connection.sendPost(urlString+"/Volumes/", data);
         System.out.println(response);
 	}
+	
+	public static void attach(String vmUuidString, String poolName, String volName, String target)
+	{
+		Map<String, String> data = new HashMap<String, String>();
+//      data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
+      data.put("Module", "VBD");
+      data.put("Method", "attachVolume");
+      data.put("vm_id", vmUuidString);
+      data.put("poolName", poolName);
+      data.put("volName" , volName);
+      data.put("target", target);
+      String response = Connection.sendPost(urlString+"/Volumes/", data);
+      System.out.println(response);
+	}
+	
+	public static void detach(String vmUuidString, String target)
+	{
+		Map<String, String> data = new HashMap<String, String>();
+//      data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
+      data.put("Module", "VBD");
+      data.put("Method", "detachVolume");
+      data.put("vm_id", vmUuidString);
+      data.put("target", target);
+      String response = Connection.sendPost(urlString+"/Volumes/", data);
+      System.out.println(response);
+	}
 }

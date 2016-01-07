@@ -167,6 +167,9 @@ def attachVolume(vm_id, poolName, volName, target, driver='qemu', driverType='qc
     root = ET.fromstring(vol.XMLDesc())
     volDir = root.find('key').text
     diskXmlConfig = XmlConverter.toDiskXml(volDir, target, driver, driverType)
+    print "diskXmlConfig**********\n"
+    print diskXmlConfig
+    print "\nends here"
     try:
         vm = conn.lookupByUUIDString(vm_id)
     except Exception, e:
@@ -178,3 +181,36 @@ def attachVolume(vm_id, poolName, volName, target, driver='qemu', driverType='qc
         log.debug("Attaching disk failed! Message: %s" % e)
         return None
     return True
+
+def detachVolume(vm_id, target):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-07 16:27
+    Description : Detach a disk specified by mounted target from a VM;
+    '''
+    try:
+        vm = conn.lookupByUUIDString(vm_id)
+    except Exception, e:
+        logNotFound("VM", vm_id, e)
+        return None
+    root = ET.fromstring(vm.XMLDesc())
+    diskETs = root.find('devices').findall('disk')
+    print diskETs
+    for et in diskETs:
+        print ET.tostring(et, 'utf-8')
+    diskET = [et for et in diskETs if et.find('target').get('dev') == target]
+    if len(diskET) == 0:
+        return None
+    diskXmlConfig = ET.tostring(diskET[0], 'utf-8')
+    print "detaching disk**********\n"
+    print diskXmlConfig
+    print "\nends here***********"
+    try:
+        vm.detachDeviceFlags(diskXmlConfig)
+        return True
+    except Exception, e:
+        log.debug("Detaching disk %s from VM %s failed! Message: %s" % (target, \
+                 vm_id, e))
+        return None
+
