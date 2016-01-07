@@ -13,7 +13,7 @@ We currently are adopting Eve as our basic framework to build our server side, w
 ###Configure Mongodb 3.2
 Due to the requirement of our service, we have to provide a database for data storing, meantime the underlying database chosen by Eve is also mongodb, so we have to configure it for further development. There are also two simple steps we need to follow:
 
-1. configure repository under /etc/yum.repos.d/ - run 'vim /etc/yum.repos.d/mongodb.repo' and then copy the following profile to it
+* configure repository under /etc/yum.repos.d/ - run 'vim /etc/yum.repos.d/mongodb.repo' and then copy the following profile to it
 ```
 [mongodb-org-3.2]
 name=MongoDB Repository
@@ -23,11 +23,13 @@ enabled=1
 ```
 save it and exit.
 
-2. 'yum clean all' and make sure the network connection is alright and then execute this command 'yum install -y mongodb-org' to install mongodb of version 3.2, the latest stable version.
+* 'yum clean all' and make sure the network connection is alright and then execute this command 'yum install -y mongodb-org' to install mongodb of version 3.2, the latest stable version.
 
 ### Java Client API Documentation
 The following part is quite essential to understand the return value in the methods to be used, if you encounter some confusing problems, this place might be the one you turn to.
-*This part will cover the basic logic and some frequently used methods accomplished so far, which are all tested by the way. As for the return value, there is a rule on all the methods in client side. As for creation, if the operation succeed, server will return the UUID of the newly created object, if failed for duplicate UUID the corresponding message will be delivered but when it failed for some unexpected error, 'User function failed' will be returned as a message. When it comes to all others methods, if it finished successfully, 'true' will be returned but if it encounters some unexpected failures, it will also return 'User function failed!'; there some exceptions in these methods which are inquiring 'true' or 'false' or other result from the server themselves ('isTemplate' and 'listPool' for example) then they will return 'true' or 'false' when succeed but still will return 'User function failed' when encountering some unexpected errors.*
+*This part will cover the basic logic and some frequently used methods accomplished so far, which are all tested by the way. As for the return value, there is a rule on all the methods in client side.*
+* *As for creation, if the operation succeed, server will return the UUID of the newly created object, if failed for duplicate UUID the corresponding message '\_id already exists!' will be delivered but when it failed for some unexpected errors, 'User function failed' will be returned as a error message. *
+* *When it comes to other methods, if it finished successfully, 'true' will be returned but if it encounters some unexpected failures, it will also return 'User function failed!'; there some exceptions in these methods which are inquiring 'true' or 'false' or other result from the server themselves ('isTemplate' and 'listPool' for example) then they will return 'true' or 'false' or other information it enquired when succeed but still will return 'User function failed' when encountering some unexpected errors.*
 
 #### VM Management
 * create - the parameter accepted is a customized object which will cover the basic and essential elements which creating process will require, besides there are some default values which means that they can be ignored and specified according to the situation. For example, the UUID of the VM can be ignored and then the server will automatically generate one for it, at the same time the client can set it by an exposed interface - setUUID method to set it before creating and then the server will use the provided UUID to create the VM.
