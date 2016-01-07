@@ -8,7 +8,7 @@ public class TestStorage {
 	public static void main(String[] args) throws IOException {
 		String poolName = "pool0";
 		String volName = "volume0";
-		String target = "hda";
+		String target = "hdb";
 //		Storage.createPool("pool0", "/home/lhearen/pool0");
 //		Storage.deletePool("cb19a228-5450-0501-3df3-9c03c7ea107d");
 //		Storage.listPools();
