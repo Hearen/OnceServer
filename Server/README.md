@@ -1,4 +1,4 @@
-## Development Guide
+# Development Guide
 This Guide is used to lead developers to work on clients based-on this server provided by us, which will including Configure Eve, Configure Mongodb 3.2, Starting our service and the last but also the most important part, APIs supplied both in client demo and server side.
 
 ### Configure Eve
@@ -6,7 +6,7 @@ We currently are adopting Eve as our basic framework to build our server side, w
 
 1. install pip - there is a [get-pip.py](https://github.com/Hearen/Linux-scripts/tree/master/tools), get it and just run 'python get-pip.py' then everything will be handled automatically if there is something wrong in this process check [this site](https://pip.pypa.io/en/stable/installing/) for some reference.
 
-2. install eve globally - pip install eve.
+2. install eve globally - 'pip install eve'.
 
 3. replace some files under '/usr/lib64/python2.7/site-packages/eve/' replace 'endpoints.py' and 'methods/post.py' with the same files under 'Server/Eve'; these files are modified to fit in our requirements.
 
@@ -21,14 +21,13 @@ baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/
 gpgcheck=0
 enabled=1
 ```
-
 save it and exit.
+
 2. 'yum clean all' and make sure the network connection is alright and then execute this command 'yum install -y mongodb-org' to install mongodb of version 3.2, the latest stable version.
 
 ### Java Client API Documentation
-Attention
----------
-**This part will cover the basic logic and some frequently used methods accomplished so far, which are all tested by the way. As for the return value, there is a rule on all the methods in client side. As for creation, if the operation succeed, server will return the UUID of the newly created object, if failed for duplicate UUID the corresponding message will be delivered but when it failed for some unexpected error, 'User function failed' will be returned as a message. When it comes to all others methods, if it finished successfully, 'true' will be returned but if it encounters some unexpected failures, it will also return 'User function failed!'; there some exceptions in these methods which are inquiring 'true' or 'false' or other result from the server themselves ('isTemplate' and 'listPool' for example) then they will return 'true' or 'false' when succeed but still will return 'User function failed' when encountering some unexpected errors.**
+The following part is quite essential to understand the return value in the methods to be used, if you encounter some confusing problems, this place might be the one you turn to.
+*This part will cover the basic logic and some frequently used methods accomplished so far, which are all tested by the way. As for the return value, there is a rule on all the methods in client side. As for creation, if the operation succeed, server will return the UUID of the newly created object, if failed for duplicate UUID the corresponding message will be delivered but when it failed for some unexpected error, 'User function failed' will be returned as a message. When it comes to all others methods, if it finished successfully, 'true' will be returned but if it encounters some unexpected failures, it will also return 'User function failed!'; there some exceptions in these methods which are inquiring 'true' or 'false' or other result from the server themselves ('isTemplate' and 'listPool' for example) then they will return 'true' or 'false' when succeed but still will return 'User function failed' when encountering some unexpected errors.*
 
 #### VM Management
 * create - the parameter accepted is a customized object which will cover the basic and essential elements which creating process will require, besides there are some default values which means that they can be ignored and specified according to the situation. For example, the UUID of the VM can be ignored and then the server will automatically generate one for it, at the same time the client can set it by an exposed interface - setUUID method to set it before creating and then the server will use the provided UUID to create the VM.
@@ -52,7 +51,7 @@ Currently there are only some basic operations on storage finished others are st
 * detach - to detach a VIF from an VM while both are specified by UUID.
 
 
-### API Documentation
+### Server API Documentation
 This documentation is used to specify the details of the APIs in server side which might be updated when the whole structure comes to its stable state. Currently this part is quite outdated and will be updated in the following few days.
 
 #### Methods Calling Mode
