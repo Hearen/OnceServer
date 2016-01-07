@@ -28,7 +28,7 @@ save it and exit.
 ### Java Client API Documentation
 The following part is quite essential to understand the return value in the methods to be used, if you encounter some confusing problems, this place might be the one you turn to.
 *This part will cover the basic logic and some frequently used methods accomplished so far, which are all tested by the way. As for the return value, there is a rule on all the methods in client side.*
-* *As for creation, if the operation succeed, server will return the UUID of the newly created object, if failed for duplicate UUID the corresponding message '\_id already exists!' will be delivered but when it failed for some unexpected errors, 'User function failed' will be returned as a error message. *
+* *As for creation, if the operation succeed, server will return the UUID of the newly created object, if failed for duplicate UUID the corresponding message '\_id already exists!' will be delivered but when it failed for some unexpected errors, 'User function failed' will be returned as a error message.*
 * *When it comes to other methods, if it finished successfully, 'true' will be returned but if it encounters some unexpected failures, it will also return 'User function failed!'; there some exceptions in these methods which are inquiring 'true' or 'false' or other result from the server themselves ('isTemplate' and 'listPool' for example) then they will return 'true' or 'false' or other information it enquired when succeed but still will return 'User function failed' when encountering some unexpected errors.*
 
 #### VM Management
