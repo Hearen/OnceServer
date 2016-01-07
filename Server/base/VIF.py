@@ -45,3 +45,53 @@ def delete(_id):
         log.debug("VIF.delete Failed! Message: %s" %e)
         return None
     return True
+def attach(vm_id, vif_id):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-06 15:35
+    Description : Attaching a vif to a VM;
+    '''
+    dom = None
+    try:
+        dom = conn.lookupByUUIDString(vm_id)
+    except Exception, e:
+        logNotFound("VM", vm_id, e)
+        return None
+    ret = VIFHelper.retrieve({"_id": vif_id})
+    macString = ret['macString']
+    source = ret['source']
+    interfaceXmlConfig = XmlConverter.toVIFXml(source, macString)
+    try:
+        dom.attachDeviceFlags(interfaceXmlConfig, 0)
+        return True
+    except Exception, e:
+        log.debug("Attaching VIF %s to VM %s failed! Message: %s" %
+                  (vif_id, vm_id, e))
+        return None
+
+
+def detach(vm_id, vif_id):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-06 15:35
+    Description : Detaching a vif from a VM;
+    '''
+    dom = None
+    try:
+        dom = conn.lookupByUUIDString(vm_id)
+    except Exception, e:
+        logNotFound("VM", vm_id, e)
+        return None
+    ret = VIFHelper.retrieve({"_id": vif_id})
+    macString = ret['macString']
+    source = ret['source']
+    interfaceXmlConfig = XmlConverter.toVIFXml(source, macString)
+    try:
+        dom.detachDeviceFlags(interfaceXmlConfig, 0)
+        return True
+    except Exception, e:
+        log.debug("Attaching VIF %s to VM %s failed! Message: %s" %
+                  (vif_id, vm_id, e))
+        return None

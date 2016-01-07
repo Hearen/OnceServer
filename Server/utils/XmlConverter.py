@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from utils.OnceLogging import log, init
+from utils.Tools import logNotFound
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
 class XmlConverter():
@@ -234,24 +235,41 @@ class XmlConverter():
         return netXml
 
     @staticmethod
-    def toVIFXml(net_type, mac, source):
+    def toVIFXml(source, macString, vifType='bridge'):
         '''
-        Author      : Wu Yuewen
-        E-mail      : wuyuewen@otcaix.iscas.ac.cn
-        Time        : 2015-12-24 14 : 50
-        Description : Used to define a XML configuration string to create a
-                    interface;
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-06 15:45
+        Description : Used to attach or detach a VIF;
         '''
         root = ET.Element('interface')
-        if net_type:
-            root.set('type', net_type)
-        if mac:
-            mac_addr = ET.SubElement(root, "mac")
-            mac_addr.set("address", str(mac))
-        if source:
-            source_bridge = ET.SubElement(root, 'source')
-            source_bridge.set('bridge', source)
-        vif_xml = ET.tostring(root, 'utf-8')
-        log.debug(vif_xml)
-        return vif_xml
+        root.set('type', vifType)
+        macET = ET.SubElement(root, "mac")
+        macET.set("address", macString)
+        sourceET = ET.SubElement(root, 'source')
+        sourceET.set('bridge', source)
+        vifXml = ET.tostring(root, 'utf-8')
+        return vifXml
 
+    @staticmethod
+    def toDiskXml(diskDir, target, driver, driverType):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-07 11:02
+        Description : Used for attaching disks to VMs;
+        '''
+        root = ET.Element("disk")
+        root.set("device", "disk")
+        root.set("file", "file")
+        sourceET = ET.SubElement(root, "source")
+        sourceET.set("file", diskDir)
+        driverET = ET.SubElement(root, "driver")
+        driverET.set("name", driver)
+        driverET.set("type", driverType)
+
+        targetET = ET.SubElement(root, "target")
+        targetET.set("bus", "xen")
+        targetET.set("dev", target)
+        diskXml = ET.tostring(root, "utf-8")
+        return diskXml

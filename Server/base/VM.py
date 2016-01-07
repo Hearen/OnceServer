@@ -4,6 +4,7 @@ from utils.XmlConverter import XmlConverter
 from time import sleep
 from utils.DBHelper import VMHelper
 from utils.UUIDGenerator import createString
+from utils.Tools import logNotFound
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
@@ -123,7 +124,7 @@ def delete(_id, flags=0):
     try:
         dom = conn.lookupByUUIDString(_id)
     except Exception, e:
-        log.debug("VM %s not found!" % _id)
+        logNotFound("VM", _id, e)
         return None
     if dom:
         if dom.isActive(): dom.destroyFlags(int(flags))
@@ -157,7 +158,7 @@ def reboot(_id, flags=0):
     try:
         dom = conn.lookupByUUIDString(_id)
     except Exception:
-        log.debug("VM %s not found!" % _id)
+        logNotFound("VM", _id, e)
         return None
     try:
         dom.shutdownFlags(int(flags))

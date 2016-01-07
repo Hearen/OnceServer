@@ -161,7 +161,7 @@ class VIFHelper:
         Parameter   : filterDict can be dictionary of list of dictionary;
         Return      : return the documents fitting the condition;
         '''
-        col = VIFHelper.__getVMCollection()
+        col = VIFHelper.__getCollection()
         return col.find_one(filterDict)
 
     @staticmethod

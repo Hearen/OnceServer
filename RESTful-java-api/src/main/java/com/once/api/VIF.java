@@ -27,4 +27,26 @@ public class VIF {
         String response = Connection.sendPost(urlString, data);
         System.out.println(response);
     }
+    
+    public static void attach(String vmUuidString, String vifUuidString)
+    {
+    	Map<String, String> data = new HashMap<String, String>();
+    	data.put("vm_id", vmUuidString);
+    	data.put("vif_id", vifUuidString);
+    	data.put("Module", "VIF");
+    	data.put("Method", "attach");
+        String response = Connection.sendPost(urlString, data);
+        System.out.println(response);
+    }
+    
+    public static void detach(String vmUuidString, String vifUuidString)
+    {
+    	Map<String, String> data = new HashMap<String, String>();
+    	data.put("vm_id", vmUuidString);
+    	data.put("vif_id", vifUuidString);
+    	data.put("Module", "VIF");
+    	data.put("Method", "detach");
+        String response = Connection.sendPost(urlString, data);
+        System.out.println(response);
+    }
 }

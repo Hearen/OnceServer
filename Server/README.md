@@ -1,3 +1,33 @@
+## Development Guide
+This Guide is used to lead developers to work on clients based-on this server provided by us, which will including Configure Eve, Configure Mongodb 3.2, Starting our service and the last but also the most important part, APIs supplied both in client demo and server side.
+
+### Configure Eve
+We currently are adopting Eve as our basic framework to build our server side, which is coded in python and can be easily installed via pip to achieve global installation. So there are two steps then we need to complete:
+1. install pip - there is a [get-pip.py](https://github.com/Hearen/Linux-scripts/tree/master/tools), get it and just run 'python get-pip.py' then everything will be handled automatically if there is something wrong in this process check [this site](https://pip.pypa.io/en/stable/installing/) for some reference.
+2. install eve globally - pip install eve.
+
+###Configure Mongodb 3.2
+Due to the requirement of our service, we have to provide a database for data storing, meantime the underlying database chosen by Eve is also mongodb, so we have to configure it for further development. There are also two simple steps we need to follow:
+1. configure repository under /etc/yum.repos.d/ - run 'vim /etc/yum.repos.d/mongodb.repo' and then copy the following profile to it
+```
+[mongodb-org-3.2]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/
+gpgcheck=0
+enabled=1
+```
+save it and exit.
+2. 'yum clean all' and make sure the network connection is alright and then execute this command 'yum install -y mongodb-org' to install mongodb of version 3.2, the latest stable version.
+### Java Client API Documentation
+This part will cover the basic logic and some frequently used methods accomplished so far, which are all tested by the way. As for the return value, there is a rule on all the methods in client side. As for creation, if the operation succeed, server will return the UUID of the newly created object, if failed for duplicate UUID the corresponding message will be delivered but when it failed for some unexpected error, 'User function failed' will be returned as a message. When it comes to all others methods, if it finished successfully, 'true' will be returned but if it encounters some unexpected failures, it will also return 'User function failed!'; there some exceptions in these methods which are inquiring 'true' or 'false' themselves ('isTemplate' for example) then they will return 'true' or 'false' when succeed but still will return 'User function failed' when encountering some unexpected errors.
+#### VM Management
+* create - the parameter accepted is a customized object which will cover the basic and essential elements which creating process will require, besides there are some default values which means that they can be ignored and specified according to the situation. For example, the UUID of the VM can be ignored and then the server will automatically generate one for it, at the same time the client can set it by an exposed interface - setUUID method to set it before creating and then the server will use the provided UUID to create the VM. By the way, no matter which way is selected,  the return value from the server will always be a UUID of the VM created in this process. But when the creation failed for conflict - providing a same UUID to create another VM, the return value will be a string to inform the client of "\_id already exist".
+* start, shutdown, reboot, delete - all these four methods will require a UUID of the VM to proceed corresponding operation(start, shut off, reboot or delete); if the operation is done successfully, the return value will be True, otherwise a 'User function failed' prompt.
+* isTemplate - is a method to check whether the VM is a template; if the UUID is provided correctly the return value will indicate the status of the VM, if not a 'User function failed' will be returned.
+* setTemplate, unsetTemplate - to set a VM template or otherwise; if done without error, 'true' will be returned otherwise 'User function failed!'.
+#### Storage Management
+Currently there are only some basic operations on storage finished others are still on the way.
+* createPool - name and pool absolute path should be provided to create it currently
 ### OnceServer API Documentation
 This documentation is used to specify the details of the APIs in server side which might be updated when the whole structure comes to its stable state.
 

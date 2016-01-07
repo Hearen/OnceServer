@@ -5,6 +5,8 @@ Time        : 2015-12-16 10 : 28
 Description : Used to assist other modules;
 '''
 from flask import make_response
+from utils.OnceLogging import log, init
+init("/var/log/xen/libvirt.log", "DEBUG", log)
 
 def moduleLoader(packageName, moduleName):
     '''
@@ -56,3 +58,11 @@ def responseMaker(content):
     headers = {'Content-Type':'text/plain'}
     return make_response(str(content), 200, headers)
 
+def logNotFound(objectName, NameOrId, message):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-07 11:09
+    Description : Used to log not found error in libvirt.log;
+    '''
+    log.debug("%s %s Not Found! Message: %s" % (objectName, NameOrId, message))

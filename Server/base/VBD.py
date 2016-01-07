@@ -1,8 +1,10 @@
+import xml.etree.ElementTree as ET
 from utils.Connection import Connection
 from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from utils.libvirt import libvirtError
 from utils.DBHelper import VBDHelper
+from utils.Tools import logNotFound
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
@@ -40,7 +42,7 @@ def deletePool(_id):
     try:
         pool = conn.storagePoolLookupByUUIDString(_id)
     except libvirtError, e:
-        log.debug("pool %s not found! Message: %s" % (_id, e))
+        logNotFound("Pool", _id, e)
         return None
     if pool.isActive():
         pool.destroy()
@@ -85,7 +87,7 @@ def createVolume(_id, poolName, volName, volSize):
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
-        log.debug("pool %s not found! Message: %s" % (poolName, e))
+        logNotFound("Pool", poolName, e)
         return None
     config = XmlConverter.toVolumeXml(volName, volSize)
     if not pool.isActive():
@@ -108,12 +110,12 @@ def deleteVolume(_id, poolName, volName):
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
-        log.debug("pool %s not found! Message: %s" % (poolName, e))
+        logNotFound("Pool", poolName, e)
         return None
     try:
         volume = pool.storageVolLookupByName(volName)
     except libvirtError, e:
-        log.debug("volume %ss not found! Message: %s" % (volName, e))
+        logNotFound("Volume", volName, e)
         return None
     try:
         volume.delete()
@@ -134,7 +136,7 @@ def listVolumes(poolName):
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
-        log.debug("pool %s not found! Message: %s" % (poolName, e))
+        logNotFound("Pool", poolName, e)
         return None
     try:
         volumes = pool.listAllVolumes()
@@ -143,3 +145,36 @@ def listVolumes(poolName):
         return None
     volNames = ','.join([vol.name() for vol in volumes])
     return volNames
+def attachVolume(vm_id, poolName, volName, target, driver='qemu', driverType='qcow2'):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-07 10:54
+    Description : Attaching a volume to a VM;
+    '''
+    pool = None
+    try:
+        pool = conn.storagePoolLookupByName(poolName)
+    except Exception, e:
+        logNotFound("Pool", poolName, e)
+        return None
+    vol = None
+    try:
+        vol = pool.storageVolLookupByName(volName)
+    except Exception, e:
+        logNotFound("Volume", volName, e)
+        return None
+    root = ET.fromstring(vol.XMLDesc())
+    volDir = root.find('key').text
+    diskXmlConfig = XmlConverter.toDiskXml(volDir, target, driver, driverType)
+    try:
+        vm = conn.lookupByUUIDString(vm_id)
+    except Exception, e:
+        logNotFound("VM", vm_id, e)
+        return None
+    try:
+        vm.attachDeviceFlags(diskXmlConfig)
+    except Exception, e:
+        log.debug("Attaching disk failed! Message: %s" % e)
+        return None
+    return True
