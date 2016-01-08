@@ -26,8 +26,6 @@ def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     UUIDString = uuid
     global Name
     Name = name
-    print UUIDString
-    print uuid
     hvm = {"loader": "/usr/lib/xen/boot/hvmloader"}
     hvm["boot"] = "cdrom"
     hvm["device_model"] = "/usr/lib/xen/bin/qemu-system-i386"
