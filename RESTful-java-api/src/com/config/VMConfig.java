@@ -30,9 +30,8 @@ public class VMConfig {
     Time        : 2015-12-16 16 : 32
     Description : The very basic parameters should always be provided;
     *******************************************/
-	public VMConfig(String name0, int vcpu0, int memory0, String diskDir0, String isoDir0, String bridgeSrc0)
+	public VMConfig(int vcpu0, int memory0, String diskDir0, String isoDir0, String bridgeSrc0)
 	{
-		name = name0;
 		vcpu = vcpu0;
 		memory = memory0;
 		diskDir = diskDir0;
@@ -49,6 +48,11 @@ public class VMConfig {
 	public void setUUID(String uuid0)
 	{
 		uuid = uuid0;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 	
     /*******************************************

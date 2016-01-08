@@ -17,12 +17,11 @@ def VMInserting(items):
     Usage       : app.on_insert_VM += VMInserting
     '''
     print "I am inserting VM now."
-    print items[0]["_id"]
     import sys
     sys.path.append(RootDir)
     from base.VM import UUIDString
-    print UUIDString
-    print 'trying to replace uuid'
+    from base.VM import Name
+    items[0]["name"] = Name
     items[0]["_id"] = UUIDString
 
 
@@ -51,9 +50,9 @@ def VolumeInserting(items):
     import sys
     sys.path.append(RootDir)
     from base.VBD import VolumeUUIDString
-    print items[0]['_id']
+    from base.VBD import VolName
+    items[0]['volName'] = VolName
     items[0]['_id'] = VolumeUUIDString
-    print "replacing volume uuidstring"
 
 def PoolInserting(items):
     '''
@@ -62,13 +61,12 @@ def PoolInserting(items):
     Time        : 2016-01-04 15:32
     Description : Use the right UUIDString determined by base.VBD instead of the default;
     '''
-    print "inside PoolInserting"
     import sys
     sys.path.append(RootDir)
     from base.VBD import PoolUUIDString
-    print items[0]['_id']
+    from base.VBD import PoolName
+    items[0]['name'] = PoolName
     items[0]['_id'] = PoolUUIDString
-    print "replacing pool uuidstring"
 
 def VIFInserting(items):
     '''

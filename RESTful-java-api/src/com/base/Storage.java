@@ -5,21 +5,23 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.config.StoragePoolConfig;
+import com.config.VolumeConfig;
 import com.utils.CONST;
 import com.utils.Connection;
 
 public class Storage {
 	private static final String urlString = "http://" + CONST.HOST + ":" + CONST.PORT;
 	
-	public static void createPool(String poolName, String target) throws UnsupportedEncodingException, MalformedURLException
+	public static void createPool(StoragePoolConfig poolConfig) throws UnsupportedEncodingException, MalformedURLException
 	{
-        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> data = poolConfig.toMap();
         data.put("Module", "VBD");
         data.put("Method", "createPool");
-//        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
-        data.put("_id", "");
-        data.put("name", poolName);
-        data.put("target", target);
+////        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
+//        data.put("_id", "");
+//        data.put("name", poolName);
+//        data.put("target", target);
         String response = Connection.sendPost(urlString+"/StoragePools/", data);
         System.out.println(response);
 	}
@@ -44,39 +46,33 @@ public class Storage {
 		return "";
 	}
 	
-	public static void createVolume(String poolName, String volName, int volSize) throws MalformedURLException, UnsupportedEncodingException
+	public static void createVolume(VolumeConfig volConfig) throws MalformedURLException, UnsupportedEncodingException
 	{
-        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> data = volConfig.toMap();
 //        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
         data.put("Module", "VBD");
         data.put("Method", "createVolume");
-        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
-        data.put("poolName", poolName);
-        data.put("volName", volName);
-        data.put("volSize", ""+volSize);
         String response = Connection.sendPost(urlString+"/Volumes/", data);
         System.out.println(response);
 	}
 	
-	public static void deleteVolume(String poolName, String volName) throws MalformedURLException, UnsupportedEncodingException
+	public static void deleteVolume(String volUuidString) throws MalformedURLException, UnsupportedEncodingException
 	{
         Map<String, String> data = new HashMap<String, String>();
         data.put("Module", "VBD");
         data.put("Method", "deleteVolume");
-        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
-        data.put("poolName", poolName);
-        data.put("volName", volName);
+        data.put("_id", volUuidString);
         String response = Connection.sendPost(urlString+"/Volumes/", data);
         System.out.println(response);
 	}
 	
-	public static void listVolumes(String poolName) throws MalformedURLException, UnsupportedEncodingException
+	public static void listVolumes(String poolUuidString) throws MalformedURLException, UnsupportedEncodingException
 	{
         Map<String, String> data = new HashMap<String, String>();
 //        data.put("_id", "27167fe7-fc9d-47d5-9cd0-717106ef67be");
         data.put("Module", "VBD");
         data.put("Method", "listVolumes");
-        data.put("poolName", poolName);
+        data.put("_id", poolUuidString);
         String response = Connection.sendPost(urlString+"/Volumes/", data);
         System.out.println(response);
 	}

@@ -9,6 +9,7 @@ from utils.Tools import logNotFound
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
 UUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
+Name = 'vm'
 
 def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     '''
@@ -18,13 +19,13 @@ def create(_id, name, memory, vcpu, mac, diskDir, isoDir, bridgeSrc):
     Description : Using limited parameters to create a VM and return its UUIDString;
     '''
     uuid = _id
-    print("Inside create")
-    print uuid
     if len(uuid) < 5:
         uuid = createString()
-
+    name = name if name else uuid
     global UUIDString
     UUIDString = uuid
+    global Name
+    Name = name
     print UUIDString
     print uuid
     hvm = {"loader": "/usr/lib/xen/boot/hvmloader"}

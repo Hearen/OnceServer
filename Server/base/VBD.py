@@ -8,7 +8,9 @@ from utils.Tools import logNotFound
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
+PoolName = 'pool'
 PoolUUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
+VolName = 'vol'
 VolumeUUIDString = '27167fe7-fc9d-47d5-9cd0-717106ef67be'
 
 
@@ -24,6 +26,8 @@ def createPool(_id, name, target):
         global PoolUUIDString
         _id = createString()
     name = name if name else _id
+    global PoolName
+    PoolName = name
     PoolUUIDString = _id
     config = XmlConverter.toSRXml(_id, name, target)
     try:
@@ -86,6 +90,8 @@ def createVolume(_id, poolName, volName, volSize):
     volName = volName if volName else _id
     global VolumeUUIDString
     VolumeUUIDString = _id
+    global VolName
+    VolName = volName
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
@@ -102,13 +108,16 @@ def createVolume(_id, poolName, volName, volSize):
         return None
     return None
 
-def deleteVolume(_id, poolName, volName):
+def deleteVolume(_id):
     '''
     Author      : LHearen
     E-mail      : LHearen@126.com
     Time        : 2015-12-30 10 : 31
     Description : Used to delete a volume in a specified pool;
     '''
+    vol = VBDHelper.retrieveVolume({"_id": _id})
+    poolName = vol["poolName"]
+    volName = vol["volName"]
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:
@@ -128,13 +137,16 @@ def deleteVolume(_id, poolName, volName):
         return None
     return True
 
-def listVolumes(poolName):
+def listVolumes(_id):
     '''
     Author      : LHearen
     E-mail      : LHearen@126.com
     Time        : 2015-12-30 16:24
     Description : Used to list volume names in a pool;
     '''
+    pool0 = VBDHelper.retrievePool({'_id': _id})
+    print pool0
+    poolName = pool0["name"]
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except libvirtError, e:

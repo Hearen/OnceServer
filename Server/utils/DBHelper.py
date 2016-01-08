@@ -110,6 +110,19 @@ class VBDHelper():
         return VBDHelper.__getPoolCollection().remove(filterDict)
 
     @staticmethod
+    def retrievePool(filterDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-08 10:17
+        Description : Using filterJson to filter the result from collection StoragePools;
+        Parameter   : filterDict can be dictionary of list of dictionary;
+        Return      : return the documents fitting the condition;
+        '''
+        col = VBDHelper.__getPoolCollection()
+        return col.find_one(filterDict)
+
+    @staticmethod
     def removeVolume(filterDict):
         '''
         Author      : LHearen
