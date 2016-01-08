@@ -1,4 +1,4 @@
-package com.once.api;
+package com.config;
 
 import java.util.HashMap;
 import java.util.Map;

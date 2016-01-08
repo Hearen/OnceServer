@@ -1,4 +1,4 @@
-package com.once.api;
+package com.utils;
 
 public class CONST {
 /*******************************************

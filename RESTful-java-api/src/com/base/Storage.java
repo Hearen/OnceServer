@@ -1,10 +1,12 @@
-package com.once.api;
+package com.base;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.utils.CONST;
+import com.utils.Connection;
 
 public class Storage {
 	private static final String urlString = "http://" + CONST.HOST + ":" + CONST.PORT;

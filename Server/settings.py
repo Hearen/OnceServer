@@ -100,6 +100,13 @@ vif = {
 		'source': {
 			'type': 'string',
 		},
+        'busy': {
+            'type': 'boolean',
+            'default': False,
+        },
+        'attachedVM': {
+            'type': 'uuid',
+        },
 	}
 }
 
@@ -123,9 +130,6 @@ pool = {
 			'type': 'string',
             'required': True,
 		 },
-        'volumes': {
-            'type': 'list',
-        }
     }
 }
 

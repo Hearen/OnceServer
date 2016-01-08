@@ -1,9 +1,9 @@
-package com.once.test;
+package com.test;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 
-import com.once.api.VIFConfig;
-import com.once.api.VIF;
+import com.base.VIF;
+import com.config.VIFConfig;
 
 public class TestVIF {
 	public static void main(String[] args) throws MalformedURLException, UnsupportedEncodingException {

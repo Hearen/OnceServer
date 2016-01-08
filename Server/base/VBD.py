@@ -23,6 +23,7 @@ def createPool(_id, name, target):
         from utils.UUIDGenerator import createString
         global PoolUUIDString
         _id = createString()
+    name = name if name else _id
     PoolUUIDString = _id
     config = XmlConverter.toSRXml(_id, name, target)
     try:
@@ -82,6 +83,7 @@ def createVolume(_id, poolName, volName, volSize):
     if len(_id) < 5:
         from utils.UUIDGenerator import createString
         _id = createString()
+    volName = volName if volName else _id
     global VolumeUUIDString
     VolumeUUIDString = _id
     try:

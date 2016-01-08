@@ -1,10 +1,15 @@
-package com.once.api;
+package com.base;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.config.VMConfig;
+import com.utils.CONST;
+import com.utils.Connection;
+import com.utils.Utils;
 
 public class VM {
 	private static final String urlString = "http://" + CONST.HOST + ":" + CONST.PORT + "/VMs/";

@@ -1,8 +1,8 @@
-package com.once.test;
+package com.test;
 
 import java.io.IOException;
-import com.once.api.VM;
-import com.once.api.VMConfig;
+
+import com.config.VMConfig;
 
 public class TestVM {
 

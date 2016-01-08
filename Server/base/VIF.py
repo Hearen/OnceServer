@@ -3,6 +3,7 @@ from utils.Connection import Connection
 from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from utils.DBHelper import VIFHelper
+from utils.Tools import logNotFound
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 conn = Connection.get_libvirt_connection()
@@ -19,6 +20,7 @@ def create(_id, name, source, macString):
         from utils.UUIDGenerator import createString
         global VIFUUIDString
         _id = createString()
+    name = name if name else _id
     VIFUUIDString = _id
     xmlConfig = XmlConverter.toNetXml(_id, name, source, macString)
     try:
@@ -64,6 +66,8 @@ def attach(vm_id, vif_id):
     interfaceXmlConfig = XmlConverter.toVIFXml(source, macString)
     try:
         dom.attachDeviceFlags(interfaceXmlConfig, 0)
+        dataDict = {"busy": True, "attachedVM": vm_id}
+        VIFHelper.update({"_id": vif_id}, dataDict)
         return True
     except Exception, e:
         log.debug("Attaching VIF %s to VM %s failed! Message: %s" %
@@ -90,6 +94,8 @@ def detach(vm_id, vif_id):
     interfaceXmlConfig = XmlConverter.toVIFXml(source, macString)
     try:
         dom.detachDeviceFlags(interfaceXmlConfig, 0)
+        dataDict = {"busy": False, "attachedVM": ""}
+        VIFHelper.update({"_id": vif_id}, dataDict)
         return True
     except Exception, e:
         log.debug("Attaching VIF %s to VM %s failed! Message: %s" %
