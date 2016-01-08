@@ -2,6 +2,9 @@
 # java *.class files
 *.class
 
+# temporary files
+*swp
+
 # python testing files
 *test*.py
 

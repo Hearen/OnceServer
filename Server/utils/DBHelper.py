@@ -119,6 +119,33 @@ class VBDHelper():
         '''
         return VBDHelper.__getVolumeCollection().remove(filterDict)
 
+    @staticmethod
+    def updateVolume(filterDict, dataDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-08 10:17
+        Description : Update certain fields in VBDs filtered documents;
+        '''
+        col = VBDHelper.__getVolumeCollection()
+        params = {"$set": dataDict}
+        res = col.update(filterDict, params)
+        return res
+
+    @staticmethod
+    def retrieveVolume(filterDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-08 10:17
+        Description : Using filterJson to filter the result from collection Volumes;
+        Parameter   : filterDict can be dictionary of list of dictionary;
+        Return      : return the documents fitting the condition;
+        '''
+        col = VBDHelper.__getVolumeCollection()
+        return col.find_one(filterDict)
+
+
 class VIFHelper:
     '''
     Author      : LHearen

@@ -145,24 +145,25 @@ def listVolumes(poolName):
         return None
     volNames = ','.join([vol.name() for vol in volumes])
     return volNames
-def attachVolume(vm_id, poolName, volName, target, driver='qemu', driverType='qcow2'):
+def attachVolume(vm_id, vol_id, target, driver='qemu', driverType='qcow2'):
     '''
     Author      : LHearen
     E-mail      : LHearen@126.com
     Time        : 2016-01-07 10:54
     Description : Attaching a volume to a VM;
     '''
-    pool = None
+    vol = VBDHelper.retrieveVolume({"_id": vol_id})
+    volName = vol["volName"]
+    poolName = vol["poolName"]
     try:
         pool = conn.storagePoolLookupByName(poolName)
     except Exception, e:
         logNotFound("Pool", poolName, e)
         return None
-    vol = None
     try:
         vol = pool.storageVolLookupByName(volName)
     except Exception, e:
-        logNotFound("Volume", volName, e)
+        logNotFound("Volume", vol_id, e)
         return None
     root = ET.fromstring(vol.XMLDesc())
     volDir = root.find('key').text
@@ -177,18 +178,22 @@ def attachVolume(vm_id, poolName, volName, target, driver='qemu', driverType='qc
         return None
     try:
         vm.attachDeviceFlags(diskXmlConfig)
+        dataDict = {"busy": True, "attachedVM": vm_id, "target": target}
+        VBDHelper.updateVolume({"_id": vol_id}, dataDict)
     except Exception, e:
         log.debug("Attaching disk failed! Message: %s" % e)
         return None
     return True
 
-def detachVolume(vm_id, target):
+def detachVolume(vm_id, vol_id):
     '''
     Author      : LHearen
     E-mail      : LHearen@126.com
     Time        : 2016-01-07 16:27
     Description : Detach a disk specified by mounted target from a VM;
     '''
+    vol = VBDHelper.retrieveVolume({"_id": vol_id})
+    target = vol["target"]
     try:
         vm = conn.lookupByUUIDString(vm_id)
     except Exception, e:
@@ -208,6 +213,8 @@ def detachVolume(vm_id, target):
     print "\nends here***********"
     try:
         vm.detachDeviceFlags(diskXmlConfig)
+        dataDict = {"busy": False, "attachedVM": "", "target": ""}
+        VBDHelper.updateVolume({"_id": vol_id}, dataDict)
         return True
     except Exception, e:
         log.debug("Detaching disk %s from VM %s failed! Message: %s" % (target, \

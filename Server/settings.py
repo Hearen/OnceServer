@@ -153,6 +153,16 @@ volume = {
 			'type': 'integer',
             'required': True,
 		 },
+        'busy': {
+            'type': 'boolean',
+            'default': False,
+        },
+        'attachedVM': {
+            'type': 'uuid',
+        },
+        'target': {
+            'type': 'string'
+        },
     }
 }
 
