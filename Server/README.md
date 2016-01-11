@@ -4,6 +4,7 @@ Development Guide
 
 This Guide is used to lead developers to work on clients based-on this server provided by us, which will including Configure Eve, Configure Mongodb 3.2, Starting our service and the last but also the most important part, APIs supplied both in client demo and server side.
 
+-----------------
 ### Configure Eve
 We currently are adopting Eve as our basic framework to build our server side, which is coded in python and can be easily installed via pip to achieve global installation. So there are three steps then we need to complete:
 
@@ -13,6 +14,7 @@ We currently are adopting Eve as our basic framework to build our server side, w
 
 * replace some files under '/usr/lib64/python2.7/site-packages/eve/' replace 'endpoints.py' and 'methods/post.py' with the same files under 'Server/Eve'; these files are modified to fit in our requirements.
 
+------------------------
 ###Configure Mongodb 3.2
 Due to the requirement of our service, we have to provide a database for data storing, meantime the underlying database chosen by Eve is also mongodb, so we have to configure it for further development. There are also two simple steps we need to follow:
 
@@ -28,6 +30,7 @@ save it and exit.
 
 * 'yum clean all' and make sure the network connection is alright and then execute this command 'yum install -y mongodb-org' to install mongodb of version 3.2, the latest stable version.
 
+---------------------------------
 ### Java Client API Documentation
 Before you truly start to develope on this framework, there are two major parts you've got to understand first.
 
@@ -54,6 +57,8 @@ Before you truly start to develope on this framework, there are two major parts 
 * createVolume - a customized object will be passed as the parameter, for more details, you check Rule 1.
 * deleteVolume - only the UUID of the volume will be needed.
 * listVolumes - the UUID of pool is needed here and the result will a string composed of names separated by comma.
+* attach - using the UUID of VM and volume and target of VM to complete attaching a certain volume to a VM.
+* detach - the opposite operation of attach.
 
 #### VIF Management
 * create - just like VM, a customized object will be used to specify the factors creating operation requires and also some values can be ignored for more details, check *Rule 1*.
