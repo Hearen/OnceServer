@@ -24,11 +24,11 @@ def createPool(_id, name, target):
     '''
     if len(_id) < 5:
         from utils.UUIDGenerator import createString
-        global PoolUUIDString
         _id = createString()
     name = name if name else _id
     global PoolName
     PoolName = name
+    global PoolUUIDString
     PoolUUIDString = _id
     config = XmlConverter.toSRXml(_id, name, target)
     try:

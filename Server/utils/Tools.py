@@ -68,14 +68,30 @@ def logNotFound(objectName, NameOrId, message):
     '''
     log.debug("%s %s Not Found! Message: %s" % (objectName, NameOrId, message))
 
-def executeShellCommand(shellDir, executor='/bin/bash'):
+def executeShellCommand(commands):
     '''
     Author      : LHearen
     E-mail      : LHearen@126.com
     Time        : 2016-01-11 14:37
     Description : Used to execute a shell script and return output from stdout;
     '''
-    process = subprocess.Popen([executor, shellDir], shell=False, \
+    process = subprocess.Popen(commands, shell=True, \
                                stdout=subprocess.PIPE)
     ret = process.communicate()
     return ret
+
+def executeShellScripts(shellDir, executor='/bin/bash'):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-11 14:37
+    Description : Used to execute a shell script and return output from stdout;
+    '''
+    commands = []
+    commands.append(executor)
+    process = subprocess.Popen(commands, shell=False, \
+                               stdout=subprocess.PIPE)
+    ret = process.communicate()
+    return ret
+
+

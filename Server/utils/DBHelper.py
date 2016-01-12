@@ -159,7 +159,6 @@ class VBDHelper():
         col = VBDHelper.__getVolumeCollection()
         return col.find_one(filterDict)
 
-
 class VIFHelper:
     '''
     Author      : LHearen
@@ -217,3 +216,35 @@ class VIFHelper:
         '''
         print "inside VIFHelper remove"
         return VIFHelper.__getCollection().remove(filterDict)
+
+class HostHelper():
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-12 14:31
+    Description : All db operations will be handled here;
+    '''
+    @staticmethod
+    def __getHostCollection():
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-12 14:29
+        Description : Used to get the reference of collection Host in db;
+        '''
+        client = MongoClient('localhost', 27017)
+        db = client['server']
+        return db.Host
+
+    @staticmethod
+    def update(filterDict, dataDict):
+        '''
+        Author      : LHearen
+        E-mail      : LHearen@126.com
+        Time        : 2016-01-12 14:32
+        Description : according to the filterDict to complete inserting dataDict;
+        '''
+        col = HostHelper.__getHostCollection()
+        params = {"$set": dataDict}
+        res = col.update(filterDict, params, upsert=True)
+        return res
