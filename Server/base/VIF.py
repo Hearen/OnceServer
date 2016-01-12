@@ -3,6 +3,7 @@ from utils.Connection import Connection
 from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from utils.DBHelper import VIFHelper
+from utils.DBHelper import VMHelper
 from utils.Tools import logNotFound
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
@@ -44,7 +45,7 @@ def delete(_id):
         vif.undefine()
         VIFHelper.remove({"_id": _id})
     except Exception, e:
-        log.debug("VIF.delete Failed! Message: %s" %e)
+        log.debug("VIF.delete Failed! Message: %s" % e)
         return None
     return True
 def attach(vm_id, vif_id):
@@ -68,6 +69,8 @@ def attach(vm_id, vif_id):
         dom.attachDeviceFlags(interfaceXmlConfig, 0)
         dataDict = {"busy": True, "attachedVM": vm_id}
         VIFHelper.update({"_id": vif_id}, dataDict)
+        dataDict = {"vifs.vif_id": vif_id, "vifs.macString": macString}
+        VMHelper.update({"_id": vm_id}, dataDict)
         return True
     except Exception, e:
         log.debug("Attaching VIF %s to VM %s failed! Message: %s" %
@@ -96,6 +99,9 @@ def detach(vm_id, vif_id):
         dom.detachDeviceFlags(interfaceXmlConfig, 0)
         dataDict = {"busy": False, "attachedVM": ""}
         VIFHelper.update({"_id": vif_id}, dataDict)
+        dataDict = {"vifs.vif_id": "", "vifs.macString": ""}
+        VMHelper.update({"_id": vm_id, "vifs.vif_id": vif_id},
+                        dataDict, "unset")
         return True
     except Exception, e:
         log.debug("Attaching VIF %s to VM %s failed! Message: %s" %

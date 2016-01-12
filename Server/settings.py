@@ -18,16 +18,8 @@ ITEM_METHODS = ['GET', 'PATCH', 'DELETE']
 
 IF_MATCH = False
 
-# We enable standard client cache directives for all resources exposed by the
-# API. We can always override these global settings later.
-CACHE_CONTROL = 'max-age=20'
-CACHE_EXPIRES = 20
-
 vm = {
     'item_url': 'regex("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")',
-    'cache_control': 'max-age=10,must-revalidate',
-    'cache_expires': 10,
-    # most global settings can be overridden at resource level
     'resource_methods': ['GET', 'POST', 'DELETE'],
     'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],
     'schema': {
@@ -62,11 +54,11 @@ vm = {
             'type':'string',
             'required': True,
         },
-		 'VBDs': {
-			'type': 'list',
+		 'Volumes': {
+			'type': 'dict',
 		 },
 		 'VIFs': {
-			'type': 'list',
+			'type': 'dict',
 		 },
 		 'isTemplate': {
 			'type': 'string',
@@ -81,8 +73,6 @@ vif = {
 #         'url': 'regex("[\w]+")',
 #         'field': 'uuid'
 #     },
-    'cache_control': 'max-age=10,must-revalidate',
-    'cache_expires': 10,
     # most global settings can be overridden at resource level
     'resource_methods': ['GET', 'POST', 'DELETE'],
     'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],
@@ -112,8 +102,6 @@ vif = {
 
 pool = {
     'item_url': 'regex("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")',
-    'cache_control': 'max-age=10,must-revalidate',
-    'cache_expires': 10,
     # most global settings can be overridden at resource level
     'resource_methods': ['GET', 'POST', 'DELETE'],
     'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],
@@ -135,8 +123,6 @@ pool = {
 
 volume = {
     'item_url': 'regex("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}")',
-    'cache_control': 'max-age=10,must-revalidate',
-    'cache_expires': 10,
     # most global settings can be overridden at resource level
     'resource_methods': ['GET', 'POST', 'DELETE'],
     'item_methods': ['GET', 'PATCH', 'DELETE', 'PUT'],

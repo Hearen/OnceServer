@@ -25,8 +25,8 @@ public class TestStorage {
 //		Storage.createVolume(volConfig);
 //		Storage.deleteVolume(volUuidString);
 		Storage.listVolumes(poolUuidString);
-//		String vm_id = "57f28539-489f-0a5f-0bf4-9abe45c62763";
-//		Storage.attach(vm_id, vol_id, target);
-//		Storage.detach(vm_id, vol_id);
+		String vmUuidString = "57f28539-489f-0a5f-0bf4-9abe45c62763";
+//		Storage.attach(vmUuidString, volUuidString, target);
+		Storage.detach(vmUuidString, volUuidString);
 	}
 }

@@ -39,15 +39,16 @@ class VMHelper():
         return res
 
     @staticmethod
-    def update(filterDict, dataDict):
+    def update(filterDict, dataDict, operation = 'set'):
         '''
         Author      : LHearen
         E-mail      : LHearen@126.com
         Time        : 2016-01-04 14:32
-        Description : Update certain fields in specified documents;
+        Description : Update certain fields in specified documents either set it
+                    or unset it;
         '''
         col = VMHelper.__getVMCollection()
-        params = {"$set": dataDict}
+        params = {"$"+operation: dataDict}
         res = col.update(filterDict, params)
         return res
 

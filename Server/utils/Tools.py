@@ -6,6 +6,7 @@ Description : Used to assist other modules;
 '''
 from flask import make_response
 from utils.OnceLogging import log, init
+import subprocess
 init("/var/log/xen/libvirt.log", "DEBUG", log)
 
 def moduleLoader(packageName, moduleName):
@@ -66,3 +67,15 @@ def logNotFound(objectName, NameOrId, message):
     Description : Used to log not found error in libvirt.log;
     '''
     log.debug("%s %s Not Found! Message: %s" % (objectName, NameOrId, message))
+
+def executeShellCommand(shellDir, executor='/bin/bash'):
+    '''
+    Author      : LHearen
+    E-mail      : LHearen@126.com
+    Time        : 2016-01-11 14:37
+    Description : Used to execute a shell script and return output from stdout;
+    '''
+    process = subprocess.Popen([executor, shellDir], shell=False, \
+                               stdout=subprocess.PIPE)
+    ret = process.communicate()
+    return ret

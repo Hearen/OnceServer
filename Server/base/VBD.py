@@ -4,6 +4,7 @@ from utils.OnceLogging import log, init
 from utils.XmlConverter import XmlConverter
 from utils.libvirt import libvirtError
 from utils.DBHelper import VBDHelper
+from utils.DBHelper import VMHelper
 from utils.Tools import logNotFound
 
 init("/var/log/xen/libvirt.log", "DEBUG", log)
@@ -182,9 +183,6 @@ def attachVolume(vm_id, vol_id, target, driver='qemu', driverType='qcow2'):
     root = ET.fromstring(vol.XMLDesc())
     volDir = root.find('key').text
     diskXmlConfig = XmlConverter.toDiskXml(volDir, target, driver, driverType)
-    print "diskXmlConfig**********\n"
-    print diskXmlConfig
-    print "\nends here"
     try:
         vm = conn.lookupByUUIDString(vm_id)
     except Exception, e:
@@ -194,6 +192,8 @@ def attachVolume(vm_id, vol_id, target, driver='qemu', driverType='qcow2'):
         vm.attachDeviceFlags(diskXmlConfig)
         dataDict = {"busy": True, "attachedVM": vm_id, "target": target}
         VBDHelper.updateVolume({"_id": vol_id}, dataDict)
+        dataDic = {"Volumes": {"vol_id": vol_id, "target": target}}
+        VMHelper.update({"_id": vm_id}, dataDic)
     except Exception, e:
         log.debug("Attaching disk failed! Message: %s" % e)
         return None
@@ -229,6 +229,9 @@ def detachVolume(vm_id, vol_id):
         vm.detachDeviceFlags(diskXmlConfig)
         dataDict = {"busy": False, "attachedVM": "", "target": ""}
         VBDHelper.updateVolume({"_id": vol_id}, dataDict)
+        dataDict = {"Volumes.vol_id": "", "Volumes.target": ""}
+        VMHelper.update({"_id": vm_id, "Volumes.vol_id": vol_id},
+                        dataDict, "unset")
         return True
     except Exception, e:
         log.debug("Detaching disk %s from VM %s failed! Message: %s" % (target, \
