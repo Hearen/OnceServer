@@ -87,9 +87,7 @@ def executeShellScripts(shellDir, executor='/bin/bash'):
     Time        : 2016-01-11 14:37
     Description : Used to execute a shell script and return output from stdout;
     '''
-    commands = []
-    commands.append(executor)
-    process = subprocess.Popen(commands, shell=False, \
+    process = subprocess.Popen(shellDir, shell=False, \
                                stdout=subprocess.PIPE)
     ret = process.communicate()
     return ret
