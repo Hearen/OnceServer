@@ -9,14 +9,14 @@ This whole project is intended to build up a VMware-like tool, which is based on
 
 4) Folder *Server* is the server-side of the project using Eve as the basic underlying framework and trying to provide a RESTful web service for the java clients and web pages.
 
------------------
-Development Guide
------------------
+## Development Guide
 *By LHearen*  *E-mail: LHearen@126.com*
 
 This Guide is used to lead developers to work on clients based-on this server provided by us, which will including Configure Eve, Configure Mongodb 3.2, Starting our service and the last but also the most important part, APIs supplied both in client demo and server side.
 
-### Configure Eve
+### Configure the developing environment
+
+#### Configure Eve
 We currently are adopting Eve as our basic framework to build our server side, which is coded in python and can be easily installed via pip to achieve global installation. So there are three steps then we need to complete:
 
 * install pip - there is a [get-pip.py](https://github.com/Hearen/Linux-scripts/tree/master/tools), get it and just run 'python get-pip.py' then everything will be handled automatically if there is something wrong in this process check [this site](https://pip.pypa.io/en/stable/installing/) for some reference.
@@ -25,7 +25,7 @@ We currently are adopting Eve as our basic framework to build our server side, w
 
 * replace some files under '/usr/lib64/python2.7/site-packages/eve/' replace 'endpoints.py' and 'methods/post.py' with the same files under 'Server/Eve'; these files are modified to fit in our requirements.
 
-### Configure Mongodb 3.2
+#### Configure Mongodb 3.2
 Due to the requirement of our service, we have to provide a database for data storing, meantime the underlying database chosen by Eve is also mongodb, so we have to configure it for further development. There are also two simple steps we need to follow:
 
 * configure repository under /etc/yum.repos.d/ - run 'vim /etc/yum.repos.d/mongodb.repo' and then copy the following profile to it
@@ -40,7 +40,6 @@ save it and exit.
 
 * 'yum clean all' and make sure the network connection is alright and then execute this command 'yum install -y mongodb-org' to install mongodb of version 3.2, the latest stable version.
 
-----------------------
 
 ### Java Client API Documentation
 Before you truly start to develope on this framework, there are two major parts you've got to understand first.
@@ -77,8 +76,6 @@ Before you truly start to develope on this framework, there are two major parts 
 * attach - to attach a VIF to an existed VM while both are specified by UUID.
 * detach - to detach a VIF from an VM while both are specified by UUID.
 
-
-----------------------------
 
 ### Server API Documentation
 This documentation is used to specify the details of the APIs in server side which can be used to understand the underlying realization details and helpful to clients development. 
@@ -122,11 +119,9 @@ This documentation is used to specify the details of the APIs in server side whi
 * attach -- attaching a created VIF to an existed vm via uuidString ob them and return *True* if succeed otherwise return 'User function failed';
 * detach -- the opposite operation of attach.
 
-----------------
 
 ###Team members
-Now this project is supported by only four major members:
-LHearen and Frank are working on underlying server part;
+Now this project is supported by only four major members while LHearen and Frank are working on underlying server part.
 
 ### Contacts
 * LHearen: LHearen@126.com, luosonglei14@otcaix.iscas.ac.cn
