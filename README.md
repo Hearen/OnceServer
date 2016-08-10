@@ -1,21 +1,21 @@
-#Introduction
+### Introduction
 This whole project is intended to build up a VMware-like tool, which is based on Eve to provide a set of RESTful interfaces, and making full use of libvirt to manage underlying VMs and corresponding peripherals including virtual interface cards, virtual disks and the like.
-#Specification
+### Folders Specification
 1) libvirt-java-api is kind of deprecated refactored version of the client interfaces and corresponding test cases;
 
 2) pool_management is where all the pool manamgement related files exist including some automatic assistant scripts;
 
 3) RESTful-java-api is the bran-new version which we are trying to make use of Eve to replace former out-dated xmlrpc to achieve RPC and data storing features.
 
-4) RESTful-libvirt is the server-side of the project using Eve as the basic underlying framework and trying to provide a RESTful web service for the java clients and web pages.
+4) Folder *Server* is the server-side of the project using Eve as the basic underlying framework and trying to provide a RESTful web service for the java clients and web pages.
 
+-----------------
 Development Guide
 -----------------
 *By LHearen*  *E-mail: LHearen@126.com*
 
 This Guide is used to lead developers to work on clients based-on this server provided by us, which will including Configure Eve, Configure Mongodb 3.2, Starting our service and the last but also the most important part, APIs supplied both in client demo and server side.
 
------------------
 ### Configure Eve
 We currently are adopting Eve as our basic framework to build our server side, which is coded in python and can be easily installed via pip to achieve global installation. So there are three steps then we need to complete:
 
@@ -25,7 +25,6 @@ We currently are adopting Eve as our basic framework to build our server side, w
 
 * replace some files under '/usr/lib64/python2.7/site-packages/eve/' replace 'endpoints.py' and 'methods/post.py' with the same files under 'Server/Eve'; these files are modified to fit in our requirements.
 
-------------------------
 ### Configure Mongodb 3.2
 Due to the requirement of our service, we have to provide a database for data storing, meantime the underlying database chosen by Eve is also mongodb, so we have to configure it for further development. There are also two simple steps we need to follow:
 
@@ -41,7 +40,8 @@ save it and exit.
 
 * 'yum clean all' and make sure the network connection is alright and then execute this command 'yum install -y mongodb-org' to install mongodb of version 3.2, the latest stable version.
 
----------------------------------
+----------------------
+
 ### Java Client API Documentation
 Before you truly start to develope on this framework, there are two major parts you've got to understand first.
 
@@ -79,6 +79,7 @@ Before you truly start to develope on this framework, there are two major parts 
 
 
 ----------------------------
+
 ### Server API Documentation
 This documentation is used to specify the details of the APIs in server side which can be used to understand the underlying realization details and helpful to clients development. 
 
@@ -121,6 +122,7 @@ This documentation is used to specify the details of the APIs in server side whi
 * attach -- attaching a created VIF to an existed vm via uuidString ob them and return *True* if succeed otherwise return 'User function failed';
 * detach -- the opposite operation of attach.
 
+----------------
 
 ###Team members
 Now this project is supported by only four major members:
